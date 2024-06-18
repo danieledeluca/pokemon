@@ -42,7 +42,7 @@ watch(
 <style scoped>
 .search-form {
     position: sticky;
-    top: var(--header-height, -100%);
+    top: calc(var(--header-height, -100%) - 1px);
     padding-top: 1rem;
     background-color: var(--pico-background-color);
     transition: top 0.3s ease-in-out;
