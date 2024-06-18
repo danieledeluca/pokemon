@@ -77,30 +77,40 @@ const boxes = [
 }
 
 .box {
-    --pico-color: var(--pico-muted-color);
+    --pico-color: #373c44;
 
     text-decoration: none;
 }
 
 .box .icon {
+    --background-color: var(--pico-muted-border-color);
+
     display: inline-flex;
     justify-content: center;
     align-items: center;
     width: 3em;
     margin-bottom: 1rem;
     padding: 0.5rem;
-    background-color: var(--pico-secondary-background);
+    background-color: var(--background-color);
+    border: 1px solid var(--pico-card-border-color);
     border-radius: var(--pico-border-radius);
     aspect-ratio: 1;
 }
 
-.box img {
+.box .icon img {
     height: 100%;
 }
 
 .box .title {
+    --pico-color: inherit;
+
     margin-bottom: 0.25rem;
-    color: var(--pico-primary-inverse);
+}
+
+.box .content {
+    --color: var(--pico-muted-color);
+
+    color: var(--color);
 }
 
 @media (min-width: 768px) {
@@ -110,6 +120,16 @@ const boxes = [
 
     .grid {
         grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .box {
+        --pico-color: #c2c7d0;
+    }
+
+    .box .icon {
+        --background-color: var(--pico-secondary-background);
     }
 }
 </style>

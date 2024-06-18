@@ -77,7 +77,7 @@ watch(y, () => {
                         </RouterLink>
                     </li>
                     <li v-if="!['home', 'card'].includes($route.name as string)">
-                        <button @click="showSearchForm" type="button" class="secondary">
+                        <button @click="showSearchForm" type="button" class="primary">
                             <span>Search</span>
                         </button>
                     </li>
