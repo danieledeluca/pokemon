@@ -99,7 +99,7 @@ export const usePokemonStore = defineStore('pokemon', () => {
             label: 'Front default',
         },
         {
-            value: 'front-default',
+            value: 'front-shiny',
             label: 'Front shiny',
         },
         {
