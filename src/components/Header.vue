@@ -56,7 +56,7 @@ watch(y, () => {
                 <ul>
                     <li>
                         <RouterLink to="/">
-                            <img alt="Pokemon logo" src="@/assets/pokemon-logo.svg" class="logo" />
+                            <strong>Pokémon</strong>
                         </RouterLink>
                     </li>
                 </ul>
