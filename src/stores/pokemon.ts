@@ -234,9 +234,21 @@ export const usePokemonStore = defineStore('pokemon', () => {
         previousCards: PokemonCard[] = []
     ) {
         const apiUrl = new URL(
-            url ||
-                `${POKEMON_TCG_API_URL}cards?q=name:"*${cardName}*" rarity:"*${cardRarity}*" types:"*${cardType}*" subtypes:"*${cardSubtype}*"&orderBy=set.releaseDate,number&page=1`
+            url || `${POKEMON_TCG_API_URL}cards?q=name:"*${cardName}*"&orderBy=set.releaseDate,number&page=1`
         );
+        const searchParamQ = apiUrl.searchParams.get('q');
+
+        if (cardRarity) {
+            apiUrl.searchParams.set('q', `${searchParamQ} rarity:"*${cardRarity}*"`);
+        }
+
+        if (cardType) {
+            apiUrl.searchParams.set('q', `${searchParamQ} types:"*${cardType}*"`);
+        }
+
+        if (cardSubtype) {
+            apiUrl.searchParams.set('q', `${searchParamQ} subtypes:"*${cardSubtype}*"`);
+        }
 
         pokemonCardsBySearch.value.responseStatus.ok = previousCards.length ? true : false;
         pokemonCardsBySearch.value.responseStatus.isLoading = true;
