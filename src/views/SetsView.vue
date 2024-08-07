@@ -7,6 +7,8 @@ import Message from '@/components/Message.vue';
 import type { PokemonSet } from '@/models';
 import { useDebounceFn } from '@vueuse/core';
 import { filterList, showItem } from '@/composables/pokemon';
+import { onBeforeRouteLeave } from 'vue-router';
+import { clearSearchParams } from '@/composables/utils';
 
 const filters = reactive({
     name: '',
@@ -29,6 +31,8 @@ onMounted(async () => {
         await pokemonStore.getPokemonSets();
     }
 });
+
+onBeforeRouteLeave(() => clearSearchParams());
 </script>
 
 <template>

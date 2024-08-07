@@ -4,11 +4,12 @@ import Message from '@/components/Message.vue';
 import PokemonSprites from '@/components/PokemonSprites.vue';
 import SearchForm from '@/components/SearchForm.vue';
 import { filterList } from '@/composables/pokemon';
-import { getSearchParam, setSearchParam } from '@/composables/utils';
+import { clearSearchParams, getSearchParam, setSearchParam } from '@/composables/utils';
 import type { PokemonSprite } from '@/models';
 import { usePokemonStore } from '@/stores/pokemon';
 import { useDebounceFn } from '@vueuse/core';
 import { computed, onMounted, onUnmounted, reactive, watch } from 'vue';
+import { onBeforeRouteLeave } from 'vue-router';
 
 const filters = reactive({
     name: getSearchParam('name'),
@@ -59,6 +60,8 @@ onUnmounted(() => {
         pokemonSprites.value.data = [];
     }
 });
+
+onBeforeRouteLeave(() => clearSearchParams());
 </script>
 
 <template>
