@@ -95,9 +95,4 @@ watch(y, () => {
     border-bottom: 1px solid var(--pico-muted-border-color);
     z-index: 2;
 }
-
-.logo {
-    display: block;
-    max-height: 50px;
-}
 </style>
