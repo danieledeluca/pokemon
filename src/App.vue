@@ -13,7 +13,8 @@ import Header from './components/Header.vue';
     <footer class="footer">
         <div class="container">
             <small>
-                Thanks to <a href="https://pokemontcg.io/" target="_blank">Pokèmon TCG</a> and
+                &copy; {{ new Date().getFullYear() }} - Daniele De Luca - Thanks to
+                <a href="https://pokemontcg.io/" target="_blank">Pokèmon TCG</a> and
                 <a href="https://pokeapi.co/" target="_blank">PokeAPI</a> for all the data.
             </small>
         </div>
