@@ -42,8 +42,8 @@ function showSearchForm() {
     }
 }
 
-watch(y, () => {
-    if (y.value === 0) {
+watch(y, (newY) => {
+    if (newY === 0) {
         hideSearchForm();
     }
 });
