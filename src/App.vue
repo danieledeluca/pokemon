@@ -7,7 +7,7 @@ import Header from './components/Header.vue';
     <Header />
     <main class="main">
         <div class="container">
-            <RouterView />
+            <RouterView :key="$route.path" />
         </div>
     </main>
     <footer class="footer">
