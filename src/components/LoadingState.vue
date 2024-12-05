@@ -12,14 +12,16 @@ const emit = defineEmits<{
 
 <template>
     <div v-if="props.responseStatus.isLoading || props.responseStatus.nextUrl" class="loading-state">
-        <div v-if="props.responseStatus.isLoading" class="loading" aria-busy="true">
-            <span>Loading...</span>
-        </div>
-        <div v-if="props.responseStatus.nextUrl" class="load-more">
-            <button @click="emit('loadMore')" type="button">
-                <span>Load more</span>
-            </button>
-        </div>
+        <button
+            @click="emit('loadMore')"
+            type="button"
+            class="secondary"
+            :aria-busy="props.responseStatus.isLoading"
+            :disabled="props.responseStatus.isLoading"
+        >
+            <span v-if="props.responseStatus.isLoading">Loading...</span>
+            <span v-else>Load more</span>
+        </button>
     </div>
 </template>
 
