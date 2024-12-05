@@ -3,6 +3,7 @@ import type { PokemonCard, Price } from '@/models';
 import { toRefs } from 'vue';
 import Tooltip from './Tooltip.vue';
 import { getImageUrl } from '@/composables/utils';
+import { RouterLink } from 'vue-router';
 
 type Market = 'tcgplayer' | 'cardmarket';
 
@@ -185,10 +186,18 @@ function getCardLastUpdateAt(market: Market) {
             <div class="content">
                 <ul class="list">
                     <li class="evolves-from" v-if="pokemonCard.evolvesFrom">
-                        <span>{{ pokemonCard.evolvesFrom }}</span>
+                        <span>Evolves from: </span>
+                        <RouterLink :to="{ name: 'cards', query: { name: pokemonCard.evolvesFrom } }">
+                            <span>{{ pokemonCard.evolvesFrom }}</span>
+                        </RouterLink>
                     </li>
                     <li class="evolves-to" v-if="pokemonCard.evolvesTo">
-                        <span>{{ pokemonCard.evolvesTo[0] }}</span>
+                        <span>Evolves to: </span>
+                        <span v-for="evolution in pokemonCard.evolvesTo" :key="evolution">
+                            <RouterLink :to="{ name: 'cards', query: { name: evolution } }">
+                                <span>{{ evolution }}</span>
+                            </RouterLink>
+                        </span>
                     </li>
                 </ul>
             </div>
@@ -273,5 +282,9 @@ article:last-child {
 
 .attack .cost img {
     max-width: 1rem;
+}
+
+.evolves-to span:not(:first-child):not(:last-child)::after {
+    content: ' | ';
 }
 </style>
