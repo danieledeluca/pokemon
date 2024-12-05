@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { showItem } from '@/composables/pokemon';
 import type { PokemonCard } from '@/models';
+import LazyImage from './LazyImage.vue';
 
 const props = defineProps<{
     pokemonCards: PokemonCard[];
@@ -17,7 +18,7 @@ const props = defineProps<{
             v-show="showItem<PokemonCard>(pokemonCard, props.pokemonCardsFiltered)"
         >
             <RouterLink :to="{ name: 'card', params: { card_id: pokemonCard.id } }">
-                <img :src="pokemonCard.images.small" :alt="pokemonCard.name" loading="lazy" class="card-image" />
+                <LazyImage :src="pokemonCard.images.small" :alt="pokemonCard.name" />
             </RouterLink>
             <div class="box-name">
                 <span>{{ pokemonCard.name }}</span>
@@ -27,7 +28,14 @@ const props = defineProps<{
 </template>
 
 <style scoped>
-.card-image {
-    width: 100%;
+.card {
+    display: flex;
+    flex-direction: column;
+}
+
+.card a {
+    position: relative;
+    flex: 1;
+    aspect-ratio: 8/11;
 }
 </style>

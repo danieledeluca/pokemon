@@ -21,6 +21,21 @@
     gap: 1rem;
 }
 
+.pokemon-grid .box {
+    position: relative;
+    aspect-ratio: 1;
+}
+
+.pokemon-grid .box img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    max-width: calc(100% - var(--pico-block-spacing-horizontal) * 2);
+    max-height: calc(100% - var(--pico-block-spacing-vertical) * 2);
+    translate: -50% -50%;
+    object-fit: contain;
+}
+
 .box {
     display: block;
     padding: var(--pico-block-spacing-vertical) var(--pico-block-spacing-horizontal);

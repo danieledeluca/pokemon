@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { showItem } from '@/composables/pokemon';
 import type { PokemonSprite } from '@/models';
+import LazyImage from './LazyImage.vue';
 
 const props = defineProps<{
     pokemonSprites: PokemonSprite[];
@@ -17,14 +18,13 @@ const props = defineProps<{
             class="sprite"
             v-show="showItem<PokemonSprite>(pokemonSprite, props.pokemonSpritesFiltered)"
         >
-            <article class="sprite-image">
-                <img
+            <article class="box">
+                <LazyImage
                     v-for="[type, sprite] in Object.entries(pokemonSprite.sprites)"
                     v-show="type === (props.pokemonSpriteType || 'front-default')"
                     :key="type"
                     :src="sprite"
                     :alt="pokemonSprite.name"
-                    loading="lazy"
                     :class="type"
                 />
             </article>
@@ -46,7 +46,6 @@ const props = defineProps<{
 
 .front-default,
 .front-shiny {
-    width: 100%;
     image-rendering: pixelated;
 }
 </style>

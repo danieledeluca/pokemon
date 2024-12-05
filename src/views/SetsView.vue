@@ -9,6 +9,7 @@ import { useDebounceFn } from '@vueuse/core';
 import { filterList, showItem } from '@/composables/pokemon';
 import { onBeforeRouteLeave } from 'vue-router';
 import { clearSearchParams } from '@/composables/utils';
+import LazyImage from '@/components/LazyImage.vue';
 
 const filters = reactive({
     name: '',
@@ -50,7 +51,7 @@ onBeforeRouteLeave(() => clearSearchParams());
                 v-show="showItem<PokemonSet>(pokemonSet, pokemonSetsFiltered)"
             >
                 <RouterLink :to="{ name: 'set', params: { set_id: pokemonSet.id } }" class="box">
-                    <img :src="pokemonSet.images.logo" :alt="pokemonSet.name" loading="lazy" class="set-image" />
+                    <LazyImage :src="pokemonSet.images.logo" :alt="pokemonSet.name" />
                 </RouterLink>
                 <div class="box-name">
                     <span>{{ pokemonSet.name }}</span>
@@ -66,19 +67,3 @@ onBeforeRouteLeave(() => clearSearchParams());
     <Message v-if="pokemonSets.responseStatus.error" type="error" :text="pokemonSets.responseStatus.error" />
     <LoadingState :response-status="pokemonSets.responseStatus" @load-more="handleLoadMore" />
 </template>
-
-<style scoped>
-.box {
-    position: relative;
-    aspect-ratio: 1;
-}
-
-.set-image {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    max-width: calc(100% - var(--pico-block-spacing-horizontal) * 2);
-    max-height: calc(100% - var(--pico-block-spacing-vertical) * 2);
-    translate: -50% -50%;
-}
-</style>
