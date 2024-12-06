@@ -63,7 +63,6 @@ function getSprites(sprite: PokeApiResult): PokemonSpriteTypes {
 }
 
 export const usePokemonStore = defineStore('pokemon', () => {
-    const defaultErrorMessage = 'There was an error, please try again';
     const responseStatus: ResponseStatus = {
         ok: false,
         isLoading: false,
@@ -132,7 +131,7 @@ export const usePokemonStore = defineStore('pokemon', () => {
     async function getPokemonSets(url = '') {
         const apiUrl = new URL(url || `${POKEMON_TCG_API_URL}sets?orderBy=releaseDate&page=1`);
 
-        pokemonSets.value.responseStatus.ok = false;
+        pokemonSets.value.responseStatus.ok = pokemonSets.value.data.length > 0;
         pokemonSets.value.responseStatus.isLoading = true;
         pokemonSets.value.responseStatus.error = '';
         pokemonSets.value.responseStatus.nextUrl = '';
@@ -152,12 +151,9 @@ export const usePokemonStore = defineStore('pokemon', () => {
             } else {
                 throw new Error('There was an error retrieving the sets, please try again');
             }
-        } catch (error: Error | any) {
-            if (error instanceof Error) {
-                pokemonSets.value.responseStatus.error = error.message;
-            } else {
-                pokemonSets.value.responseStatus.error = defaultErrorMessage;
-            }
+        } catch (e) {
+            const error = e as Error;
+            pokemonSets.value.responseStatus.error = error.message;
         }
 
         pokemonSets.value.responseStatus.isLoading = false;
@@ -166,7 +162,7 @@ export const usePokemonStore = defineStore('pokemon', () => {
     async function getPokemonCardsBySet(setId: string, url = '') {
         const apiUrl = new URL(url || `${POKEMON_TCG_API_URL}cards?q=set.id:${setId}&orderBy=number&page=1`);
 
-        pokemonCardsBySet.value.responseStatus.ok = false;
+        pokemonCardsBySet.value.responseStatus.ok = pokemonCardsBySet.value.data[setId]?.length > 0;
         pokemonCardsBySet.value.responseStatus.isLoading = true;
         pokemonSets.value.responseStatus.error = '';
         pokemonCardsBySet.value.responseStatus.nextUrl = '';
@@ -186,12 +182,9 @@ export const usePokemonStore = defineStore('pokemon', () => {
             } else {
                 throw new Error('There was an error retrieving the cards, please try again');
             }
-        } catch (error: Error | any) {
-            if (error instanceof Error) {
-                pokemonCardsBySet.value.responseStatus.error = error.message;
-            } else {
-                pokemonCardsBySet.value.responseStatus.error = defaultErrorMessage;
-            }
+        } catch (e) {
+            const error = e as Error;
+            pokemonCardsBySet.value.responseStatus.error = error.message;
         }
 
         pokemonCardsBySet.value.responseStatus.isLoading = false;
@@ -214,12 +207,9 @@ export const usePokemonStore = defineStore('pokemon', () => {
             } else {
                 throw new Error('There was an error retrieving the card data, please try again');
             }
-        } catch (error: Error | any) {
-            if (error instanceof Error) {
-                pokemonCards.value.responseStatus.error = error.message;
-            } else {
-                pokemonCards.value.responseStatus.error = defaultErrorMessage;
-            }
+        } catch (e) {
+            const error = e as Error;
+            pokemonCards.value.responseStatus.error = error.message;
         }
 
         pokemonCards.value.responseStatus.isLoading = false;
@@ -250,7 +240,7 @@ export const usePokemonStore = defineStore('pokemon', () => {
             apiUrl.searchParams.set('q', `${searchParamQ} subtypes:"*${cardSubtype}*"`);
         }
 
-        pokemonCardsBySearch.value.responseStatus.ok = previousCards.length ? true : false;
+        pokemonCardsBySearch.value.responseStatus.ok = previousCards.length > 0;
         pokemonCardsBySearch.value.responseStatus.isLoading = true;
         pokemonCardsBySearch.value.responseStatus.error = '';
         pokemonCardsBySearch.value.responseStatus.nextUrl = '';
@@ -273,12 +263,9 @@ export const usePokemonStore = defineStore('pokemon', () => {
             } else {
                 throw new Error('There was an error retrieving the cards, please try again');
             }
-        } catch (error: Error | any) {
-            if (error instanceof Error) {
-                pokemonCardsBySearch.value.responseStatus.error = error.message;
-            } else {
-                pokemonCardsBySearch.value.responseStatus.error = defaultErrorMessage;
-            }
+        } catch (e) {
+            const error = e as Error;
+            pokemonCardsBySearch.value.responseStatus.error = error.message;
         }
 
         pokemonCardsBySearch.value.responseStatus.isLoading = false;
@@ -326,7 +313,7 @@ export const usePokemonStore = defineStore('pokemon', () => {
             apiUrl.searchParams.set('limit', '10000');
         }
 
-        pokemonSprites.value.responseStatus.ok = previousSprites.length ? true : false;
+        pokemonSprites.value.responseStatus.ok = previousSprites.length > 0;
         pokemonSprites.value.responseStatus.isLoading = true;
         pokemonSprites.value.responseStatus.error = '';
         pokemonSprites.value.responseStatus.nextUrl = '';
@@ -368,12 +355,9 @@ export const usePokemonStore = defineStore('pokemon', () => {
                 } else {
                     throw new Error('There was an error retrieving the sprites, please try again');
                 }
-            } catch (error: Error | any) {
-                if (error instanceof Error) {
-                    pokemonSprites.value.responseStatus.error = error.message;
-                } else {
-                    pokemonSprites.value.responseStatus.error = defaultErrorMessage;
-                }
+            } catch (e) {
+                const error = e as Error;
+                pokemonSprites.value.responseStatus.error = error.message;
             }
         }
 
