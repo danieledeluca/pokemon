@@ -7,16 +7,16 @@ const props = defineProps<{
 }>();
 
 const isLoading = ref(true);
-
-function handleLoad() {
-    isLoading.value = false;
-}
+const hasError = ref(false);
 </script>
 
 <template>
     <div class="image-wrapper">
-        <div :aria-busy="isLoading"></div>
-        <img :src="props.src" :alt="props.alt" loading="lazy" @load="handleLoad" />
+        <img v-if="hasError" src="@/assets/no-image.png" alt="No image found" />
+        <template v-else>
+            <div :aria-busy="isLoading"></div>
+            <img :src="props.src" :alt="props.alt" loading="lazy" @load="isLoading = false" @error="hasError = true" />
+        </template>
     </div>
 </template>
 
@@ -31,9 +31,5 @@ function handleLoad() {
     top: 50%;
     left: 50%;
     translate: -50% -50%;
-}
-
-img {
-    width: 100%;
 }
 </style>
