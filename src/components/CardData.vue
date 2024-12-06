@@ -266,6 +266,7 @@ article:last-child {
 
 .types img,
 .weaknesses img,
+.resistance img,
 .retreat-cost img {
     max-width: 64px;
 }
