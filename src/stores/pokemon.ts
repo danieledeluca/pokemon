@@ -1,7 +1,7 @@
 import { parseLabel } from '@/utils';
+import { POKE_API_URL, POKEMON_TCG_API_URL } from '@/utils/constants';
 import type {
     PokeApiResponse,
-    PokeApiResult,
     PokemonCard,
     PokemonCards,
     PokemonData,
@@ -13,24 +13,9 @@ import type {
     PokemonSpriteTypes,
     ResponseStatus,
 } from '@/utils/models';
-import { filterList } from '@/utils/pokemon';
+import { filterList, getSpriteId, getSprites } from '@/utils/pokemon';
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-
-const POKEMON_TCG_API_URL = 'https://api.pokemontcg.io/v2/';
-const POKE_API_URL = 'https://pokeapi.co/api/v2/';
-
-const SPRITE_FRONT_DEFAULT_URL = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/';
-const SPRITE_FRONT_SHINY_URL = `${SPRITE_FRONT_DEFAULT_URL}shiny/`;
-const HOME_SPRITE_FRONT_DEFAULT_URL =
-    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/';
-const HOME_SPRITE_FRONT_SHINY_URL = `${HOME_SPRITE_FRONT_DEFAULT_URL}shiny/`;
-const OFFICIAL_ARTWORK_SPRITE_FRONT_DEFAULT_URL =
-    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/';
-const OFFICIAL_ARTWORK_SPRITE_FRONT_SHINY_URL = `${OFFICIAL_ARTWORK_SPRITE_FRONT_DEFAULT_URL}shiny/`;
-const SHOWDOWN_SPRITE_FRONT_DEFAULT_URL =
-    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/';
-const SHOWDOWN_SPRITE_FRONT_SHINY_URL = `${SHOWDOWN_SPRITE_FRONT_DEFAULT_URL}shiny/`;
 
 function getNextUrl(url: string) {
     const apiUrl = new URL(url);
@@ -39,27 +24,6 @@ function getNextUrl(url: string) {
     apiUrl.searchParams.set('page', (currentPage + 1).toString());
 
     return apiUrl.href;
-}
-
-function getSpriteId(sprite: PokeApiResult) {
-    const regex = /(pokemon|pokemon-species)\/(\d+)\//;
-
-    return parseInt(sprite.url.match(regex)?.[2] || '0');
-}
-
-function getSprites(sprite: PokeApiResult): PokemonSpriteTypes {
-    const spriteId = getSpriteId(sprite);
-
-    return {
-        'front-default': `${SPRITE_FRONT_DEFAULT_URL}${spriteId}.png`,
-        'front-shiny': `${SPRITE_FRONT_SHINY_URL}${spriteId}.png`,
-        'home-front-default': `${HOME_SPRITE_FRONT_DEFAULT_URL}${spriteId}.png`,
-        'home-front-shiny': `${HOME_SPRITE_FRONT_SHINY_URL}${spriteId}.png`,
-        'official-artwork-front-default': `${OFFICIAL_ARTWORK_SPRITE_FRONT_DEFAULT_URL}${spriteId}.png`,
-        'official-artwork-front-shiny': `${OFFICIAL_ARTWORK_SPRITE_FRONT_SHINY_URL}${spriteId}.png`,
-        'showdown-front-default': `${SHOWDOWN_SPRITE_FRONT_DEFAULT_URL}${spriteId}.gif`,
-        'showdown-front-shiny': `${SHOWDOWN_SPRITE_FRONT_SHINY_URL}${spriteId}.gif`,
-    };
 }
 
 export const usePokemonStore = defineStore('pokemon', () => {
