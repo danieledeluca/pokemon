@@ -161,7 +161,6 @@ function getCardLastUpdateAt(market: Market) {
                 <ul class="list">
                     <li class="attack" v-for="pokemonAttack in pokemonCard.attacks" :key="pokemonAttack.name">
                         <strong class="data">
-                            <span class="name">{{ pokemonAttack.name }}</span>
                             <span class="cost">
                                 <img
                                     v-for="cost in pokemonAttack.cost"
@@ -170,6 +169,7 @@ function getCardLastUpdateAt(market: Market) {
                                     :alt="cost"
                                 />
                             </span>
+                            <span class="name">{{ pokemonAttack.name }}</span>
                             <span class="damage">{{ pokemonAttack.damage }}</span>
                         </strong>
                         <div>{{ pokemonAttack.text }}</div>
@@ -281,12 +281,14 @@ article:last-child {
 .attack .cost {
     display: inline-flex;
     gap: 0.25rem;
-    margin-left: 0.5rem;
-    margin-right: auto;
 }
 
 .attack .cost img {
     max-width: 1rem;
+}
+
+.attack .name {
+    margin-right: auto;
 }
 
 .evolves-to span:not(:first-child):not(:last-child)::after {
