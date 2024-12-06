@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ResponseStatus } from '@/models';
+import type { ResponseStatus } from '@/utils/models';
 
 const props = defineProps<{
     responseStatus: ResponseStatus;

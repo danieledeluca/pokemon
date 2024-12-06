@@ -1,4 +1,4 @@
-import type { PokeApiResult, PokemonCard, PokemonSet, PokemonSprite } from '@/models';
+import type { PokeApiResult, PokemonCard, PokemonSet, PokemonSprite } from '@/utils/models';
 
 export function filterList<T extends PokemonSet | PokemonCard | PokemonSprite | PokeApiResult>(
     filter: string,

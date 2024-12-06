@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { isInViewport } from '@/composables/utils';
+import { isInViewport } from '@/utils';
 import { useWindowScroll } from '@vueuse/core';
 import { ref, watch } from 'vue';
 import { RouterLink } from 'vue-router';

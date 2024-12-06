@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { showItem } from '@/composables/pokemon';
-import type { PokemonSprite } from '@/models';
+import { showItem } from '@/utils/pokemon';
+import type { PokemonSprite } from '@/utils/models';
 import LazyImage from './LazyImage.vue';
 
 const props = defineProps<{

@@ -7,9 +7,9 @@ import SearchForm from '@/components/SearchForm.vue';
 import PokemonCards from '@/components/PokemonCards.vue';
 import Message from '@/components/Message.vue';
 import { useDebounceFn } from '@vueuse/core';
-import { filterList } from '@/composables/pokemon';
-import type { PokemonCard } from '@/models';
-import { getSearchParam } from '@/composables/utils';
+import { filterList } from '@/utils/pokemon';
+import type { PokemonCard } from '@/utils/models';
+import { getSearchParam } from '@/utils';
 
 const route = useRoute();
 const setId = route.params.set_id as string;

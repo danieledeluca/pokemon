@@ -3,7 +3,7 @@ import LoadingState from '@/components/LoadingState.vue';
 import Message from '@/components/Message.vue';
 import PokemonCards from '@/components/PokemonCards.vue';
 import SearchForm from '@/components/SearchForm.vue';
-import { clearSearchParams, getSearchParam, setSearchParam } from '@/composables/utils';
+import { clearSearchParams, getSearchParam, setSearchParam } from '@/utils';
 import { usePokemonStore } from '@/stores/pokemon';
 import { useDebounceFn } from '@vueuse/core';
 import { computed, onMounted, onUnmounted, reactive, watch } from 'vue';

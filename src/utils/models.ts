@@ -206,3 +206,5 @@ export interface PokemonRegion {
     name: string;
     sprites: PokemonSprite[];
 }
+
+export type Market = 'tcgplayer' | 'cardmarket';

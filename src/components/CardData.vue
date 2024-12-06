@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import type { PokemonCard, Price } from '@/models';
+import type { Market, PokemonCard, Price } from '@/utils/models';
 import { toRefs } from 'vue';
 import Tooltip from './Tooltip.vue';
-import { getImageUrl } from '@/composables/utils';
+import { getImageUrl } from '@/utils';
 import { RouterLink } from 'vue-router';
-
-type Market = 'tcgplayer' | 'cardmarket';
 
 const props = defineProps<{
     pokemonCard: PokemonCard;

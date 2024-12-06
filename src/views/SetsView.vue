@@ -4,11 +4,11 @@ import { computed, onMounted, reactive } from 'vue';
 import SearchForm from '@/components/SearchForm.vue';
 import LoadingState from '@/components/LoadingState.vue';
 import Message from '@/components/Message.vue';
-import type { PokemonSet } from '@/models';
+import type { PokemonSet } from '@/utils/models';
 import { useDebounceFn } from '@vueuse/core';
-import { filterList, showItem } from '@/composables/pokemon';
+import { filterList, showItem } from '@/utils/pokemon';
 import { onBeforeRouteLeave } from 'vue-router';
-import { clearSearchParams } from '@/composables/utils';
+import { clearSearchParams } from '@/utils';
 import LazyImage from '@/components/LazyImage.vue';
 
 const filters = reactive({

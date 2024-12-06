@@ -13,9 +13,9 @@ import type {
     ResponseStatus,
     PokemonData,
     PokemonSpriteTypes,
-} from '@/models';
-import { filterList } from '@/composables/pokemon';
-import { parseLabel } from '@/composables/utils';
+} from '@/utils/models';
+import { filterList } from '@/utils/pokemon';
+import { parseLabel } from '@/utils';
 
 const POKEMON_TCG_API_URL = 'https://api.pokemontcg.io/v2/';
 const POKE_API_URL = 'https://pokeapi.co/api/v2/';

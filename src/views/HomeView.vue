@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getImageUrl } from '@/composables/utils';
+import { getImageUrl } from '@/utils';
 
 const boxes = [
     {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getSearchParam, setSearchParam } from '@/composables/utils';
+import { getSearchParam, setSearchParam } from '@/utils';
 import { ref, watch } from 'vue';
 
 const props = defineProps<{
