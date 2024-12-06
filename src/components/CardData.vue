@@ -266,6 +266,12 @@ article:last-child {
     margin-bottom: 0;
 }
 
+.types img,
+.weaknesses img,
+.retreat-cost img {
+    max-width: 64px;
+}
+
 .attack .data {
     display: flex;
     align-items: center;
