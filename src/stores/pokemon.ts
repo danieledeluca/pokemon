@@ -173,7 +173,10 @@ export const usePokemonStore = defineStore('pokemon', () => {
             if (response.ok) {
                 const json = (await response.json()) as PokemonCards;
 
-                pokemonCardsBySet.value.data[setId] = <PokemonCard[]>json.data;
+                const setCards = pokemonCardsBySet.value.data[setId] || [];
+                setCards.push(...(<PokemonCard[]>json.data));
+
+                pokemonCardsBySet.value.data[setId] = setCards;
                 pokemonCardsBySet.value.responseStatus.ok = true;
 
                 if (json.totalCount > pokemonCardsBySet.value.data[setId].length) {
