@@ -14,6 +14,7 @@ const filters = reactive({
     type: getSearchParam('type'),
     subtype: getSearchParam('subtype'),
 });
+const hasFilters = computed(() => Object.values(filters).some((value) => value));
 
 const pokemonStore = usePokemonStore();
 const pokemonCards = computed(() => pokemonStore.pokemonCardsBySearch);
@@ -45,7 +46,7 @@ watch(filters, async (newFilters) => {
 });
 
 onMounted(() => {
-    if (!pokemonCards.value.data.length) {
+    if (!pokemonCards.value.data.length || hasFilters.value) {
         pokemonStore.getPokemonCardsBySearch(filters.name, filters.rarity, filters.type, filters.subtype);
     }
 
@@ -63,7 +64,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-    if (Object.values(filters).some((value) => value)) {
+    if (hasFilters.value) {
         pokemonCards.value.data = [];
     }
 });
