@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { RouterLink, useRoute } from 'vue-router';
+import CardData from '@/components/CardData.vue';
+import LoadingState from '@/components/LoadingState.vue';
+import Message from '@/components/Message.vue';
 import { usePokemonStore } from '@/stores/pokemon';
 import { computed, onMounted } from 'vue';
-import LoadingState from '@/components/LoadingState.vue';
-import CardData from '@/components/CardData.vue';
-import Message from '@/components/Message.vue';
+import { RouterLink, useRoute } from 'vue-router';
 
 const route = useRoute();
 const cardId = route.params.card_id as string;
@@ -30,7 +30,7 @@ onMounted(async () => {
 <template>
     <div v-if="pokemonCard.responseStatus.ok && pokemonCard.data[cardId]" class="card">
         <div class="card-image">
-            <img :src="pokemonCard.data[cardId]?.images.large" :alt="pokemonCard.data[cardId]?.name" loading="lazy" />
+            <img :src="pokemonCard.data[cardId].images.large" :alt="pokemonCard.data[cardId].name" loading="lazy" />
             <div class="card-navigation">
                 <RouterLink
                     v-if="cardIndex > 0"

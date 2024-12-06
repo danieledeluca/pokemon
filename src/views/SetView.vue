@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { useRoute } from 'vue-router';
-import { usePokemonStore } from '@/stores/pokemon';
-import { computed, onMounted, reactive } from 'vue';
 import LoadingState from '@/components/LoadingState.vue';
-import SearchForm from '@/components/SearchForm.vue';
-import PokemonCards from '@/components/PokemonCards.vue';
 import Message from '@/components/Message.vue';
-import { useDebounceFn } from '@vueuse/core';
-import { filterList } from '@/utils/pokemon';
-import type { PokemonCard } from '@/utils/models';
+import PokemonCards from '@/components/PokemonCards.vue';
+import SearchForm from '@/components/SearchForm.vue';
+import { usePokemonStore } from '@/stores/pokemon';
 import { getSearchParam } from '@/utils';
+import type { PokemonCard } from '@/utils/models';
+import { filterList } from '@/utils/pokemon';
+import { useDebounceFn } from '@vueuse/core';
+import { computed, onMounted, reactive } from 'vue';
+import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const setId = route.params.set_id as string;

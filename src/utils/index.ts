@@ -18,14 +18,6 @@ export function getSearchParam(key: string) {
     return new URLSearchParams(window.location.search).get(key) || '';
 }
 
-export function clearSearchParams() {
-    const searchParams = new URLSearchParams(window.location.search);
-
-    searchParams.forEach((_value, key) => {
-        setSearchParam(key, '');
-    });
-}
-
 export function isInViewport(_element: string | HTMLElement, _scrollPosition: number, _header: string | HTMLElement) {
     const element = typeof _element === 'string' ? (document.querySelector(_element) as HTMLElement) : _element;
     const header = typeof _header === 'string' ? (document.querySelector(_header) as HTMLElement) : _header;

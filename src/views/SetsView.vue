@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { usePokemonStore } from '@/stores/pokemon';
-import { computed, onMounted, reactive } from 'vue';
-import SearchForm from '@/components/SearchForm.vue';
+import LazyImage from '@/components/LazyImage.vue';
 import LoadingState from '@/components/LoadingState.vue';
 import Message from '@/components/Message.vue';
+import SearchForm from '@/components/SearchForm.vue';
+import { usePokemonStore } from '@/stores/pokemon';
 import type { PokemonSet } from '@/utils/models';
-import { useDebounceFn } from '@vueuse/core';
 import { filterList, showItem } from '@/utils/pokemon';
-import { onBeforeRouteLeave } from 'vue-router';
-import { clearSearchParams } from '@/utils';
-import LazyImage from '@/components/LazyImage.vue';
+import { useDebounceFn } from '@vueuse/core';
+import { computed, onMounted, reactive } from 'vue';
 
 const filters = reactive({
     name: '',
@@ -32,8 +30,6 @@ onMounted(async () => {
         await pokemonStore.getPokemonSets();
     }
 });
-
-onBeforeRouteLeave(() => clearSearchParams());
 </script>
 
 <template>

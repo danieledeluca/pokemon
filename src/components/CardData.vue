@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { getImageUrl } from '@/utils';
 import type { Market, PokemonCard, Price } from '@/utils/models';
 import { toRefs } from 'vue';
-import Tooltip from './Tooltip.vue';
-import { getImageUrl } from '@/utils';
 import { RouterLink } from 'vue-router';
+import Tooltip from './Tooltip.vue';
 
 const props = defineProps<{
     pokemonCard: PokemonCard;

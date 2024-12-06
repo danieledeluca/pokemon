@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { showItem } from '@/utils/pokemon';
 import type { PokemonCard } from '@/utils/models';
+import { showItem } from '@/utils/pokemon';
 import LazyImage from './LazyImage.vue';
 
 const props = defineProps<{

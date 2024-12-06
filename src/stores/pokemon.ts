@@ -1,21 +1,21 @@
-import { ref } from 'vue';
-import { defineStore } from 'pinia';
+import { parseLabel } from '@/utils';
 import type {
-    PokemonSets,
-    PokemonSet,
-    PokemonCards,
-    PokemonCard,
-    PokemonSprite,
     PokeApiResponse,
-    PokemonRegionResponse,
-    PokemonRegion,
     PokeApiResult,
-    ResponseStatus,
+    PokemonCard,
+    PokemonCards,
     PokemonData,
+    PokemonRegion,
+    PokemonRegionResponse,
+    PokemonSet,
+    PokemonSets,
+    PokemonSprite,
     PokemonSpriteTypes,
+    ResponseStatus,
 } from '@/utils/models';
 import { filterList } from '@/utils/pokemon';
-import { parseLabel } from '@/utils';
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
 
 const POKEMON_TCG_API_URL = 'https://api.pokemontcg.io/v2/';
 const POKE_API_URL = 'https://pokeapi.co/api/v2/';
