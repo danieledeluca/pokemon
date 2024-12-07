@@ -14,15 +14,15 @@ function getTypeImage(type: string) {
 </script>
 
 <template>
-    <span class="type">
+    <span>
         <img :src="getTypeImage(props.pokemonType)" :alt="props.pokemonType" :class="props.size" />
         <Tooltip :text="pokemonType" />
     </span>
 </template>
 
 <style scoped>
-.type {
-    display: inline-flex;
+img {
+    display: block;
 }
 
 img.small {

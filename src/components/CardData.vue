@@ -257,10 +257,11 @@ article:last-child {
     margin-bottom: 0;
 }
 
-.weaknesses .value,
-.resistance .value {
-    display: inline-block;
-    margin-left: 0.25rem;
+.weakness,
+.resistance {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
 }
 
 .attack .data {
