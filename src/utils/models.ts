@@ -34,13 +34,13 @@ export interface PokemonCard {
     subtypes: string[];
     level?: string;
     hp: string;
-    types?: string[];
+    types?: Type[];
     evolvesFrom?: string;
     abilities?: Ability[];
     attacks?: Attack[];
     weaknesses?: Weakness[];
     resistances?: Resistance[];
-    retreatCost?: string[];
+    retreatCost?: Type[];
     convertedRetreatCost?: number;
     set: PokemonSet;
     number: string;
@@ -68,6 +68,19 @@ export interface SetImages {
     logo: string;
 }
 
+export type Type =
+    | 'Colorless'
+    | 'Darkness'
+    | 'Dragon'
+    | 'Fairy'
+    | 'Fighting'
+    | 'Fire'
+    | 'Grass'
+    | 'Lightning'
+    | 'Metal'
+    | 'Psychic'
+    | 'Water';
+
 export interface Ability {
     name: string;
     text: string;
@@ -75,7 +88,7 @@ export interface Ability {
 }
 
 export interface Attack {
-    cost: string[];
+    cost: Type[];
     name: string;
     text: string;
     damage: string;
@@ -83,12 +96,12 @@ export interface Attack {
 }
 
 export interface Weakness {
-    type: string;
+    type: Type;
     value: string;
 }
 
 export interface Resistance {
-    type: string;
+    type: Type;
     value: string;
 }
 

@@ -1,19 +1,14 @@
 <script setup lang="ts">
-import { getImageUrl } from '@/utils';
 import type { Market, PokemonCard, Price } from '@/utils/models';
 import { toRefs } from 'vue';
 import { RouterLink } from 'vue-router';
-import Tooltip from './Tooltip.vue';
+import PokemonType from './PokemonType.vue';
 
 const props = defineProps<{
     pokemonCard: PokemonCard;
 }>();
 
 const { pokemonCard } = toRefs(props);
-
-function getTypeImage(type: string) {
-    return getImageUrl(`pokemon-types/${type.toLowerCase()}.png`);
-}
 
 function getCardPrice(market: Market) {
     let price: number | undefined;
@@ -97,8 +92,7 @@ function getCardLastUpdateAt(market: Market) {
                 </h6>
                 <div class="content">
                     <div class="type" v-for="pokemonType in pokemonCard.types" :key="pokemonType">
-                        <img :src="getTypeImage(pokemonType)" :alt="pokemonType" />
-                        <Tooltip :text="pokemonType" />
+                        <PokemonType :pokemonType="pokemonType" size="large" />
                     </div>
                 </div>
             </div>
@@ -108,8 +102,8 @@ function getCardLastUpdateAt(market: Market) {
                 </h6>
                 <div class="content">
                     <div class="weakness" v-for="pokemonWeakness in pokemonCard.weaknesses" :key="pokemonWeakness.type">
-                        <img :src="getTypeImage(pokemonWeakness.type)" :alt="pokemonWeakness.type" />
-                        <Tooltip :text="`${pokemonWeakness.type} ${pokemonWeakness.value}`" />
+                        <PokemonType :pokemonType="pokemonWeakness.type" size="large" />
+                        <span class="value">{{ pokemonWeakness.value }}</span>
                     </div>
                 </div>
             </div>
@@ -123,8 +117,8 @@ function getCardLastUpdateAt(market: Market) {
                         v-for="pokemonResistance in pokemonCard.resistances"
                         :key="pokemonResistance.type"
                     >
-                        <img :src="getTypeImage(pokemonResistance.type)" :alt="pokemonResistance.type" />
-                        <Tooltip :text="`${pokemonResistance.type} ${pokemonResistance.value}`" />
+                        <PokemonType :pokemonType="pokemonResistance.type" size="large" />
+                        <span class="value">{{ pokemonResistance.value }}</span>
                     </div>
                 </div>
             </div>
@@ -134,8 +128,7 @@ function getCardLastUpdateAt(market: Market) {
                 </h6>
                 <div class="content">
                     <div class="resistance" v-for="retreatCost in pokemonCard.retreatCost" :key="retreatCost">
-                        <img :src="getTypeImage(retreatCost)" :alt="retreatCost" />
-                        <Tooltip :text="retreatCost" />
+                        <PokemonType :pokemonType="retreatCost" size="large" />
                     </div>
                 </div>
             </div>
@@ -162,11 +155,11 @@ function getCardLastUpdateAt(market: Market) {
                     <li class="attack" v-for="pokemonAttack in pokemonCard.attacks" :key="pokemonAttack.name">
                         <strong class="data">
                             <span class="cost">
-                                <img
+                                <PokemonType
                                     v-for="cost in pokemonAttack.cost"
                                     :key="cost"
-                                    :src="getTypeImage(cost)"
-                                    :alt="cost"
+                                    :pokemonType="cost"
+                                    size="small"
                                 />
                             </span>
                             <span class="name">{{ pokemonAttack.name }}</span>
@@ -264,11 +257,10 @@ article:last-child {
     margin-bottom: 0;
 }
 
-.types img,
-.weaknesses img,
-.resistance img,
-.retreat-cost img {
-    max-width: 64px;
+.weaknesses .value,
+.resistance .value {
+    display: inline-block;
+    margin-left: 0.25rem;
 }
 
 .attack .data {
@@ -281,10 +273,6 @@ article:last-child {
 .attack .cost {
     display: inline-flex;
     gap: 0.25rem;
-}
-
-.attack .cost img {
-    max-width: 1rem;
 }
 
 .attack .name {
