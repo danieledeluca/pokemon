@@ -43,13 +43,13 @@ onMounted(async () => {
     </div>
     <SearchForm
         name="card"
-        :is-disabled="pokemonCards.responseStatus.isLoading || !!pokemonCards.responseStatus.error"
-        @update-filter="handleUpdateFilter"
+        :isDisabled="pokemonCards.responseStatus.isLoading || !!pokemonCards.responseStatus.error"
+        @updateFilter="handleUpdateFilter"
     >
         <!-- TODO: add more filters -->
     </SearchForm>
     <template v-if="pokemonCards.responseStatus.ok && pokemonCards.data[setId]?.length">
-        <PokemonCards :pokemon-cards="pokemonCards.data[setId]" :pokemon-cards-filtered="pokemonCardsFiltered" />
+        <PokemonCards :pokemonCards="pokemonCards.data[setId]" :pokemonCardsFiltered="pokemonCardsFiltered" />
         <Message
             v-if="!pokemonCardsFiltered?.length && filters.name"
             type="error"
@@ -57,7 +57,7 @@ onMounted(async () => {
         />
     </template>
     <Message v-if="pokemonCards.responseStatus.error" type="error" :text="pokemonCards.responseStatus.error" />
-    <LoadingState :response-status="pokemonCards.responseStatus" @load-more="handleLoadMore" />
+    <LoadingState :responseStatus="pokemonCards.responseStatus" @loadMore="handleLoadMore" />
 </template>
 
 <style scoped>

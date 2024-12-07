@@ -50,10 +50,10 @@ onMounted(async () => {
                 </RouterLink>
             </div>
         </div>
-        <CardData :pokemon-card="pokemonCard.data[cardId]" />
+        <CardData :pokemonCard="pokemonCard.data[cardId]" />
     </div>
     <Message v-if="pokemonCard.responseStatus.error" type="error" :text="pokemonCard.responseStatus.error" />
-    <LoadingState :response-status="pokemonCard.responseStatus" />
+    <LoadingState :responseStatus="pokemonCard.responseStatus" />
 </template>
 
 <style scoped>

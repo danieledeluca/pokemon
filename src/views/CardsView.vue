@@ -73,8 +73,8 @@ onUnmounted(() => {
 <template>
     <SearchForm
         name="card"
-        :is-disabled="pokemonCards.responseStatus.isLoading || !!pokemonCards.responseStatus.error"
-        @update-filter="handleUpdateFilter"
+        :isDisabled="pokemonCards.responseStatus.isLoading || !!pokemonCards.responseStatus.error"
+        @updateFilter="handleUpdateFilter"
     >
         <fieldset class="grid" :disabled="pokemonCards.responseStatus.isLoading || !!pokemonCards.responseStatus.error">
             <label>
@@ -115,7 +115,7 @@ onUnmounted(() => {
         </fieldset>
     </SearchForm>
     <template v-if="pokemonCards.responseStatus.ok">
-        <PokemonCards :pokemon-cards="pokemonCards.data" />
+        <PokemonCards :pokemonCards="pokemonCards.data" />
         <Message
             v-if="!pokemonCards.data.length && Object.values(filters).some((value) => value)"
             type="error"
@@ -123,5 +123,5 @@ onUnmounted(() => {
         />
     </template>
     <Message v-if="pokemonCards.responseStatus.error" type="error" :text="pokemonCards.responseStatus.error" />
-    <LoadingState :response-status="pokemonCards.responseStatus" @load-more="handleLoadMore" />
+    <LoadingState :responseStatus="pokemonCards.responseStatus" @loadMore="handleLoadMore" />
 </template>

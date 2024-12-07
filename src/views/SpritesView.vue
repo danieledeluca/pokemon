@@ -64,8 +64,8 @@ onUnmounted(() => {
 <template>
     <SearchForm
         name="pokemon"
-        :is-disabled="pokemonSprites.responseStatus.isLoading || !!pokemonSprites.responseStatus.error"
-        @update-filter="handleUpdateFilter"
+        :isDisabled="pokemonSprites.responseStatus.isLoading || !!pokemonSprites.responseStatus.error"
+        @updateFilter="handleUpdateFilter"
     >
         <fieldset
             class="grid"
@@ -100,9 +100,9 @@ onUnmounted(() => {
     </SearchForm>
     <template v-if="pokemonSprites.responseStatus.ok">
         <PokemonSprites
-            :pokemon-sprites="pokemonSprites.data"
-            :pokemon-sprites-filtered="pokemonSpritesFiltered"
-            :pokemon-sprite-type="filters.type"
+            :pokemonSprites="pokemonSprites.data"
+            :pokemonSpritesFiltered="pokemonSpritesFiltered"
+            :pokemonSpriteType="filters.type"
         />
         <Message
             v-if="!pokemonSpritesFiltered?.length && Object.values(filters).some((value) => value)"
@@ -111,5 +111,5 @@ onUnmounted(() => {
         />
     </template>
     <Message v-if="pokemonSprites.responseStatus.error" type="error" :text="pokemonSprites.responseStatus.error" />
-    <LoadingState :response-status="pokemonSprites.responseStatus" @load-more="handleLoadMore" />
+    <LoadingState :responseStatus="pokemonSprites.responseStatus" @loadMore="handleLoadMore" />
 </template>

@@ -8,5 +8,9 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
 
     // Enable prettier
-    "prettier.enable": true
+    "prettier.enable": true,
+
+    // Set Vue preffered style
+    "vue.complete.casing.props": "camel",
+    "vue.complete.casing.tags": "pascal"
 }
