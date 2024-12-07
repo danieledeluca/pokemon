@@ -30,27 +30,6 @@ function getCardPrice(market: Market) {
         return Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
     }
 }
-
-function getCardLastUpdateAt(market: Market) {
-    let date: string | undefined;
-
-    switch (market) {
-        case 'tcgplayer':
-            date = pokemonCard.value.tcgplayer?.updatedAt;
-            break;
-
-        case 'cardmarket':
-            date = pokemonCard.value.cardmarket?.updatedAt;
-            break;
-
-        default:
-            break;
-    }
-
-    if (date) {
-        return Intl.DateTimeFormat('en-US', { dateStyle: 'medium' }).format(new Date(date));
-    }
-}
 </script>
 
 <template>
@@ -202,11 +181,7 @@ function getCardLastUpdateAt(market: Market) {
                     <a :href="pokemonCard.tcgplayer.url" target="_blank" class="secondary">
                         <span>View prices</span>
                     </a>
-                    <small>
-                        (last update:
-                        <template v-if="getCardPrice('tcgplayer')">{{ getCardPrice('tcgplayer') }} -</template>
-                        {{ getCardLastUpdateAt('tcgplayer') }})
-                    </small>
+                    <small v-if="getCardPrice('tcgplayer')"> (average price: {{ getCardPrice('tcgplayer') }})</small>
                 </div>
             </div>
             <div class="card-market" v-if="pokemonCard.cardmarket">
@@ -217,11 +192,7 @@ function getCardLastUpdateAt(market: Market) {
                     <a :href="pokemonCard.cardmarket.url" target="_blank" class="secondary">
                         <span>View prices</span>
                     </a>
-                    <small>
-                        (last update:
-                        <template v-if="getCardPrice('cardmarket')">{{ getCardPrice('cardmarket') }} -</template>
-                        {{ getCardLastUpdateAt('cardmarket') }})
-                    </small>
+                    <small v-if="getCardPrice('cardmarket')"> (average price: {{ getCardPrice('cardmarket') }})</small>
                 </div>
             </div>
         </article>
@@ -250,7 +221,7 @@ article:last-child {
 .attributes .content {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 0.5rem;
 }
 
 .abilities .list {
