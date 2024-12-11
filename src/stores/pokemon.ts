@@ -193,18 +193,17 @@ export const usePokemonStore = defineStore('pokemon', () => {
         const apiUrl = new URL(
             url || `${POKEMON_TCG_API_URL}cards?q=name:"*${cardName}*"&orderBy=set.releaseDate,number&page=1`
         );
-        const searchParamQ = apiUrl.searchParams.get('q');
 
         if (cardRarity) {
-            apiUrl.searchParams.set('q', `${searchParamQ} rarity:"*${cardRarity}*"`);
+            apiUrl.searchParams.set('q', `${apiUrl.searchParams.get('q')} rarity:"*${cardRarity}*"`);
         }
 
         if (cardType) {
-            apiUrl.searchParams.set('q', `${searchParamQ} types:"*${cardType}*"`);
+            apiUrl.searchParams.set('q', `${apiUrl.searchParams.get('q')} types:"*${cardType}*"`);
         }
 
         if (cardSubtype) {
-            apiUrl.searchParams.set('q', `${searchParamQ} subtypes:"*${cardSubtype}*"`);
+            apiUrl.searchParams.set('q', `${apiUrl.searchParams.get('q')} subtypes:"*${cardSubtype}*"`);
         }
 
         pokemonCardsBySearch.value.responseStatus.ok = previousCards.length > 0;
