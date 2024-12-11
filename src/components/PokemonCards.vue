@@ -15,7 +15,9 @@ const props = defineProps<{
             class="card"
             v-for="pokemonCard in props.pokemonCards"
             :key="pokemonCard.id"
-            v-show="showItem<PokemonCard>(pokemonCard, props.pokemonCardsFiltered)"
+            v-show="
+                showItem<PokemonCard>(pokemonCard, props.pokemonCardsFiltered, ['name', 'rarity', 'type', 'subtype'])
+            "
         >
             <RouterLink :to="{ name: 'card', params: { card_id: pokemonCard.id } }">
                 <LazyImage :src="pokemonCard.images.small" :alt="pokemonCard.name" />

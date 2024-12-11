@@ -21,11 +21,16 @@ export function filterList<T extends PokemonSet | PokemonCard | PokemonSprite | 
 
 export function showItem<T extends PokemonSet | PokemonCard | PokemonSprite | PokeApiResult>(
     item: T,
-    filteredList?: T[]
+    filteredList?: T[],
+    keys: string[] = ['name']
 ) {
     if (!filteredList) return true;
 
-    return filteredList.findIndex((filteredItem) => filteredItem.name === item.name) > -1;
+    return (
+        filteredList.findIndex((filteredItem) =>
+            keys.every((key) => filteredItem[key as keyof T] === item[key as keyof T])
+        ) > -1
+    );
 }
 
 export function getSpriteId(sprite: PokeApiResult) {

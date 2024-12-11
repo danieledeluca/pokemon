@@ -145,6 +145,7 @@ export const usePokemonStore = defineStore('pokemon', () => {
 
                 if (json.totalCount > pokemonCardsBySet.value.data[setId].length) {
                     pokemonCardsBySet.value.responseStatus.nextUrl = getNextUrl(apiUrl.href);
+                    await getPokemonCardsBySet(setId, pokemonCardsBySet.value.responseStatus.nextUrl);
                 }
             } else {
                 throw new Error('There was an error retrieving the cards, please try again');

@@ -2,13 +2,14 @@
 import LoadingState from '@/components/LoadingState.vue';
 import Message from '@/components/Message.vue';
 import PokemonCards from '@/components/PokemonCards.vue';
-import SearchForm from '@/components/SearchForm.vue';
+import PokemonCardSearchForm from '@/components/PokemonCardSearchForm.vue';
 import { usePokemonStore } from '@/stores/pokemon';
-import { getSearchParam, setSearchParam } from '@/utils';
+import { getSearchParam } from '@/utils';
+import type { PokemonCardFilters } from '@/utils/models';
 import { useDebounceFn } from '@vueuse/core';
 import { computed, onMounted, onUnmounted, reactive, watch } from 'vue';
 
-const filters = reactive({
+const filters: PokemonCardFilters = reactive({
     name: getSearchParam('name'),
     rarity: getSearchParam('rarity'),
     type: getSearchParam('type'),
@@ -22,9 +23,14 @@ const pokemonCardRarities = computed(() => pokemonStore.pokemonCardRarities);
 const pokemonCardTypes = computed(() => pokemonStore.pokemonCardTypes);
 const pokemonCardSubtypes = computed(() => pokemonStore.pokemonCardSubtypes);
 
-const handleUpdateFilter = useDebounceFn((newFilter: string) => {
-    filters.name = newFilter;
+const handleUpdateName = useDebounceFn((newName: string) => {
+    filters.name = newName;
 }, 1000);
+const handleUpdateFilters = (newFilters: Omit<PokemonCardFilters, 'name'>) => {
+    filters.rarity = newFilters.rarity;
+    filters.type = newFilters.type;
+    filters.subtype = newFilters.subtype;
+};
 
 const handleLoadMore = async () => {
     await pokemonStore.getPokemonCardsBySearch(
@@ -38,10 +44,6 @@ const handleLoadMore = async () => {
 };
 
 watch(filters, async (newFilters) => {
-    Object.entries(newFilters).forEach(([key, value]) => {
-        setSearchParam(key, value);
-    });
-
     await pokemonStore.getPokemonCardsBySearch(newFilters.name, newFilters.rarity, newFilters.type, newFilters.subtype);
 });
 
@@ -71,49 +73,14 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <SearchForm
-        name="card"
+    <PokemonCardSearchForm
         :isDisabled="pokemonCards.responseStatus.isLoading || !!pokemonCards.responseStatus.error"
-        @updateFilter="handleUpdateFilter"
-    >
-        <fieldset class="grid" :disabled="pokemonCards.responseStatus.isLoading || !!pokemonCards.responseStatus.error">
-            <label>
-                Select a card rarity
-                <select v-model="filters.rarity" :disabled="!pokemonCardRarities.length">
-                    <option selected value="">All rarities</option>
-                    <option
-                        v-for="pokemonCardRarity in pokemonCardRarities"
-                        :key="pokemonCardRarity"
-                        :value="pokemonCardRarity"
-                    >
-                        {{ pokemonCardRarity }}
-                    </option>
-                </select>
-            </label>
-            <label>
-                Select a card type
-                <select v-model="filters.type" :disabled="!pokemonCardTypes.length">
-                    <option selected value="">All types</option>
-                    <option v-for="pokemonCardType in pokemonCardTypes" :key="pokemonCardType" :value="pokemonCardType">
-                        {{ pokemonCardType }}
-                    </option>
-                </select>
-            </label>
-            <label>
-                Select a card subtype
-                <select v-model="filters.subtype" :disabled="!pokemonCardSubtypes.length">
-                    <option selected value="">All subtypes</option>
-                    <option
-                        v-for="pokemonCardSubtype in pokemonCardSubtypes"
-                        :key="pokemonCardSubtype"
-                        :value="pokemonCardSubtype"
-                    >
-                        {{ pokemonCardSubtype }}
-                    </option>
-                </select>
-            </label>
-        </fieldset>
-    </SearchForm>
+        :rarities="pokemonCardRarities"
+        :types="pokemonCardTypes"
+        :subtypes="pokemonCardSubtypes"
+        @updateName="handleUpdateName"
+        @updateFilters="handleUpdateFilters"
+    />
     <template v-if="pokemonCards.responseStatus.ok">
         <PokemonCards :pokemonCards="pokemonCards.data" />
         <Message

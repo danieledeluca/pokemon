@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { getImageUrl } from '@/utils';
-import type { Type } from '@/utils/models';
 import Tooltip from './Tooltip.vue';
 
 const props = defineProps<{
-    pokemonType: Type;
+    pokemonType: string;
     size: 'small' | 'large';
 }>();
 
