@@ -30,7 +30,10 @@ const boxes = [
         <div class="grid">
             <RouterLink v-for="box in boxes" :to="{ name: box.name }" :key="box.name" class="box">
                 <span class="icon">
-                    <img :src="getImageUrl(`icons/${box.name}.png`)" :alt="box.title" />
+                    <img
+                        :src="Object.keys(glob).find((key) => key.indexOf(box.name) > -1)"
+                        :alt="box.title"
+                    />
                 </span>
                 <h6 class="title">{{ box.title }}</h6>
                 <div class="content">{{ box.content }}</div>

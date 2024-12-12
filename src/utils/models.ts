@@ -156,7 +156,7 @@ export interface PokeApiResult {
 }
 
 export interface PokemonRegionResponse {
-    abilities: any[];
+    abilities: PokeApiResult[];
     id: number;
     main_region: PokeApiResult;
     moves: PokeApiResult[];

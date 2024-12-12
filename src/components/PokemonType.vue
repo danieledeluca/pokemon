@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { getImageUrl } from '@/utils';
 import Tooltip from './Tooltip.vue';
 
 const props = defineProps<{
@@ -7,14 +6,18 @@ const props = defineProps<{
     size: 'small' | 'large';
 }>();
 
-function getTypeImage(type: string) {
-    return getImageUrl(`pokemon-types/${type.toLowerCase()}.png`);
-}
+const glob = import.meta.glob('@/assets/pokemon-types/*.png', { eager: true });
 </script>
 
 <template>
     <span>
-        <img :src="getTypeImage(props.pokemonType)" :alt="props.pokemonType" :class="props.size" />
+        <img
+            :src="
+                Object.keys(glob).find((key) => key.indexOf(props.pokemonType.toLowerCase()) > -1)
+            "
+            :alt="props.pokemonType"
+            :class="props.size"
+        />
         <Tooltip :text="pokemonType" />
     </span>
 </template>

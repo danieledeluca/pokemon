@@ -36,7 +36,3 @@ export function isInViewport(_element: string | HTMLElement, _scrollPosition: nu
 
     return false;
 }
-
-export function getImageUrl(path: string) {
-    return new URL(`/src/assets/${path}`, import.meta.url).href;
-}
