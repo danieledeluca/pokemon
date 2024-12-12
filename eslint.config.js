@@ -6,6 +6,16 @@ export default [
     {
         name: 'app/files-to-lint',
         files: ['**/*.{ts,mts,tsx,vue}'],
+        rules: {
+            'vue/custom-event-name-casing': ['error', 'camelCase'],
+            'vue/prop-name-casing': ['error', 'camelCase'],
+            'vue/multi-word-component-names': [
+                'error',
+                {
+                    ignores: ['Message', 'Tooltip', 'Header'],
+                },
+            ],
+        },
     },
 
     {
