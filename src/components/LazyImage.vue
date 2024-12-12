@@ -15,7 +15,13 @@ const hasError = ref(false);
         <img v-if="hasError" src="@/assets/no-image.png" alt="No image found" />
         <template v-else>
             <div :aria-busy="isLoading"></div>
-            <img :src="props.src" :alt="props.alt" loading="lazy" @load="isLoading = false" @error="hasError = true" />
+            <img
+                :src="props.src"
+                :alt="props.alt"
+                loading="lazy"
+                @load="isLoading = false"
+                @error="hasError = true"
+            />
         </template>
     </div>
 </template>

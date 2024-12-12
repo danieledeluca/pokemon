@@ -11,7 +11,10 @@ const emit = defineEmits<{
 </script>
 
 <template>
-    <div v-if="props.responseStatus.isLoading || props.responseStatus.nextUrl" class="loading-state">
+    <div
+        v-if="props.responseStatus.isLoading || props.responseStatus.nextUrl"
+        class="loading-state"
+    >
         <button
             @click="emit('loadMore')"
             type="button"

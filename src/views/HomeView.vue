@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { getImageUrl } from '@/utils';
-
+const glob = import.meta.glob('@/assets/icons/*.png', { eager: true });
 const boxes = [
     {
         name: 'sets',

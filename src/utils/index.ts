@@ -18,13 +18,21 @@ export function getSearchParam(key: string) {
     return new URLSearchParams(window.location.search).get(key) || '';
 }
 
-export function isInViewport(_element: string | HTMLElement, _scrollPosition: number, _header: string | HTMLElement) {
-    const element = typeof _element === 'string' ? (document.querySelector(_element) as HTMLElement) : _element;
-    const header = typeof _header === 'string' ? (document.querySelector(_header) as HTMLElement) : _header;
+export function isInViewport(
+    _element: string | HTMLElement,
+    _scrollPosition: number,
+    _header: string | HTMLElement
+) {
+    const element =
+        typeof _element === 'string' ? (document.querySelector(_element) as HTMLElement) : _element;
+    const header =
+        typeof _header === 'string' ? (document.querySelector(_header) as HTMLElement) : _header;
     const headerStyle = getComputedStyle(header);
 
     if (element) {
-        const headerHeight = ['fixed', 'sticky'].includes(headerStyle.position) ? header.offsetHeight || 0 : 0;
+        const headerHeight = ['fixed', 'sticky'].includes(headerStyle.position)
+            ? header.offsetHeight || 0
+            : 0;
 
         const elementTop = element.offsetTop;
         const elementBottom = elementTop + element.offsetHeight;

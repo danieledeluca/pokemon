@@ -30,7 +30,11 @@ onMounted(async () => {
 <template>
     <div v-if="pokemonCard.responseStatus.ok && pokemonCard.data[cardId]" class="card">
         <div class="card-image">
-            <img :src="pokemonCard.data[cardId].images.large" :alt="pokemonCard.data[cardId].name" loading="lazy" />
+            <img
+                :src="pokemonCard.data[cardId].images.large"
+                :alt="pokemonCard.data[cardId].name"
+                loading="lazy"
+            />
             <div class="card-navigation">
                 <RouterLink
                     v-if="cardIndex > 0"
@@ -52,7 +56,11 @@ onMounted(async () => {
         </div>
         <CardData :pokemonCard="pokemonCard.data[cardId]" />
     </div>
-    <Message v-if="pokemonCard.responseStatus.error" type="error" :text="pokemonCard.responseStatus.error" />
+    <Message
+        v-if="pokemonCard.responseStatus.error"
+        type="error"
+        :text="pokemonCard.responseStatus.error"
+    />
     <LoadingState :responseStatus="pokemonCard.responseStatus" />
 </template>
 

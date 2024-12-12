@@ -1,4 +1,10 @@
-import type { PokeApiResult, PokemonCard, PokemonSet, PokemonSprite, PokemonSpriteTypes } from '@/utils/models';
+import type {
+    PokeApiResult,
+    PokemonCard,
+    PokemonSet,
+    PokemonSprite,
+    PokemonSpriteTypes,
+} from '@/utils/models';
 import {
     HOME_SPRITE_FRONT_DEFAULT_URL,
     HOME_SPRITE_FRONT_SHINY_URL,

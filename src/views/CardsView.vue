@@ -44,12 +44,22 @@ const handleLoadMore = async () => {
 };
 
 watch(filters, async (newFilters) => {
-    await pokemonStore.getPokemonCardsBySearch(newFilters.name, newFilters.rarity, newFilters.type, newFilters.subtype);
+    await pokemonStore.getPokemonCardsBySearch(
+        newFilters.name,
+        newFilters.rarity,
+        newFilters.type,
+        newFilters.subtype
+    );
 });
 
 onMounted(() => {
     if (!pokemonCards.value.data.length || hasFilters.value) {
-        pokemonStore.getPokemonCardsBySearch(filters.name, filters.rarity, filters.type, filters.subtype);
+        pokemonStore.getPokemonCardsBySearch(
+            filters.name,
+            filters.rarity,
+            filters.type,
+            filters.subtype
+        );
     }
 
     if (!pokemonCardRarities.value.length) {
@@ -89,6 +99,10 @@ onUnmounted(() => {
             text="No cards found"
         />
     </template>
-    <Message v-if="pokemonCards.responseStatus.error" type="error" :text="pokemonCards.responseStatus.error" />
+    <Message
+        v-if="pokemonCards.responseStatus.error"
+        type="error"
+        :text="pokemonCards.responseStatus.error"
+    />
     <LoadingState :responseStatus="pokemonCards.responseStatus" @loadMore="handleLoadMore" />
 </template>

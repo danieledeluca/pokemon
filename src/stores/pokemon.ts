@@ -124,7 +124,9 @@ export const usePokemonStore = defineStore('pokemon', () => {
     }
 
     async function getPokemonCardsBySet(setId: string, url = '') {
-        const apiUrl = new URL(url || `${POKEMON_TCG_API_URL}cards?q=set.id:${setId}&orderBy=number&page=1`);
+        const apiUrl = new URL(
+            url || `${POKEMON_TCG_API_URL}cards?q=set.id:${setId}&orderBy=number&page=1`
+        );
 
         pokemonCardsBySet.value.responseStatus.ok = pokemonCardsBySet.value.data[setId]?.length > 0;
         pokemonCardsBySet.value.responseStatus.isLoading = true;
@@ -145,7 +147,10 @@ export const usePokemonStore = defineStore('pokemon', () => {
 
                 if (json.totalCount > pokemonCardsBySet.value.data[setId].length) {
                     pokemonCardsBySet.value.responseStatus.nextUrl = getNextUrl(apiUrl.href);
-                    await getPokemonCardsBySet(setId, pokemonCardsBySet.value.responseStatus.nextUrl);
+                    await getPokemonCardsBySet(
+                        setId,
+                        pokemonCardsBySet.value.responseStatus.nextUrl
+                    );
                 }
             } else {
                 throw new Error('There was an error retrieving the cards, please try again');
@@ -192,11 +197,15 @@ export const usePokemonStore = defineStore('pokemon', () => {
         previousCards: PokemonCard[] = []
     ) {
         const apiUrl = new URL(
-            url || `${POKEMON_TCG_API_URL}cards?q=name:"*${cardName}*"&orderBy=set.releaseDate,number&page=1`
+            url ||
+                `${POKEMON_TCG_API_URL}cards?q=name:"*${cardName}*"&orderBy=set.releaseDate,number&page=1`
         );
 
         if (cardRarity) {
-            apiUrl.searchParams.set('q', `${apiUrl.searchParams.get('q')} rarity:"*${cardRarity}*"`);
+            apiUrl.searchParams.set(
+                'q',
+                `${apiUrl.searchParams.get('q')} rarity:"*${cardRarity}*"`
+            );
         }
 
         if (cardType) {
@@ -204,7 +213,10 @@ export const usePokemonStore = defineStore('pokemon', () => {
         }
 
         if (cardSubtype) {
-            apiUrl.searchParams.set('q', `${apiUrl.searchParams.get('q')} subtypes:"*${cardSubtype}*"`);
+            apiUrl.searchParams.set(
+                'q',
+                `${apiUrl.searchParams.get('q')} subtypes:"*${cardSubtype}*"`
+            );
         }
 
         pokemonCardsBySearch.value.responseStatus.ok = previousCards.length > 0;

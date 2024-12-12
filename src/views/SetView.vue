@@ -86,14 +86,21 @@ onMounted(async () => {
         @updateFilters="handleUpdateFilters"
     />
     <template v-if="pokemonCards.responseStatus.ok && pokemonCards.data[setId]?.length">
-        <PokemonCards :pokemonCards="pokemonCards.data[setId]" :pokemonCardsFiltered="pokemonCardsFiltered" />
+        <PokemonCards
+            :pokemonCards="pokemonCards.data[setId]"
+            :pokemonCardsFiltered="pokemonCardsFiltered"
+        />
         <Message
             v-if="!pokemonCardsFiltered?.length"
             type="error"
             text="No cards found, try again with different filters"
         />
     </template>
-    <Message v-if="pokemonCards.responseStatus.error" type="error" :text="pokemonCards.responseStatus.error" />
+    <Message
+        v-if="pokemonCards.responseStatus.error"
+        type="error"
+        :text="pokemonCards.responseStatus.error"
+    />
     <LoadingState :responseStatus="pokemonCards.responseStatus" />
 </template>
 

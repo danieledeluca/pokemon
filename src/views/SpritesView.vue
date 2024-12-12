@@ -18,7 +18,9 @@ const filters = reactive({
 
 const pokemonStore = usePokemonStore();
 const pokemonSprites = computed(() => pokemonStore.pokemonSprites);
-const pokemonSpritesFiltered = computed(() => filterList<PokemonSprite>(filters.name, pokemonSprites.value.data));
+const pokemonSpritesFiltered = computed(() =>
+    filterList<PokemonSprite>(filters.name, pokemonSprites.value.data)
+);
 const pokemonSpriteTypes = pokemonStore.pokemonSpriteTypes;
 const pokemonRegions = computed(() => pokemonStore.pokemonRegions);
 
@@ -64,12 +66,16 @@ onUnmounted(() => {
 <template>
     <SearchForm
         name="pokemon"
-        :isDisabled="pokemonSprites.responseStatus.isLoading || !!pokemonSprites.responseStatus.error"
+        :isDisabled="
+            pokemonSprites.responseStatus.isLoading || !!pokemonSprites.responseStatus.error
+        "
         @updateFilter="handleUpdateFilter"
     >
         <fieldset
             class="grid"
-            :disabled="pokemonSprites.responseStatus.isLoading || !!pokemonSprites.responseStatus.error"
+            :disabled="
+                pokemonSprites.responseStatus.isLoading || !!pokemonSprites.responseStatus.error
+            "
         >
             <label>
                 Select the type of the sprite
@@ -110,6 +116,10 @@ onUnmounted(() => {
             text="No Pokèmon found"
         />
     </template>
-    <Message v-if="pokemonSprites.responseStatus.error" type="error" :text="pokemonSprites.responseStatus.error" />
+    <Message
+        v-if="pokemonSprites.responseStatus.error"
+        type="error"
+        :text="pokemonSprites.responseStatus.error"
+    />
     <LoadingState :responseStatus="pokemonSprites.responseStatus" @loadMore="handleLoadMore" />
 </template>

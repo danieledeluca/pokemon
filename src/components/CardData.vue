@@ -47,8 +47,12 @@ function getCardPrice(market: Market) {
                 {{ pokemonCard.flavorText }}
             </p>
             <p class="hp"><strong>HP: </strong>{{ pokemonCard.hp }}</p>
-            <p class="level" v-if="pokemonCard.level"><strong>Level: </strong>{{ pokemonCard.level }}</p>
-            <p class="rarity" v-if="pokemonCard.rarity"><strong>Rarity: </strong>{{ pokemonCard.rarity }}</p>
+            <p class="level" v-if="pokemonCard.level">
+                <strong>Level: </strong>{{ pokemonCard.level }}
+            </p>
+            <p class="rarity" v-if="pokemonCard.rarity">
+                <strong>Rarity: </strong>{{ pokemonCard.rarity }}
+            </p>
             <p class="set">
                 <strong>
                     Set:
@@ -63,7 +67,11 @@ function getCardPrice(market: Market) {
         </article>
         <article
             class="attributes"
-            v-if="pokemonCard.types?.length || pokemonCard.resistances?.length || pokemonCard.weaknesses?.length"
+            v-if="
+                pokemonCard.types?.length ||
+                pokemonCard.resistances?.length ||
+                pokemonCard.weaknesses?.length
+            "
         >
             <div class="types" v-if="pokemonCard.types?.length">
                 <h6 class="title">
@@ -80,7 +88,11 @@ function getCardPrice(market: Market) {
                     <span>Weaknesses</span>
                 </h6>
                 <div class="content">
-                    <div class="weakness" v-for="pokemonWeakness in pokemonCard.weaknesses" :key="pokemonWeakness.type">
+                    <div
+                        class="weakness"
+                        v-for="pokemonWeakness in pokemonCard.weaknesses"
+                        :key="pokemonWeakness.type"
+                    >
                         <PokemonType :pokemonType="pokemonWeakness.type" size="large" />
                         <span class="value">{{ pokemonWeakness.value }}</span>
                     </div>
@@ -106,7 +118,11 @@ function getCardPrice(market: Market) {
                     <span>Retreat cost</span>
                 </h6>
                 <div class="content">
-                    <div class="resistance" v-for="retreatCost in pokemonCard.retreatCost" :key="retreatCost">
+                    <div
+                        class="resistance"
+                        v-for="retreatCost in pokemonCard.retreatCost"
+                        :key="retreatCost"
+                    >
                         <PokemonType :pokemonType="retreatCost" size="large" />
                     </div>
                 </div>
@@ -118,7 +134,11 @@ function getCardPrice(market: Market) {
             </h6>
             <div class="content">
                 <ul class="list">
-                    <li class="ability" v-for="pokemonAbility in pokemonCard.abilities" :key="pokemonAbility.name">
+                    <li
+                        class="ability"
+                        v-for="pokemonAbility in pokemonCard.abilities"
+                        :key="pokemonAbility.name"
+                    >
                         <strong>{{ pokemonAbility.type }}: {{ pokemonAbility.name }}</strong>
                         <div>{{ pokemonAbility.text }}</div>
                     </li>
@@ -131,7 +151,11 @@ function getCardPrice(market: Market) {
             </h6>
             <div class="content">
                 <ul class="list">
-                    <li class="attack" v-for="pokemonAttack in pokemonCard.attacks" :key="pokemonAttack.name">
+                    <li
+                        class="attack"
+                        v-for="pokemonAttack in pokemonCard.attacks"
+                        :key="pokemonAttack.name"
+                    >
                         <strong class="data">
                             <span class="cost">
                                 <PokemonType
@@ -157,7 +181,9 @@ function getCardPrice(market: Market) {
                 <ul class="list">
                     <li class="evolves-from" v-if="pokemonCard.evolvesFrom">
                         <span>Evolves from: </span>
-                        <RouterLink :to="{ name: 'cards', query: { name: pokemonCard.evolvesFrom } }">
+                        <RouterLink
+                            :to="{ name: 'cards', query: { name: pokemonCard.evolvesFrom } }"
+                        >
                             <span>{{ pokemonCard.evolvesFrom }}</span>
                         </RouterLink>
                     </li>
@@ -181,7 +207,9 @@ function getCardPrice(market: Market) {
                     <a :href="pokemonCard.tcgplayer.url" target="_blank" class="secondary">
                         <span>View prices</span>
                     </a>
-                    <small v-if="getCardPrice('tcgplayer')"> (average price: {{ getCardPrice('tcgplayer') }})</small>
+                    <small v-if="getCardPrice('tcgplayer')">
+                        (average price: {{ getCardPrice('tcgplayer') }})</small
+                    >
                 </div>
             </div>
             <div class="card-market" v-if="pokemonCard.cardmarket">
@@ -192,7 +220,9 @@ function getCardPrice(market: Market) {
                     <a :href="pokemonCard.cardmarket.url" target="_blank" class="secondary">
                         <span>View prices</span>
                     </a>
-                    <small v-if="getCardPrice('cardmarket')"> (average price: {{ getCardPrice('cardmarket') }})</small>
+                    <small v-if="getCardPrice('cardmarket')">
+                        (average price: {{ getCardPrice('cardmarket') }})</small
+                    >
                 </div>
             </div>
         </article>

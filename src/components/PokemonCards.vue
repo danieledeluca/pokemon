@@ -16,7 +16,12 @@ const props = defineProps<{
             v-for="pokemonCard in props.pokemonCards"
             :key="pokemonCard.id"
             v-show="
-                showItem<PokemonCard>(pokemonCard, props.pokemonCardsFiltered, ['name', 'rarity', 'type', 'subtype'])
+                showItem<PokemonCard>(pokemonCard, props.pokemonCardsFiltered, [
+                    'name',
+                    'rarity',
+                    'type',
+                    'subtype',
+                ])
             "
         >
             <RouterLink :to="{ name: 'card', params: { card_id: pokemonCard.id } }">

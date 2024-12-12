@@ -32,7 +32,10 @@ function showSearchForm() {
         if (isInViewport(searchForm.value, y.value, header.value!)) {
             focusFirstInput();
         } else {
-            searchForm.value.style.setProperty('--header-height', `${header.value?.offsetHeight || 0}px`);
+            searchForm.value.style.setProperty(
+                '--header-height',
+                `${header.value?.offsetHeight || 0}px`
+            );
             isSearchFormSticky.value = true;
 
             setTimeout(() => {

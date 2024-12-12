@@ -15,7 +15,9 @@ const filters = reactive({
 
 const pokemonStore = usePokemonStore();
 const pokemonSets = computed(() => pokemonStore.pokemonSets);
-const pokemonSetsFiltered = computed(() => filterList<PokemonSet>(filters.name, pokemonSets.value.data));
+const pokemonSetsFiltered = computed(() =>
+    filterList<PokemonSet>(filters.name, pokemonSets.value.data)
+);
 
 const handleUpdateFilter = useDebounceFn((newFilter: string) => {
     filters.name = newFilter;
@@ -60,6 +62,10 @@ onMounted(async () => {
             :text="`No sets found for: <strong>${filters.name}</strong>`"
         />
     </template>
-    <Message v-if="pokemonSets.responseStatus.error" type="error" :text="pokemonSets.responseStatus.error" />
+    <Message
+        v-if="pokemonSets.responseStatus.error"
+        type="error"
+        :text="pokemonSets.responseStatus.error"
+    />
     <LoadingState :responseStatus="pokemonSets.responseStatus" @loadMore="handleLoadMore" />
 </template>
