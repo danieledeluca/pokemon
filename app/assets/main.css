@@ -1,0 +1,94 @@
+#__nuxt {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.page-wrapper {
+    flex: 1;
+    padding-block: 2rem;
+}
+
+.pokemon-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.pokemon-grid .image {
+    position: relative;
+    display: block;
+    margin-bottom: 0;
+}
+
+.pokemon-grid .image.article {
+    padding: var(--pico-block-spacing-vertical) var(--pico-block-spacing-horizontal);
+    background-color: var(--pico-card-background-color);
+    border: 1px solid var(--pico-card-border-color);
+    border-radius: var(--pico-border-radius);
+}
+
+.pokemon-grid .image.article:not(:focus-visible) {
+    box-shadow: var(--pico-card-box-shadow);
+}
+
+.pokemon-grid .image.article:hover {
+    background-color: var(--pico-card-sectioning-background-color);
+}
+
+.pokemon-grid .image img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+    object-fit: contain;
+}
+
+.pokemon-grid .name {
+    margin-top: 0.5rem;
+    font-size: 0.875em;
+    text-align: center;
+}
+
+.pokemon-grid :where(.set, .sprite) .image {
+    aspect-ratio: 1;
+}
+
+.pokemon-grid :where(.set, .sprite) img {
+    max-width: calc(100% - var(--pico-block-spacing-horizontal) * 2);
+    max-height: calc(100% - var(--pico-block-spacing-vertical) * 2);
+}
+
+:where(.pokemon-grid .card, .card) .image {
+    aspect-ratio: 104 / 145;
+}
+
+.navigation-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.navigation-wrap .navigation {
+    width: auto;
+}
+
+.navigation-wrap .navigation > * {
+    flex: 0;
+}
+
+.navigation {
+    margin-bottom: 0;
+}
+
+[role='search']:not(:has(+ form)),
+[role='search'] + form {
+    margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+    .pokemon-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 2rem;
+    }
+}

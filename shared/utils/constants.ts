@@ -1,0 +1,1 @@
+export const POKEMON_TCG_CARDS_PAGE_SIZE = 60;
