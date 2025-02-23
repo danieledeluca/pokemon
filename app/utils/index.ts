@@ -11,7 +11,7 @@ export function formatPrice(price: number) {
     }).format(price);
 }
 
-export function groupBy<T>(array: T[] | null, _key: keyof T) {
+export function groupBy<T>(array: T[] | undefined, _key: keyof T) {
     return array?.reduce<Record<string, T[]>>((acc, item) => {
         const key = item[_key] as string;
 
