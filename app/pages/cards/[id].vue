@@ -1,11 +1,11 @@
 <script setup lang="ts">
 const route = useRoute();
-const { data: card } = await useFetch(`/api/cards/${route.params.id}`);
+const { data: card, error } = await useFetch(`/api/cards/${route.params.id}`);
 
-if (!card.value) {
+if (error.value || !card.value) {
     throw createError({
-        statusCode: 404,
-        statusMessage: 'Card not found',
+        statusCode: error.value?.statusCode || 404,
+        statusMessage: error.value?.message || 'Card not found',
     });
 }
 

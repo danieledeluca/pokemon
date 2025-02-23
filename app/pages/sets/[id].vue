@@ -8,12 +8,12 @@ const { filters, sorters, sortersOptions, query } = useFilters<PokemonTCG.Card>(
     'number',
     'rarity',
 ]);
-const { data: cards } = await useFetch(`/api/sets/${setId}`, { query });
+const { data: cards, error } = await useFetch(`/api/sets/${setId}`, { query });
 
-if (!cards.value?.length && !filters.name) {
+if (error.value || (!cards.value?.length && !filters.name)) {
     throw createError({
-        statusCode: 404,
-        statusMessage: 'Set not found',
+        statusCode: error.value?.statusCode || 404,
+        statusMessage: error.value?.message || 'Set not found',
     });
 }
 
