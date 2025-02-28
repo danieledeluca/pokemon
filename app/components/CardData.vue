@@ -158,7 +158,7 @@ const cardMarketFilteredPrices = filterCardMarketPrices(card.cardmarket?.prices)
                     <span>TCGplayer</span>
                 </h5>
                 <a :href="card.tcgplayer.url" target="_blank" role="button" class="secondary">
-                    <span>Buy now from TCGplayer</span>
+                    <span>Buy now</span>
                 </a>
                 <small class="last-update">
                     Last update: {{ formatDate(card.tcgplayer.updatedAt) }}
@@ -184,7 +184,7 @@ const cardMarketFilteredPrices = filterCardMarketPrices(card.cardmarket?.prices)
                     <span>Cardmarket</span>
                 </h5>
                 <a :href="card.cardmarket.url" target="_blank" role="button" class="secondary">
-                    <span>Buy now from Cardmarket</span>
+                    <span>Buy now</span>
                 </a>
                 <small class="last-update">
                     Last update: {{ formatDate(card.cardmarket.updatedAt) }}
