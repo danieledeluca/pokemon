@@ -32,13 +32,3 @@ const nextCardId = cards.value?.[cardIndex + 1]?.id;
         </NuxtLink>
     </div>
 </template>
-
-<style scoped>
-.navigation {
-    margin-top: 1rem;
-}
-
-.navigation > * {
-    width: 100%;
-}
-</style>

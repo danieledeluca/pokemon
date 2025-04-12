@@ -1,3 +1,5 @@
+import type { NamedAPIResource } from 'pokenode-ts';
+
 export interface SpriteTypes {
     'front-default': string;
     'front-shiny': string;
@@ -18,4 +20,9 @@ export interface SpriteQuery {
     name: string;
     offset: number;
     limit: number;
+}
+
+export interface PokemonEvolutionChain extends NamedAPIResource {
+    index: number;
+    evolves_to: PokemonEvolutionChain[];
 }

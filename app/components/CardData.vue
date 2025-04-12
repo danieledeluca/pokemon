@@ -206,18 +206,6 @@ const cardMarketFilteredPrices = filterCardMarketPrices(card.cardmarket?.prices)
 </template>
 
 <style scoped>
-article {
-    border: 1px solid var(--pico-muted-border-color);
-}
-
-article:last-child {
-    margin-bottom: 0;
-}
-
-article :where(p, ul, li):last-child {
-    margin-bottom: 0;
-}
-
 .types .type {
     vertical-align: middle;
 }
@@ -255,7 +243,7 @@ article :where(p, ul, li):last-child {
     --gap: 0.75rem;
 }
 
-:where(.rule, .ability, .attack, .evolution, .prices > *):not(:last-child) {
+:is(.rule, .ability, .attack, .evolution, .prices > *):not(:last-child) {
     margin-bottom: 1rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid var(--pico-muted-border-color);

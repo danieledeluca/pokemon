@@ -18,11 +18,6 @@ span {
     display: inline-block;
 }
 
-[data-tooltip] {
-    border-bottom: none;
-    cursor: default;
-}
-
 img {
     display: block;
 }

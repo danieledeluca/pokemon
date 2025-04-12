@@ -1,7 +1,12 @@
 <script setup lang="ts">
-const { src, alt } = defineProps<{
+const {
+    src,
+    alt,
+    showPlaceholder = true,
+} = defineProps<{
     src: string;
     alt: string;
+    showPlaceholder?: boolean;
 }>();
 
 const showErrorImage = ref(false);
@@ -12,7 +17,7 @@ const showErrorImage = ref(false);
         v-if="!showErrorImage"
         :src="src"
         :alt="alt"
-        :placeholder="getImage('loading.svg')"
+        :placeholder="showPlaceholder ? getImage('loading.svg') : false"
         densities="1x"
         @error="showErrorImage = true"
     />

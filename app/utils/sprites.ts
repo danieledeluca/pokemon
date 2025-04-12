@@ -1,11 +1,5 @@
-function getSpriteId(spriteUrl: string) {
-    const regex = /(pokemon|pokemon-species)\/(\d+)\//;
-
-    return parseInt(spriteUrl.match(regex)?.[2] || '0');
-}
-
 export function getSpriteImages(spriteUrl: string): Record<keyof SpriteTypes, string> {
-    const spriteId = getSpriteId(spriteUrl);
+    const spriteId = getIdFromUrl(spriteUrl);
 
     return {
         'front-default': `${SPRITE_FRONT_DEFAULT_URL}${spriteId}.png`,

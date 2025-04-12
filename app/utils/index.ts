@@ -34,6 +34,8 @@ export function getImage(path: string) {
     return assets[`/assets/images/${path}`] as string;
 }
 
-export function parseName(name: string) {
+export function parseName(name: string | undefined) {
+    if (!name) return '';
+
     return name.slice(0, 1).toUpperCase() + name.slice(1).replace(/-/g, ' ');
 }
