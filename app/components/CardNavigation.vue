@@ -5,7 +5,7 @@ const { card } = defineProps<{
     card: PokemonTCG.Card;
 }>();
 
-const { query } = useFilters<PokemonTCG.Card>('number', 'asc');
+const { query } = useTcgFilters<PokemonTCG.Card>('number', 'asc');
 const { data: cards } = await useFetch(`/api/sets/${card.set.id}`, { query });
 const cardIndex = cards.value?.findIndex((_card) => _card.id === card.id) || 0;
 

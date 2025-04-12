@@ -18,7 +18,7 @@ const route = useRoute();
                     <NuxtLink to="/cards" :external="route.name === 'cards'">Cards</NuxtLink>
                 </li>
                 <li>
-                    <NuxtLink to="/sprites" :external="route.name === 'sprites'">Sprites</NuxtLink>
+                    <NuxtLink to="/pokemon" :external="route.name === 'pokemon'">Pokémon</NuxtLink>
                 </li>
             </ul>
         </nav>

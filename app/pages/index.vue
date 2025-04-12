@@ -11,9 +11,9 @@ const boxes = [
         content: 'A list of all Pokémon TCG cards released.',
     },
     {
-        name: 'sprites',
-        title: 'Pokémon sprites',
-        content: 'A list of all Pokémon sprites released.',
+        name: 'pokemon',
+        title: 'Pokémon',
+        content: 'A list of all Pokémon.',
     },
 ];
 </script>

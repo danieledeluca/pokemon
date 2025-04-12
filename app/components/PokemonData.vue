@@ -58,12 +58,12 @@ if (pokemon.forms.length > 1) {
                 <template v-for="variety in species.varieties" :key="variety.pokemon.name">
                     <div v-if="getIdFromUrl(variety.pokemon.url) !== pokemon.id" class="variety">
                         <NuxtLink
-                            :to="`/sprites/${getIdFromUrl(variety.pokemon.url)}`"
+                            :to="`/pokemon/${getIdFromUrl(variety.pokemon.url)}`"
                             class="image"
                             :data-tooltip="parseName(variety.pokemon.name)"
                         >
                             <AppImage
-                                :src="getSpriteImages(variety.pokemon.url)['front-default']"
+                                :src="getPokemonSprites(variety.pokemon.url)['front-default']"
                                 :alt="variety.pokemon.name"
                                 :showPlaceholder="false"
                             />

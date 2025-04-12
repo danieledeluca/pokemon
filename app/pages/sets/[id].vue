@@ -3,11 +3,11 @@ import type { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 
 const route = useRoute();
 const setId = route.params.id;
-const { filters, sorters, sortersOptions, query } = useFilters<PokemonTCG.Card>('number', 'asc', [
-    'name',
+const { filters, sorters, sortersOptions, query } = useTcgFilters<PokemonTCG.Card>(
     'number',
-    'rarity',
-]);
+    'asc',
+    ['name', 'number', 'rarity'],
+);
 const { data: cards, error } = await useFetch(`/api/sets/${setId}`, { query });
 
 if (error.value || (!cards.value?.length && !filters.name)) {
@@ -42,7 +42,7 @@ useSeoMeta({
             <p><strong>Total cards: </strong>{{ currentSet.total }}</p>
         </div>
     </article>
-    <SearchForm
+    <TcgSearchForm
         v-model:filters="filters"
         v-model:sorters="sorters"
         :sorterOptions="sortersOptions"

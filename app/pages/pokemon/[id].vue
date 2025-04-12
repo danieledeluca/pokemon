@@ -1,13 +1,15 @@
 <script setup lang="ts">
+import type { Pokemon } from 'pokenode-ts';
+
 const route = useRoute();
 const pokemonId = route.params.id as string;
 
-const { data: pokemon, error } = await useFetch(`/api/sprites/${pokemonId}`);
+const { data: pokemon, error } = await useFetch<Pokemon>(`/api/pokemon/${pokemonId}`);
 
 if (error.value) {
     throw createError({
-        statusCode: error.value?.response?.status,
-        statusMessage: error.value?.response?.statusText,
+        statusCode: error.value.statusCode,
+        statusMessage: error.value.statusMessage,
     });
 }
 

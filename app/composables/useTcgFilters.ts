@@ -1,6 +1,6 @@
 import type { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 
-export default function useFilters<T extends object>(
+export default function useTcgFilters<T extends object>(
     defaultOrder: NestedKeyOf<T>,
     defaultDirection: keyof TCGSortersDirectionOptions,
     orderOptions?: NestedKeyOf<T>[],

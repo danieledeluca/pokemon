@@ -1,6 +1,7 @@
 <script setup lang="ts" generic="T extends object">
-const { sorterOptions } = defineProps<{
+const { sorterOptions, placeholder = 'Search for a card' } = defineProps<{
     sorterOptions?: TCGSortersOptions<T>;
+    placeholder?: string;
 }>();
 
 const filters = defineModel<TCGFilters>('filters', { required: true });
@@ -17,7 +18,7 @@ if (sorters.value) {
 
 <template>
     <form ref="searchForm" role="search">
-        <input v-model="filters.name" type="search" name="name" placeholder="Search for a card" />
+        <input v-model="filters.name" type="search" name="name" :placeholder />
         <template v-if="sorterOptions">
             <input
                 v-for="(value, key) in sorters"

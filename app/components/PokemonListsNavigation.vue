@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import type { NamedAPIResourceList } from 'pokenode-ts';
 
-const { sprites } = defineProps<{
-    sprites: NamedAPIResourceList;
+const { pokemon } = defineProps<{
+    pokemon: NamedAPIResourceList;
 }>();
 
 const route = useRoute();
 
-const showPreviousButton = sprites.previous !== null;
-const showNextButton = sprites.next !== null;
+const showPreviousButton = pokemon.previous !== null;
+const showNextButton = pokemon.next !== null;
 
 const previousOffset = showPreviousButton
-    ? new URLSearchParams(new URL(sprites.previous || '').search).get('offset')
+    ? new URLSearchParams(new URL(pokemon.previous || '').search).get('offset')
     : '';
 const nextOffset = showNextButton
-    ? new URLSearchParams(new URL(sprites.next || '').search).get('offset')
+    ? new URLSearchParams(new URL(pokemon.next || '').search).get('offset')
     : '';
 </script>
 
@@ -26,7 +26,7 @@ const nextOffset = showNextButton
             </button>
             <NuxtLink
                 v-else
-                :to="{ name: 'sprites', query: { ...route.query, offset: previousOffset } }"
+                :to="{ name: 'pokemon', query: { ...route.query, offset: previousOffset } }"
                 role="button"
                 class="secondary"
                 :external="true"
@@ -38,7 +38,7 @@ const nextOffset = showNextButton
             </button>
             <NuxtLink
                 v-else
-                :to="{ name: 'sprites', query: { ...route.query, offset: nextOffset } }"
+                :to="{ name: 'pokemon', query: { ...route.query, offset: nextOffset } }"
                 role="button"
                 class="secondary"
                 :external="true"

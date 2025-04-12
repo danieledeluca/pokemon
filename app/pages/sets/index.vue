@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 
-const { filters, query } = useFilters<PokemonTCG.Set>('releaseDate', 'desc');
+const { filters, query } = useTcgFilters<PokemonTCG.Set>('releaseDate', 'desc');
 const { data: sets, error } = await useFetch('/api/sets', { query });
 
 if (error.value) {
@@ -20,7 +20,7 @@ useSeoMeta({
 </script>
 
 <template>
-    <SearchForm v-model:filters="filters" />
+    <TcgSearchForm v-model:filters="filters" placeholder="Search for a set" />
     <template v-if="sets?.length">
         <div v-for="(_sets, series) in setsBySeries" :key="series" class="series">
             <h2>{{ series }}</h2>

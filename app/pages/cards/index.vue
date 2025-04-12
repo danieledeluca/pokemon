@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 
-const { filters, sorters, sortersOptions, query } = useFilters<PokemonTCG.Card>(
+const { filters, sorters, sortersOptions, query } = useTcgFilters<PokemonTCG.Card>(
     'set.releaseDate',
     'asc',
     ['set.releaseDate', 'name', 'rarity'],
@@ -22,7 +22,7 @@ useSeoMeta({
 </script>
 
 <template>
-    <SearchForm
+    <TcgSearchForm
         v-model:filters="filters"
         v-model:sorters="sorters"
         :sorterOptions="sortersOptions"

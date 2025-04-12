@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const filters = defineModel<SpriteFilters>('filters', { required: true });
+const filters = defineModel<PokemonFilters>('filters', { required: true });
 
-const typeOptions: (keyof SpriteTypes)[] = [
+const sprites: SpriteTypes[] = [
     'front-default',
     'front-shiny',
     'home-front-default',
@@ -15,17 +15,22 @@ const typeOptions: (keyof SpriteTypes)[] = [
 
 <template>
     <form role="search">
-        <input v-model="filters.name" type="search" name="name" placeholder="Search for a sprite" />
-        <input type="hidden" name="type" :value="filters.type" />
+        <input
+            v-model="filters.name"
+            type="search"
+            name="name"
+            placeholder="Search for a pokemon"
+        />
+        <input type="hidden" name="type" :value="filters.sprite" />
         <button type="submit">
             <span>Search</span>
         </button>
     </form>
     <form>
         <label for="type">Select the type of the sprite</label>
-        <select id="type" v-model="filters.type" name="type">
-            <option v-for="type in typeOptions" :key="type" :value="type">
-                {{ parseName(type) }}
+        <select id="type" v-model="filters.sprite" name="type">
+            <option v-for="sprite in sprites" :key="sprite" :value="sprite">
+                {{ parseName(sprite) }}
             </option>
         </select>
     </form>

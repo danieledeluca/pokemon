@@ -7,12 +7,12 @@ const { evolutionChain } = defineProps<{
 <template>
     <div class="evolution">
         <NuxtLink
-            :to="`/sprites/${getIdFromUrl(evolutionChain.url)}`"
+            :to="`/pokemon/${getIdFromUrl(evolutionChain.url)}`"
             class="image"
             :data-tooltip="parseName(evolutionChain.name)"
         >
             <AppImage
-                :src="getSpriteImages(evolutionChain.url)['front-default']"
+                :src="getPokemonSprites(evolutionChain.url)['front-default']"
                 :alt="evolutionChain.name"
                 :showPlaceholder="false"
             />

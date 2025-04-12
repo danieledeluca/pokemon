@@ -2,8 +2,8 @@
 const route = useRoute();
 const router = useRouter();
 
-const { filters, query } = useSpritesFilters('front-default');
-const { data: pokemon, error } = await useFetch('/api/sprites', { query });
+const { filters, query } = usePokemonFilters('front-default');
+const { data: pokemon, error } = await useFetch('/api/pokemon', { query });
 
 if (error.value) {
     throw createError({
@@ -13,9 +13,9 @@ if (error.value) {
 }
 
 watch(
-    () => filters.type,
+    () => filters.sprite,
     (newType) => {
-        router.push({ query: { ...route.query, type: newType } });
+        router.push({ query: { ...route.query, sprite: newType } });
     },
 );
 
@@ -26,17 +26,17 @@ useSeoMeta({
 </script>
 
 <template>
-    <SpritesSearchForm v-model:filters="filters" />
+    <PokemonSearchForm v-model:filters="filters" />
     <template v-if="pokemon?.results.length">
         <div class="pokemon-grid">
             <div v-for="poke in pokemon.results" :key="poke.url" class="pokemon">
-                <NuxtLink class="image article" :to="`/sprites/${poke.url.split('/').at(-2)}`">
-                    <template v-for="(image, type) in getSpriteImages(poke.url)" :key="type">
+                <NuxtLink class="image article" :to="`/pokemon/${poke.url.split('/').at(-2)}`">
+                    <template v-for="(image, sprite) in getPokemonSprites(poke.url)" :key="sprite">
                         <AppImage
-                            v-if="type === filters.type"
+                            v-if="sprite === filters.sprite"
                             :src="image"
                             :alt="poke.name"
-                            :class="type"
+                            :class="sprite"
                         />
                     </template>
                 </NuxtLink>
@@ -45,7 +45,7 @@ useSeoMeta({
                 </div>
             </div>
         </div>
-        <SpritesNavigation :sprites="pokemon" />
+        <PokemonListsNavigation :pokemon />
     </template>
     <AppMessage
         v-else
