@@ -16,12 +16,16 @@ const boxes = [
         content: 'A list of all Pokémon.',
     },
 ];
+
+useHead({
+    title: '',
+});
 </script>
 
 <template>
     <div class="hero">
         <div class="hero-background">
-            <img src="~/assets/images/pokemon-logo.svg" alt="Pokémon" />
+            <img src="~/assets/images/logo.svg" alt="Pokémon Vault" />
         </div>
     </div>
     <div class="grid">

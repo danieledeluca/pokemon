@@ -7,7 +7,7 @@ const route = useRoute();
         <nav class="container">
             <ul>
                 <li>
-                    <NuxtLink to="/">Pokémon</NuxtLink>
+                    <NuxtLink to="/">Pokémon Vault</NuxtLink>
                 </li>
             </ul>
             <ul>

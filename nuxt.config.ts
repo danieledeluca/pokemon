@@ -8,7 +8,6 @@ export default defineNuxtConfig({
     },
     app: {
         head: {
-            title: 'Pokémon',
             link: [
                 {
                     rel: 'stylesheet',
