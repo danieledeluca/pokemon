@@ -14,7 +14,6 @@ const { evolutionChain } = defineProps<{
             <AppImage
                 :src="getPokemonSprites(evolutionChain.url)['front-default']"
                 :alt="evolutionChain.name"
-                :showPlaceholder="false"
             />
         </NuxtLink>
         <div class="name">

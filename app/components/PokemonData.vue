@@ -65,7 +65,6 @@ if (pokemon.forms.length > 1) {
                             <AppImage
                                 :src="getPokemonSprites(variety.pokemon.url)['front-default']"
                                 :alt="variety.pokemon.name"
-                                :showPlaceholder="false"
                             />
                         </NuxtLink>
                         <div class="name">
@@ -83,11 +82,7 @@ if (pokemon.forms.length > 1) {
                 <template v-for="form in forms" :key="form.name">
                     <div v-if="form.id !== pokemon.id" class="form">
                         <div class="image" :data-tooltip="parseName(form.name)">
-                            <AppImage
-                                :src="form.sprites.front_default || ''"
-                                :alt="form.name"
-                                :showPlaceholder="false"
-                            />
+                            <AppImage :src="form.sprites.front_default || ''" :alt="form.name" />
                         </div>
                         <div class="name">
                             <span>{{ parseName(form.name) }}</span>
@@ -103,10 +98,13 @@ if (pokemon.forms.length > 1) {
 .content {
     display: inline-grid;
     grid-template-columns: repeat(3, 1fr);
-    align-items: center;
     gap: 1rem;
     width: 100%;
     text-align: center;
+}
+
+.evolutions .content {
+    align-items: center;
 }
 
 @media (min-width: 576px) {
@@ -118,14 +116,13 @@ if (pokemon.forms.length > 1) {
 
 <style>
 .pokemon .content .image {
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     max-width: 96px;
+    width: 100%;
+    margin-inline: auto;
     aspect-ratio: 1;
-}
-
-.pokemon .content img {
-    height: 100%;
-    object-fit: contain;
 }
 
 .pokemon .content .name {

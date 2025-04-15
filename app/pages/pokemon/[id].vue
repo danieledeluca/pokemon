@@ -40,10 +40,15 @@ useSeoMeta({
 </template>
 
 <style scoped>
+.image {
+    padding: 1rem;
+    aspect-ratio: 1;
+}
+
 img {
     width: 100%;
+    height: 100%;
     image-rendering: pixelated;
-    aspect-ratio: 1;
     object-fit: contain;
 }
 </style>
