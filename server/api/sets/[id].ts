@@ -14,19 +14,13 @@ async function getSetCards(parameter: PokemonTCG.Parameter, cards: PokemonTCG.Ca
     return cards;
 }
 
-export default defineCachedEventHandler(
-    async (event) => {
-        const setId = getRouterParam(event, 'id');
-        const query = getQuery(event);
+export default defineMaybeCachedEventHandler(async (event) => {
+    const setId = getRouterParam(event, 'id');
+    const query = getQuery(event);
 
-        query.q += `set.id:${setId}`;
+    query.q += `set.id:${setId}`;
 
-        if (setId) {
-            return await getSetCards(query);
-        }
-    },
-    {
-        maxAge: CACHE_MAX_AGE,
-        getKey: (event) => event.path,
-    },
-);
+    if (setId) {
+        return await getSetCards(query);
+    }
+});
