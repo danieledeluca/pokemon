@@ -20,7 +20,8 @@ export default defineMaybeCachedEventHandler(async (event) => {
 
     query.q += `set.id:${setId}`;
 
-    if (setId) {
-        return await getSetCards(query);
-    }
+    return {
+        cards: await getSetCards(query),
+        set: (await $fetch('/api/sets', { query: { q: `id:${setId}` } }))?.[0],
+    };
 });

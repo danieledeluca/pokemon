@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const { text, type } = defineProps<{
     text: string;
-    type: 'warning';
+    type: 'warning' | 'error';
 }>();
 </script>
 
@@ -23,5 +23,10 @@ const { text, type } = defineProps<{
 .message.warning {
     --background-color: var(--pico-color-amber-200);
     --color: var(--pico-color-dark);
+}
+
+.message.error {
+    --background-color: var(--pico-color-red-500);
+    --color: var(--pico-color-light);
 }
 </style>

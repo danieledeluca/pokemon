@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
 
-const { cards } = defineProps<{
+const { cards = undefined } = defineProps<{
     cards?: PokemonTCG.Card[];
 }>();
 </script>

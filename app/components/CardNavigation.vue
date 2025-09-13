@@ -6,14 +6,16 @@ const { card } = defineProps<{
 }>();
 
 const { query } = useTcgFilters<PokemonTCG.Card>('number', 'asc');
-const { data: cards } = await useFetch(`/api/sets/${card.set.id}`, { query });
-const cardIndex = cards.value?.findIndex((_card) => _card.id === card.id) || 0;
+const { data } = await useFetch(`/api/sets/${card.set.id}`, { query });
+
+const cards = data.value?.cards;
+const cardIndex = cards?.findIndex((_card) => _card.id === card.id) || 0;
 
 const showPreviousButton = cardIndex > 0;
 const showNextButton = cardIndex < card.set.total - 1;
 
-const previousCardId = cards.value?.[cardIndex - 1]?.id;
-const nextCardId = cards.value?.[cardIndex + 1]?.id;
+const previousCardId = cards?.[cardIndex - 1]?.id;
+const nextCardId = cards?.[cardIndex + 1]?.id;
 </script>
 
 <template>

@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends object">
-const { sorterOptions, placeholder = 'Search for a card' } = defineProps<{
+const { sorterOptions = undefined, placeholder = 'Search for a card' } = defineProps<{
     sorterOptions?: TCGSortersOptions<T>;
     placeholder?: string;
 }>();

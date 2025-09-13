@@ -37,6 +37,7 @@ useSeoMeta({
         </aside>
         <PokemonData :pokemon="pokemon" />
     </div>
+    <AppMessage v-else text="We couldn't find the pokemon you are looking for" type="warning" />
 </template>
 
 <style scoped>

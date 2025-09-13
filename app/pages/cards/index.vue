@@ -6,14 +6,7 @@ const { filters, sorters, sortersOptions, query } = useTcgFilters<PokemonTCG.Car
     'asc',
     ['set.releaseDate', 'name', 'rarity'],
 );
-const { data: cards, error } = await useFetch('/api/cards', { query });
-
-if (error.value) {
-    throw createError({
-        statusCode: error.value.statusCode,
-        message: error.value.message,
-    });
-}
+const { data: cards, error, status } = await useLazyFetch('/api/cards', { query });
 
 useSeoMeta({
     title: 'Cards',
@@ -22,18 +15,22 @@ useSeoMeta({
 </script>
 
 <template>
-    <TcgSearchForm
-        v-model:filters="filters"
-        v-model:sorters="sorters"
-        :sorterOptions="sortersOptions"
-    />
-    <template v-if="cards?.data.length">
-        <CardsGrid :cards="cards.data" />
-        <CardsNavigation :cards="cards" />
+    <SkeletonLoader v-if="status === 'pending'" layout="cards" />
+    <AppMessage v-if="status === 'error' && error" type="error" :text="error.message" />
+    <template v-if="status === 'success'">
+        <TcgSearchForm
+            v-model:filters="filters"
+            v-model:sorters="sorters"
+            :sorterOptions="sortersOptions"
+        />
+        <template v-if="cards?.data.length">
+            <CardsGrid :cards="cards.data" />
+            <CardsNavigation :cards="cards" />
+        </template>
+        <AppMessage
+            v-else
+            :text="`We couldn't find any cards matching your search criteria`"
+            type="warning"
+        />
     </template>
-    <AppMessage
-        v-else
-        :text="`We couldn't find any cards matching your search criteria`"
-        type="warning"
-    />
 </template>
