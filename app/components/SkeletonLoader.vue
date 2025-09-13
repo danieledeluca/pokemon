@@ -101,6 +101,10 @@ const { layout } = defineProps<{
     margin-top: 1rem;
 }
 
+article {
+    box-shadow: none;
+}
+
 article.basic {
     height: 540px;
 }
