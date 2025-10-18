@@ -12,7 +12,11 @@ useSeoMeta({
 
 <template>
     <SkeletonLoader v-if="status === 'pending'" layout="card" />
-    <AppMessage v-if="status === 'error' && error" type="error" :text="error.message" />
+    <AppMessage
+        v-if="status === 'error' && error"
+        type="error"
+        :text="error.statusMessage || error.message"
+    />
     <template v-if="status === 'success'">
         <div v-if="card" class="detail card">
             <aside :style="`--header-height: ${headerHeight}px;`">

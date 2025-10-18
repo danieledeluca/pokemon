@@ -23,7 +23,11 @@ useSeoMeta({
 
 <template>
     <SkeletonLoader v-if="status === 'pending'" layout="set" />
-    <AppMessage v-if="status === 'error' && error" type="error" :text="error.message" />
+    <AppMessage
+        v-if="status === 'error' && error"
+        type="error"
+        :text="error.statusMessage || error.message"
+    />
     <template v-if="status === 'success'">
         <article v-if="set" class="set">
             <div class="logo">
