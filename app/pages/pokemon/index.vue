@@ -14,8 +14,8 @@ if (error.value) {
 
 watch(
     () => filters.sprite,
-    (newType) => {
-        router.push({ query: { ...route.query, sprite: newType } });
+    (newSprite) => {
+        router.push({ query: { ...route.query, sprite: newSprite } });
     },
 );
 

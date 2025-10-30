@@ -1,9 +1,9 @@
-export default function usePokemonFilters(defaultType: SpriteTypes) {
+export default function usePokemonFilters(defaultSprite: SpriteTypes) {
     const route = useRoute();
 
     const filters = reactive<PokemonFilters>({
         name: route.query.name?.toString() || '',
-        sprite: (route.query.type?.toString() as SpriteTypes) || defaultType,
+        sprite: (route.query.sprite?.toString() as SpriteTypes) || defaultSprite,
     });
 
     const query: PokemonQuery = {

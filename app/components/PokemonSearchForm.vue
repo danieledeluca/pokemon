@@ -21,14 +21,14 @@ const sprites: SpriteTypes[] = [
             name="name"
             placeholder="Search for a pokemon"
         />
-        <input type="hidden" name="type" :value="filters.sprite" />
+        <input type="hidden" name="sprite" :value="filters.sprite" />
         <button type="submit">
             <span>Search</span>
         </button>
     </form>
     <form>
-        <label for="type">Select the type of the sprite</label>
-        <select id="type" v-model="filters.sprite" name="type">
+        <label for="sprite">Select the type of the sprite</label>
+        <select id="sprite" v-model="filters.sprite" name="sprite">
             <option v-for="sprite in sprites" :key="sprite" :value="sprite">
                 {{ parseName(sprite) }}
             </option>
