@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import type { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
+import type { CardResume } from '@tcgdex/sdk';
 
-const { filters, sorters, sortersOptions, query } = useTcgFilters<PokemonTCG.Card>(
-    'set.releaseDate',
-    'asc',
-    ['set.releaseDate', 'name', 'rarity'],
-);
+const { filters, query } = useTcgFilters<CardResume>();
 const { data: cards, error, status } = await useLazyFetch('/api/cards', { query });
 
 useSeoMeta({
@@ -22,14 +18,10 @@ useSeoMeta({
         :text="error.statusMessage || error.message"
     />
     <template v-if="status === 'success'">
-        <TcgSearchForm
-            v-model:filters="filters"
-            v-model:sorters="sorters"
-            :sorterOptions="sortersOptions"
-        />
-        <template v-if="cards?.data.length">
-            <CardsGrid :cards="cards.data" />
-            <CardsNavigation :cards="cards" />
+        <TcgSearchForm v-model:filters="filters" />
+        <template v-if="cards?.length">
+            <CardsGrid :cards="cards" />
+            <CardsNavigation :query="query" />
         </template>
         <AppMessage
             v-else

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
+import type { CardList } from '@tcgdex/sdk';
 
 const { cards = undefined } = defineProps<{
-    cards?: PokemonTCG.Card[];
+    cards?: CardList;
 }>();
 </script>
 
@@ -10,7 +10,7 @@ const { cards = undefined } = defineProps<{
     <div v-if="cards?.length" class="pokemon-grid">
         <div v-for="card in cards" :key="card.id" class="card">
             <NuxtLink :to="`/cards/${card.id}`" class="image">
-                <AppImage :src="card.images.small" :alt="card.name" />
+                <AppImage :src="`${card.image}/low.png`" :alt="card.name" />
             </NuxtLink>
             <div class="name">
                 <span>{{ card.name }}</span>

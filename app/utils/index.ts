@@ -4,25 +4,11 @@ export function formatDate(date: string) {
     }).format(new Date(date));
 }
 
-export function formatPrice(price: number) {
+export function formatPrice(price: number, currency: string) {
     return new Intl.NumberFormat('en-US', {
         style: 'currency',
-        currency: 'USD',
+        currency,
     }).format(price);
-}
-
-export function groupBy<T>(array: T[] | undefined, _key: keyof T) {
-    return array?.reduce<Record<string, T[]>>((acc, item) => {
-        const key = item[_key] as string;
-
-        if (!acc[key]) {
-            acc[key] = [];
-        }
-
-        acc[key].push(item);
-
-        return acc;
-    }, {});
 }
 
 export function getImage(path: string) {

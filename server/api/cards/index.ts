@@ -1,23 +1,9 @@
-import axios from 'axios';
-import type { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
+import type { CardResume } from '@tcgdex/sdk';
 
 export default defineMaybeCachedEventHandler(async (event) => {
     const query = getQuery(event);
 
-    const params: PokemonTCG.Parameter = {
-        ...query,
-        pageSize: POKEMON_TCG_CARDS_PAGE_SIZE,
-    };
+    const cards = await $fetch<CardResume[]>(`${TCG_DEX_API_URL}/cards`, { query });
 
-    try {
-        const response = await axios.get<PokemonTCGResponse<PokemonTCG.Card>>(
-            `${POKEMON_TCG_API_URL}/cards`,
-            { params },
-        );
-
-        return response.data;
-    } catch (e) {
-        const error = e as Error;
-        Promise.reject(error);
-    }
+    return cards;
 });

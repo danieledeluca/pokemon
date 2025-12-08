@@ -1,23 +1,15 @@
 <script setup lang="ts">
-import type { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
+import type { Set } from '@tcgdex/sdk';
 
 const route = useRoute();
 const setId = route.params.id;
 
-const { filters, sorters, sortersOptions, query } = useTcgFilters<PokemonTCG.Card>(
-    'number',
-    'asc',
-    ['name', 'number', 'rarity'],
-);
-
-const { data, error, status } = await useLazyFetch(`/api/sets/${setId}`, { query });
-
-const cards = computed(() => data.value?.cards);
-const set = computed(() => data.value?.set);
+const { filters, query } = useTcgFilters<Set>();
+const { data: set, error, status } = await useLazyFetch(`/api/sets/${setId}`, { query });
 
 useSeoMeta({
-    title: data.value?.set?.name,
-    description: `A list of all Pokémon TCG cards in the ${data.value?.set?.name} set`,
+    title: () => set.value?.name,
+    description: () => `A list of all Pokémon TCG cards in the ${set.value?.name} set`,
 });
 </script>
 
@@ -31,24 +23,25 @@ useSeoMeta({
     <template v-if="status === 'success'">
         <article v-if="set" class="set">
             <div class="logo">
-                <img :src="set.images.logo" :alt="set.name" />
+                <AppImage :src="`${set.logo}.png`" :alt="set.name" />
             </div>
             <div class="content">
                 <p>
                     <strong>Name: </strong>{{ set.name }}
-                    <img class="symbol" :src="set.images.symbol" :alt="set.name" />
+                    <img
+                        v-if="set.symbol"
+                        class="symbol"
+                        :src="`${set.symbol}.png`"
+                        :alt="set.name"
+                    />
                 </p>
-                <p><strong>Series: </strong>{{ set.series }}</p>
+                <p><strong>Serie: </strong>{{ set.serie.name }}</p>
                 <p><strong>Release date: </strong>{{ formatDate(set.releaseDate) }}</p>
-                <p><strong>Total cards: </strong>{{ set.total }}</p>
+                <p><strong>Total cards: </strong>{{ set.cardCount.total }}</p>
             </div>
         </article>
-        <TcgSearchForm
-            v-model:filters="filters"
-            v-model:sorters="sorters"
-            :sorterOptions="sortersOptions"
-        />
-        <CardsGrid v-if="cards?.length" :cards="cards" />
+        <TcgSearchForm v-model:filters="filters" />
+        <CardsGrid v-if="set?.cards.length" :cards="set.cards" />
         <AppMessage
             v-else
             text="We couldn't find any cards matching your search criteria"

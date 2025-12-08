@@ -1,4 +1,6 @@
-export const POKE_API_LIMIT = POKEMON_TCG_CARDS_PAGE_SIZE;
+export const TCG_DEX_ITEM_PER_PAGE = 60;
+
+export const POKE_API_LIMIT = TCG_DEX_ITEM_PER_PAGE;
 
 export const SPRITE_FRONT_DEFAULT_URL =
     'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/';

@@ -3,8 +3,8 @@
         <div class="container">
             <small>
                 &copy; {{ new Date().getFullYear() }} - Daniele De Luca - Thanks to
-                <a href="https://pokemontcg.io/" target="_blank">Pokémon TCG</a> and
-                <a href="https://pokeapi.co/" target="_blank">PokeAPI</a> for all the data.
+                <a href="https://www.tcgdex.net/" target="_blank">TCGdex</a> and
+                <a href="https://pokeapi.co/" target="_blank">PokéAPI</a> for all the data.
             </small>
         </div>
     </footer>

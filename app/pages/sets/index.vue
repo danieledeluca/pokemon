@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
+import type { SerieResume } from '@tcgdex/sdk';
 
-const { filters, query } = useTcgFilters<PokemonTCG.Set>('releaseDate', 'desc');
-const { data: sets, error, status } = await useLazyFetch('/api/sets', { query });
+const { filters, query } = useTcgFilters<SerieResume>();
+const { data: series, error, status } = await useLazyFetch('/api/sets', { query });
 
 useSeoMeta({
     title: 'Sets',
@@ -18,14 +18,14 @@ useSeoMeta({
         :text="error.statusMessage || error.message"
     />
     <template v-if="status === 'success'">
-        <TcgSearchForm v-model:filters="filters" placeholder="Search for a set" />
-        <template v-if="sets?.length">
-            <div v-for="(_sets, series) in groupBy(sets, 'series')" :key="series" class="series">
-                <h2>{{ series }}</h2>
+        <TcgSearchForm v-model:filters="filters" nameFieldPlaceholder="Search for a set" />
+        <template v-if="series?.length">
+            <div v-for="serie in series" :key="serie.id" class="series">
+                <h2>{{ serie.name }}</h2>
                 <div class="pokemon-grid">
-                    <div v-for="set in _sets" :key="set.id" class="set">
+                    <div v-for="set in serie.sets" :key="set.id" class="set">
                         <NuxtLink class="image article" :to="`/sets/${set.id}`">
-                            <AppImage :src="set.images.logo" :alt="set.name" />
+                            <AppImage :src="`${set.logo}.png`" :alt="set.name" />
                         </NuxtLink>
                         <div class="name">
                             <span>{{ set.name }}</span>

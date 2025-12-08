@@ -25,7 +25,7 @@
     gap: 1rem;
 }
 
-.pokemon-grid .image {
+:is(.pokemon-grid, .card) .image {
     position: relative;
     display: block;
     margin-bottom: 0;
@@ -46,7 +46,7 @@
     background-color: var(--pico-card-sectioning-background-color);
 }
 
-.pokemon-grid .image img {
+:is(.pokemon-grid, .card) .image img {
     position: absolute;
     top: 50%;
     left: 50%;

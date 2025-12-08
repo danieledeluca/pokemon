@@ -1,27 +1,13 @@
-import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
-
-async function getSetCards(parameter: PokemonTCG.Parameter, cards: PokemonTCG.Card[] = []) {
-    const pageCards = await PokemonTCG.findCardsByQueries(parameter);
-
-    cards.push(...pageCards);
-
-    if (pageCards[0]?.set.total > cards.length) {
-        parameter.page = (Number(parameter.page) || 1) + 1;
-
-        await getSetCards(parameter, cards);
-    }
-
-    return cards;
-}
+import type { Set } from '@tcgdex/sdk';
 
 export default defineMaybeCachedEventHandler(async (event) => {
     const setId = getRouterParam(event, 'id');
     const query = getQuery(event);
 
-    query.q += `set.id:${setId}`;
+    const set = await $fetch<Set>(`${TCG_DEX_API_URL}/sets/${setId}`);
+    set.cards = set.cards.filter((card) =>
+        card.name.toLowerCase().includes(query.name?.toString().toLowerCase() || ''),
+    );
 
-    return {
-        cards: await getSetCards(query),
-        set: (await $fetch('/api/sets', { query: { q: `id:${setId}` } }))?.[0],
-    };
+    return set;
 });

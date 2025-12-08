@@ -1,117 +1,63 @@
-import type { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
-import type { NestedKeyOf } from './utils';
+import type { Card } from '@tcgdex/sdk';
 
-export interface PokemonTCGResponse<T> {
-    data: T[];
-    page: number;
-    pageSize: number;
-    count: number;
-    totalCount: number;
-}
+export type TcgFilters = {
+    name: string;
+};
 
-export interface PokemonTCGCard extends PokemonTCG.Card {
-    level?: string;
-    tcgplayer?: {
-        url: string;
-        updatedAt: string;
-        prices: TCGPrices;
+export type TcgSortOrderDefaultValues = 'ASC' | 'DESC';
+
+export type TcgQuery<T extends object> = Partial<TcgFilters> & {
+    'sort:field'?: NestedKeyOf<T>;
+    'sort:order': TcgSortOrderDefaultValues;
+    'pagination:page': number;
+    'pagination:itemsPerPage': number;
+};
+
+export type TcgCard = Card & {
+    pricing: {
+        cardmarket: TcgCardPricingCardMarket;
+        tcgplayer: TcgCardPricingTcgPlayer;
     };
-    cardmarket?: {
-        url: string;
-        updatedAt: string;
-        prices: CardMarketPrices;
-    };
-}
+};
 
-export interface TCGPrices {
-    'normal'?: PokemonTCG.Price;
-    '1stEdition'?: PokemonTCG.Price;
-    'unlimited'?: PokemonTCG.Price;
-    'holofoil'?: PokemonTCG.Price;
-    'reverseHolofoil'?: PokemonTCG.Price;
-    '1stEditionHolofoil'?: PokemonTCG.Price;
-    'unlimitedHolofoil'?: PokemonTCG.Price;
-}
+export type TcgCardPricingCardMarket = (TcgCardPricingBase & TcgCardMarketPrices) | null;
 
-export interface CardMarketPrices {
-    averageSellPrice: number | null;
+export type TcgCardPricingTcgPlayer = (TcgCardPricingBase & TcgCardTcgPlayerPrices) | null;
+
+export type TcgCardPricingBase = {
+    updated: string;
+    unit: string;
+};
+
+export type TcgCardMarketPrices = {
+    'avg': number | null;
+    'low': number | null;
+    'trend': number | null;
+    'avg1': number | null;
+    'avg7': number | null;
+    'avg30': number | null;
+    'avg-holo': number | null;
+    'low-holo': number | null;
+    'trend-holo': number | null;
+    'avg1-holo': number | null;
+    'avg7-holo': number | null;
+    'avg30-holo': number | null;
+};
+
+export type TcgCardTcgPlayerPrices = {
+    'normal': TcgCardTcgPlayerPrice;
+    '1st-edition': TcgCardTcgPlayerPrice;
+    'unlimited': TcgCardTcgPlayerPrice;
+    'holofoil': TcgCardTcgPlayerPrice;
+    '1st-edition-holofoil': TcgCardTcgPlayerPrice;
+    'unlimited-holofoil': TcgCardTcgPlayerPrice;
+    'reverse-holofoil': TcgCardTcgPlayerPrice;
+};
+
+export type TcgCardTcgPlayerPrice = {
     lowPrice: number | null;
-    trendPrice: number | null;
-    germanProLow: number | null;
-    suggestedPrice: number | null;
-    reverseHoloSell: number | null;
-    reverseHoloLow: number | null;
-    reverseHoloTrend: number | null;
-    lowPriceExPlus: number | null;
-    avg1: number | null;
-    avg7: number | null;
-    avg30: number | null;
-    reverseHoloAvg1: number | null;
-    reverseHoloAvg7: number | null;
-    reverseHoloAvg30: number | null;
-}
-
-export enum TCGPriceLabel {
-    'normal' = 'Normal',
-    '1stEdition' = '1st Edition',
-    'unlimited' = 'Unlimited',
-    'holofoil' = 'Holofoil',
-    'reverseHolofoil' = 'Reverse Holofoil',
-    '1stEditionHolofoil' = '1st Edition Holofoil',
-    'unlimitedHolofoil' = 'Unlimited Holofoil',
-}
-
-export enum CardMarketPriceLabel {
-    'averageSellPrice' = 'Average Sell Price',
-    'lowPrice' = 'Low Price',
-    'trendPrice' = 'Trend Price',
-    'germanProLow' = 'German Pro Low',
-    'suggestedPrice' = 'Suggested Price',
-    'reverseHoloSell' = 'Reverse Holo Sell',
-    'reverseHoloLow' = 'Reverse Holo Low',
-    'reverseHoloTrend' = 'Reverse Holo Trend',
-    'lowPriceExPlus' = 'Low Price (Ex+)',
-    'avg1' = '1 Day Average',
-    'avg7' = '7 Day Average',
-    'avg30' = '30 Day Average',
-    'reverseHoloAvg1' = 'Reverse Holo 1 Day Average',
-    'reverseHoloAvg7' = 'Reverse Holo 7 Day Average',
-    'reverseHoloAvg30' = 'Reverse Holo 30 Day Average',
-}
-
-export type TCGFilteredPrices = Pick<PokemonTCG.Price, 'low' | 'mid' | 'high' | 'market'>;
-
-export type CardMarketFilteredPrices = Pick<
-    CardMarketPrices,
-    'trendPrice' | 'avg1' | 'avg7' | 'avg30'
->;
-
-export interface TCGFilters {
-    name?: string;
-}
-
-export interface TCGSorters<T extends object> {
-    order: NestedKeyOf<T>;
-    direction: keyof TCGSortersDirectionOptions;
-}
-
-export interface TCGSortersOptions<T extends object> {
-    order: NestedKeyOf<T>[];
-    direction: (keyof TCGSortersDirectionOptions)[];
-}
-export interface TCGSortersDirectionOptions {
-    asc: string;
-    desc: string;
-}
-
-export enum TCGSortersOrderLabels {
-    'set.releaseDate' = 'Release Date',
-    'name' = 'Name',
-    'number' = 'Number',
-    'rarity' = 'Rarity',
-}
-
-export enum TCGSortersDirectionLabels {
-    asc = 'Ascending',
-    desc = 'Descending',
-}
+    midPrice: number | null;
+    highPrice: number | null;
+    marketPrice: number | null;
+    directLowPrice: number | null;
+};

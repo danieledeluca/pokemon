@@ -1,9 +1,7 @@
-import { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
-
-export default defineMaybeCachedEventHandler((event) => {
+export default defineMaybeCachedEventHandler(async (event) => {
     const cardId = getRouterParam(event, 'id');
 
-    if (cardId) {
-        return PokemonTCG.findCardByID(cardId) as Promise<PokemonTCGCard>;
-    }
+    const card = await $fetch<TcgCard>(`${TCG_DEX_API_URL}/cards/${cardId}`);
+
+    return card;
 });

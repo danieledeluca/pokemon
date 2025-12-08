@@ -1,25 +1,28 @@
 <script setup lang="ts">
-import type { PokemonTCG } from 'pokemon-tcg-sdk-typescript';
-
 const { card } = defineProps<{
-    card: PokemonTCG.Card;
+    card: TcgCard;
 }>();
 
-const { query } = useTcgFilters<PokemonTCG.Card>('number', 'asc');
-const { data } = await useFetch(`/api/sets/${card.set.id}`, { query });
+const { data: set } = await useLazyFetch(`/api/sets/${card.set.id}`);
 
-const cards = data.value?.cards;
-const cardIndex = cards?.findIndex((_card) => _card.id === card.id) || 0;
+const cards = computed(() => set.value?.cards);
+const cardIndex = computed(() => cards.value?.findIndex((_card) => _card.id === card.id) || 0);
 
-const showPreviousButton = cardIndex > 0;
-const showNextButton = cardIndex < card.set.total - 1;
+const showPreviousButton = computed(() => cardIndex.value > 0);
+const showNextButton = computed(() => cardIndex.value < card.set.cardCount.total - 1);
 
-const previousCardId = cards?.[cardIndex - 1]?.id;
-const nextCardId = cards?.[cardIndex + 1]?.id;
+const previousCardId = computed(() => cards.value?.[cardIndex.value - 1]?.id);
+const nextCardId = computed(() => cards.value?.[cardIndex.value + 1]?.id);
+
+const showNavigation = computed(
+    () =>
+        (showPreviousButton.value || showNextButton.value) &&
+        (previousCardId.value || nextCardId.value),
+);
 </script>
 
 <template>
-    <div class="navigation" role="group">
+    <div v-if="showNavigation" class="navigation" role="group">
         <button v-if="!showPreviousButton" type="button" class="secondary" disabled>
             <span>Previous</span>
         </button>
