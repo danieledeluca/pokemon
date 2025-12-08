@@ -1,3 +1,3 @@
 # Pokémon
 
-A list of all Pokèmon, TCG sets and TCG cards.
+A list of all Pokémon, TCG sets and TCG cards.
