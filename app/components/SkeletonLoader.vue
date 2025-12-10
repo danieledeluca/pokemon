@@ -1,15 +1,21 @@
 <script setup lang="ts">
 const { layout } = defineProps<{
-    layout: 'sets' | 'set' | 'cards' | 'card';
+    layout: 'sets' | 'set' | 'cards' | 'card' | 'pokemon-list' | 'pokemon';
 }>();
 </script>
 
 <template>
-    <template v-if="layout === 'sets'">
-        <div class="skeleton search sets"></div>
-        <div class="skeleton title"></div>
+    <template v-if="layout === 'sets' || layout === 'pokemon-list'">
+        <div class="skeleton search" :class="{ sets: layout === 'sets' }"></div>
+        <template v-if="layout === 'pokemon-list'">
+            <div class="form">
+                <div class="skeleton label"></div>
+                <div class="skeleton input"></div>
+            </div>
+        </template>
+        <div v-if="layout === 'sets'" class="skeleton title"></div>
         <div class="pokemon-grid">
-            <div v-for="m in 12" :key="m" class="set">
+            <div v-for="m in 18" :key="m" class="set">
                 <div class="skeleton image"></div>
                 <div class="skeleton name"></div>
             </div>
@@ -18,12 +24,8 @@ const { layout } = defineProps<{
     <template v-if="layout === 'set' || layout === 'cards'">
         <div v-if="layout === 'set'" class="skeleton set-banner"></div>
         <div class="skeleton search"></div>
-        <div class="form">
-            <div class="skeleton label"></div>
-            <div class="skeleton input"></div>
-        </div>
         <div class="pokemon-grid">
-            <div v-for="m in 12" :key="m" class="card">
+            <div v-for="m in 18" :key="m" class="card">
                 <div class="skeleton image"></div>
                 <div class="skeleton name"></div>
             </div>
@@ -39,6 +41,19 @@ const { layout } = defineProps<{
                 <article class="skeleton basic"></article>
                 <article class="skeleton attributes"></article>
                 <article class="skeleton attacks"></article>
+            </div>
+        </div>
+    </template>
+    <template v-if="layout === 'pokemon'">
+        <div class="detail pokemon">
+            <div>
+                <div class="skeleton image"></div>
+                <div class="skeleton navigation"></div>
+            </div>
+            <div>
+                <article class="skeleton basic"></article>
+                <article class="skeleton evolutions"></article>
+                <article class="skeleton varieties"></article>
             </div>
         </div>
     </template>
@@ -105,16 +120,28 @@ article {
     box-shadow: none;
 }
 
-article.basic {
+.card .basic {
     height: 540px;
 }
 
-article.attributes {
+.card .attributes {
     height: 130px;
 }
 
-article.attacks {
+.card .attacks {
     height: 200px;
+}
+
+.pokemon .image {
+    aspect-ratio: 1;
+}
+
+.pokemon .basic {
+    height: 320px;
+}
+
+.pokemon :is(.evolutions, .varieties) {
+    height: 190px;
 }
 
 @keyframes skeleton {

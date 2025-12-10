@@ -96,6 +96,7 @@ const { type } = defineProps<{
     --background-color: #5a5464;
     --color: var(--pico-color-light);
 }
+
 .type.fairy {
     --background-color: #ee91e2;
 }

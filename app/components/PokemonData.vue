@@ -1,32 +1,30 @@
 <script setup lang="ts">
-import type { Pokemon, PokemonForm } from 'pokenode-ts';
+import type { EvolutionChain, Pokemon, PokemonForm, PokemonSpecies } from 'pokenode-ts';
 
-const { pokemon } = defineProps<{
+const {
+    pokemon,
+    pokemonSpecies,
+    pokemonForms,
+    pokemonEvolutionChain: _pokemonEvolutionChain,
+} = defineProps<{
     pokemon: Pokemon;
+    pokemonSpecies: PokemonSpecies;
+    pokemonForms: PokemonForm[];
+    pokemonEvolutionChain: EvolutionChain;
 }>();
 
-const { name, flavourText, species } = await usePokemon(pokemon);
-const { evolutionChain } = await useEvolutionChain(species.value);
-const forms: PokemonForm[] = [];
-
-if (pokemon.forms.length > 1) {
-    for (const pokemonForm of pokemon.forms) {
-        const { form } = await usePokemonForm(pokemonForm);
-
-        if (form.value) {
-            forms.push(form.value);
-        }
-    }
-}
+const evolutionChain = parseEvolutionChain(_pokemonEvolutionChain);
 </script>
 
 <template>
     <main>
         <article class="basic">
             <h1>
-                <span>{{ name }}</span>
+                <span>{{ getPokemonName(pokemon, pokemonSpecies, pokemonForms) }}</span>
             </h1>
-            <p class="flavour-text">{{ flavourText }}</p>
+            <p class="flavour-text">
+                {{ parsePokemonFlavorText(pokemonSpecies.flavor_text_entries) }}
+            </p>
             <p class="height"><strong>Height: </strong>{{ Number(pokemon.height) / 10 }} m</p>
             <p class="weight"><strong>Weight: </strong>{{ Number(pokemon.weight) / 10 }} kg</p>
             <p class="types">
@@ -38,24 +36,24 @@ if (pokemon.forms.length > 1) {
                 />
             </p>
         </article>
-        <article v-if="evolutionChain" class="evolutions">
+        <article v-if="evolutionChain.length" class="evolutions">
             <h5 class="title">
                 <span>Evolutions</span>
             </h5>
             <div class="content">
-                <EvolutionChain
+                <PokemonEvolutionChain
                     v-for="subEvolutionChain in evolutionChain"
                     :key="subEvolutionChain.name"
                     :evolutionChain="subEvolutionChain"
                 />
             </div>
         </article>
-        <article v-if="species && species.varieties.length > 1" class="varieties">
+        <article v-if="pokemonSpecies.varieties.length > 1" class="varieties">
             <h5 class="title">
                 <span>Varieties</span>
             </h5>
             <div class="content">
-                <template v-for="variety in species.varieties" :key="variety.pokemon.name">
+                <template v-for="variety in pokemonSpecies.varieties" :key="variety.pokemon.name">
                     <div v-if="getIdFromUrl(variety.pokemon.url) !== pokemon.id" class="variety">
                         <NuxtLink
                             :to="`/pokemon/${getIdFromUrl(variety.pokemon.url)}`"
@@ -74,12 +72,12 @@ if (pokemon.forms.length > 1) {
                 </template>
             </div>
         </article>
-        <article v-if="forms.length" class="forms">
+        <article v-if="pokemonForms.length > 1" class="forms">
             <h5 class="title">
                 <span>Forms</span>
             </h5>
             <div class="content">
-                <template v-for="form in forms" :key="form.name">
+                <template v-for="form in pokemonForms" :key="form.name">
                     <div v-if="form.id !== pokemon.id" class="form">
                         <div class="image" :data-tooltip="parseName(form.name)">
                             <AppImage :src="form.sprites.front_default || ''" :alt="form.name" />

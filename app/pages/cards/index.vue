@@ -25,7 +25,7 @@ useSeoMeta({
         </template>
         <AppMessage
             v-else
-            :text="`We couldn't find any cards matching your search criteria`"
+            text="We couldn't find any cards matching your search criteria"
             type="warning"
         />
     </template>

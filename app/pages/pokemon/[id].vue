@@ -1,43 +1,54 @@
 <script setup lang="ts">
-import type { Pokemon } from 'pokenode-ts';
-
 const route = useRoute();
 const pokemonId = route.params.id as string;
 
-const { data: pokemon, error } = await useFetch<Pokemon>(`/api/pokemon/${pokemonId}`);
+const { data, error, status } = await useLazyFetch(`/api/pokemon/${pokemonId}`);
+const pokemon = computed(() => data.value?.pokemon);
+const pokemonSpecies = computed(() => data.value?.pokemonSpecies);
+const pokemonForms = computed(() => data.value?.pokemonForms);
+const pokemonEvolutionChain = computed(() => data.value?.pokemonEvolutionChain);
 
-if (error.value) {
-    throw createError({
-        statusCode: error.value.statusCode,
-        statusMessage: error.value.statusMessage,
-    });
-}
+const name = computed(() =>
+    getPokemonName(pokemon.value, pokemonSpecies.value, pokemonForms.value),
+);
 
 const { headerHeight } = useHeader();
-const { name, flavourText } = await usePokemon(pokemon.value!);
-
-const image =
-    pokemon.value?.sprites.versions['generation-v']['black-white'].animated.front_default ||
-    pokemon.value?.sprites.front_default ||
-    '';
 
 useSeoMeta({
     title: name,
-    description: flavourText,
+    description: () => parsePokemonFlavorText(pokemonSpecies.value?.flavor_text_entries),
 });
 </script>
 
 <template>
-    <div v-if="pokemon" class="detail pokemon">
-        <aside :style="`--header-height: ${headerHeight}px;`">
-            <div class="image">
-                <AppImage :src="image" :alt="name" :showPlaceholder="false" />
-            </div>
-            <PokemonNavigation :pokemonId="Number(pokemonId)" />
-        </aside>
-        <PokemonData :pokemon="pokemon" />
-    </div>
-    <AppMessage v-else text="We couldn't find the pokemon you are looking for" type="warning" />
+    <SkeletonLoader v-if="status === 'pending'" layout="pokemon" />
+    <AppMessage
+        v-if="status === 'error' && error"
+        type="error"
+        :text="error.statusMessage || error.message"
+    />
+    <template v-if="status === 'success'">
+        <div v-if="pokemon" class="detail pokemon">
+            <aside :style="`--header-height: ${headerHeight}px;`">
+                <div class="image">
+                    <AppImage
+                        :src="getPokemonImage(pokemon)"
+                        :alt="name"
+                        :showPlaceholder="false"
+                    />
+                </div>
+                <PokemonNavigation />
+            </aside>
+            <PokemonData
+                v-if="pokemonSpecies && pokemonForms && pokemonEvolutionChain"
+                :pokemon="pokemon"
+                :pokemonSpecies="pokemonSpecies"
+                :pokemonForms="pokemonForms"
+                :pokemonEvolutionChain="pokemonEvolutionChain"
+            />
+        </div>
+        <AppMessage v-else text="We couldn't find the pokemon you are looking for" type="warning" />
+    </template>
 </template>
 
 <style scoped>

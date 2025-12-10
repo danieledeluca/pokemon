@@ -1,20 +1,20 @@
 <script setup lang="ts">
 import type { NamedAPIResourceList } from 'pokenode-ts';
 
-const { pokemon } = defineProps<{
-    pokemon: NamedAPIResourceList;
+const { pokemonList } = defineProps<{
+    pokemonList: NamedAPIResourceList;
 }>();
 
 const route = useRoute();
 
-const showPreviousButton = pokemon.previous !== null;
-const showNextButton = pokemon.next !== null;
+const showPreviousButton = pokemonList.previous !== null;
+const showNextButton = pokemonList.next !== null;
 
 const previousOffset = showPreviousButton
-    ? new URLSearchParams(new URL(pokemon.previous || '').search).get('offset')
+    ? new URLSearchParams(new URL(pokemonList.previous || '').search).get('offset')
     : '';
 const nextOffset = showNextButton
-    ? new URLSearchParams(new URL(pokemon.next || '').search).get('offset')
+    ? new URLSearchParams(new URL(pokemonList.next || '').search).get('offset')
     : '';
 </script>
 

@@ -14,19 +14,18 @@ const sprites: SpriteTypes[] = [
 </script>
 
 <template>
-    <form role="search">
-        <input
-            v-model="filters.name"
-            type="search"
-            name="name"
-            placeholder="Search for a pokemon"
-        />
-        <input type="hidden" name="sprite" :value="filters.sprite" />
-        <button type="submit">
-            <span>Search</span>
-        </button>
-    </form>
     <form>
+        <fieldset role="search">
+            <input
+                v-model="filters.name"
+                type="search"
+                name="name"
+                placeholder="Search for a pokemon"
+            />
+            <button type="submit">
+                <span>Search</span>
+            </button>
+        </fieldset>
         <label for="sprite">Select the type of the sprite</label>
         <select id="sprite" v-model="filters.sprite" name="sprite">
             <option v-for="sprite in sprites" :key="sprite" :value="sprite">

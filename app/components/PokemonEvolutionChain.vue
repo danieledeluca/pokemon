@@ -12,27 +12,26 @@ const colEnd = colStart + maxEvolutionChainLength + 1;
 </script>
 
 <template>
-    <EvolutionSingle :evolutionChain />
-    <template v-if="evolutionChain.evolves_to.length > 1">
+    <PokemonEvolutionChainSingle :evolutionChain="evolutionChain" />
+    <div
+        v-if="evolutionChain.evolves_to.length > 1"
+        class="split"
+        :style="{
+            '--col-start': colStart,
+            '--col-end': evolutionChain.evolves_to.length > 3 ? -1 : colEnd,
+            '--col-span': colEnd - colStart,
+        }"
+    >
         <div
-            class="split"
-            :style="`
-                --col-start: ${colStart};
-                --col-end: ${evolutionChain.evolves_to.length > 3 ? -1 : colEnd};
-                --col-span: ${colEnd - colStart};
-            `"
+            v-for="subEvolutionChain in evolutionChain.evolves_to"
+            :key="subEvolutionChain.name"
+            class="evolution-line"
+            :style="{ '--col-span': colEnd - colStart }"
         >
-            <div
-                v-for="subEvolutionChain in evolutionChain.evolves_to"
-                :key="subEvolutionChain.name"
-                class="evolution-line"
-                :style="`--col-span: ${colEnd - colStart};`"
-            >
-                <EvolutionChain :evolutionChain="subEvolutionChain" />
-            </div>
+            <PokemonEvolutionChain :evolutionChain="subEvolutionChain" />
         </div>
-    </template>
-    <EvolutionChain
+    </div>
+    <PokemonEvolutionChain
         v-for="subEvolutionChain in evolutionChain.evolves_to"
         v-else
         :key="subEvolutionChain.name"

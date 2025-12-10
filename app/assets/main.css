@@ -122,9 +122,12 @@
     margin-bottom: 0;
 }
 
-[role='search']:not(:has(+ form)),
-[role='search'] + form {
+form:has([role='search']) {
     margin-bottom: 2rem;
+}
+
+fieldset[role='search']:last-child {
+    margin-bottom: 0;
 }
 
 [data-tooltip]:not(a, button, input, [role='button']) {
