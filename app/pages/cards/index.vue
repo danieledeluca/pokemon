@@ -20,8 +20,8 @@ useSeoMeta({
     <template v-if="status === 'success'">
         <TcgSearchForm v-model:filters="filters" />
         <template v-if="cards?.length">
-            <CardsGrid :cards="cards" />
-            <CardsNavigation :query="query" />
+            <TcgCardsGrid :cards="cards" />
+            <TcgCardsNavigation :query="query" />
         </template>
         <AppMessage
             v-else

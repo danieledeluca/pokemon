@@ -24,7 +24,7 @@ const tcgPlayerFilteredPrices = filterTcgCardTcgPlayerPrices(card.pricing.tcgpla
             <p v-if="card.hp" class="hp"><strong>HP: </strong>{{ card.hp }}</p>
             <p v-if="card.types?.length" class="types">
                 <strong>Types: </strong>
-                <CardType
+                <TcgCardType
                     v-for="type in card.types"
                     :key="type"
                     class="type"
@@ -65,7 +65,7 @@ const tcgPlayerFilteredPrices = filterTcgCardTcgPlayerPrices(card.pricing.tcgpla
                 </h5>
                 <div class="content">
                     <span v-for="weakness in card.weaknesses" :key="weakness.type" class="attr">
-                        <CardType :type="weakness.type" size="large" />
+                        <TcgCardType :type="weakness.type" size="large" />
                         <span class="value">{{ weakness.value }}</span>
                     </span>
                     <span v-if="!card.weaknesses?.length">N/A</span>
@@ -81,7 +81,7 @@ const tcgPlayerFilteredPrices = filterTcgCardTcgPlayerPrices(card.pricing.tcgpla
                         :key="resistance.type"
                         class="attr"
                     >
-                        <CardType :type="resistance.type" size="large" />
+                        <TcgCardType :type="resistance.type" size="large" />
                         <span class="value">{{ resistance.value }}</span>
                     </span>
                     <span v-if="!card.resistances?.length">N/A</span>
@@ -93,7 +93,7 @@ const tcgPlayerFilteredPrices = filterTcgCardTcgPlayerPrices(card.pricing.tcgpla
                 </h5>
                 <div class="content">
                     <span v-for="retreat in card.retreat" :key="retreat" class="attr">
-                        <CardType type="Colorless" size="large" :showTooltip="false" />
+                        <TcgCardType type="Colorless" size="large" :showTooltip="false" />
                     </span>
                     <span v-if="!card.retreat">N/A</span>
                 </div>
@@ -118,7 +118,7 @@ const tcgPlayerFilteredPrices = filterTcgCardTcgPlayerPrices(card.pricing.tcgpla
                 <div v-for="attack in card.attacks" :key="attack.name" class="attack">
                     <div class="data">
                         <div class="cost">
-                            <CardType
+                            <TcgCardType
                                 v-for="cost in attack.cost"
                                 :key="cost"
                                 class="type"

@@ -23,9 +23,9 @@ useSeoMeta({
                 <div class="image">
                     <AppImage :src="`${card.image}/high.png`" :alt="card.name" />
                 </div>
-                <CardNavigation :card="card" />
+                <TcgCardNavigation :card="card" />
             </aside>
-            <CardData :card="card" />
+            <TcgCardData :card="card" />
         </div>
         <AppMessage v-else text="We couldn't find the card you are looking for" type="warning" />
     </template>

@@ -41,7 +41,7 @@ useSeoMeta({
             </div>
         </article>
         <TcgSearchForm v-model:filters="filters" />
-        <CardsGrid v-if="set?.cards.length" :cards="set.cards" />
+        <TcgCardsGrid v-if="set?.cards.length" :cards="set.cards" />
         <AppMessage
             v-else
             text="We couldn't find any cards matching your search criteria"
