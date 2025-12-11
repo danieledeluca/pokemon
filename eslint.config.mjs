@@ -4,7 +4,7 @@ import withNuxt from './.nuxt/eslint.config.mjs';
 
 export default withNuxt(eslintPluginPrettierRecommended, {
     rules: {
+        'vue/attribute-hyphenation': ['error', 'never'],
         'vue/no-multiple-template-root': 'off',
-        'vue/attribute-hyphenation': 'off',
     },
 });
