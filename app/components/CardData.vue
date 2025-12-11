@@ -89,7 +89,7 @@ const tcgPlayerFilteredPrices = filterTcgCardTcgPlayerPrices(card.pricing.tcgpla
             </div>
             <div class="attribute">
                 <h5 class="title">
-                    <span>Retreat cost</span>
+                    <span>Retreat</span>
                 </h5>
                 <div class="content">
                     <span v-for="retreat in card.retreat" :key="retreat" class="attr">
