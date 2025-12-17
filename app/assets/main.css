@@ -135,6 +135,15 @@ fieldset[role='search']:last-child {
     cursor: default;
 }
 
+/* Medium zoom */
+.medium-zoom-overlay {
+    z-index: 3;
+}
+
+.medium-zoom-image {
+    z-index: 4;
+}
+
 @media (min-width: 768px) {
     .pokemon-grid {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));

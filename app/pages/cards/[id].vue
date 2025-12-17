@@ -21,7 +21,7 @@ useSeoMeta({
         <div v-if="card" class="detail card">
             <aside :style="`--header-height: ${headerHeight}px;`">
                 <div class="image">
-                    <AppImage :src="`${card.image}/high.png`" :alt="card.name" />
+                    <AppImage :src="`${card.image}/high.png`" :alt="card.name" :allowZoom="true" />
                 </div>
                 <TcgCardNavigation :card="card" />
             </aside>
