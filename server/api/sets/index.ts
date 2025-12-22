@@ -19,6 +19,7 @@ export default defineMaybeCachedEventHandler(async (event) => {
     return setsBySeries
         .filter((serie) => {
             serie.sets = serie.sets.filter((set) => setsIds.includes(set.id)) || [];
+            serie.sets.reverse();
             return serie.sets.length > 0;
         })
         .reverse();
