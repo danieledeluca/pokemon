@@ -1,66 +1,58 @@
 <script setup lang="ts">
+import { getPokemonSpriteUrl } from 'pokenode-ts';
+
 const route = useRoute();
-const pokemonId = route.params.id as string;
+const pokemonId = Number(route.params.id);
 
-const { data, error, status } = await useLazyFetch(`/api/pokemon/${pokemonId}`);
-const pokemon = computed(() => data.value?.pokemon);
-const pokemonSpecies = computed(() => data.value?.pokemonSpecies);
-const pokemonForms = computed(() => data.value?.pokemonForms);
-const pokemonEvolutionChain = computed(() => data.value?.pokemonEvolutionChain);
+const { data: pokemon, pending, error } = useLazyFetch(`/api/pokemon/${pokemonId}`);
+const { data: pokemonDetails } = useLazyFetch(`/api/pokemon/details/${pokemonId}`);
 
-const name = computed(() =>
-    getPokemonName(pokemon.value, pokemonSpecies.value, pokemonForms.value),
-);
-
-const { headerHeight } = useHeader();
+const pokemonName = computed(() => pokemonDetails.value?.name);
 
 useSeoMeta({
-    title: name,
-    description: () => parsePokemonFlavorText(pokemonSpecies.value?.flavor_text_entries),
+    title: () => pokemonName.value,
+    description: () => `Discover sprites, types and evolutions for ${pokemonName.value}.`,
+});
+
+const spriteUrl = computed(() => {
+    return pokemon.value?.sprites.versions['generation-v']['black-white'].animated.front_default
+        || getPokemonSpriteUrl(pokemonId);
 });
 </script>
 
 <template>
-    <SkeletonLoader v-if="status === 'pending'" layout="pokemon" />
-    <AppMessage
-        v-if="status === 'error' && error"
-        type="error"
-        :text="error.statusMessage || error.message"
-    />
-    <template v-if="status === 'success'">
-        <div v-if="pokemon" class="detail pokemon">
-            <aside :style="`--header-height: ${headerHeight}px;`">
-                <div class="image">
+    <template v-if="pending">
+        <div class="grid gap-4 sm:gap-6 md:grid-cols-3 lg:gap-8">
+            <div>
+                <USkeleton class="aspect-square w-full" />
+                <USkeleton class="mt-4 h-8 w-full sm:mt-6 lg:mt-8" />
+            </div>
+            <div class="space-y-4 sm:space-y-6 md:col-span-2 lg:space-y-8">
+                <USkeleton class="h-96 w-full" />
+                <USkeleton class="h-48 w-full" />
+            </div>
+        </div>
+    </template>
+    <UAlert v-else-if="error" color="error" :title="error.message" />
+    <template v-else-if="pokemon">
+        <div class="grid gap-4 sm:gap-6 md:grid-cols-3 lg:gap-8">
+            <div>
+                <div class="flex aspect-square items-center justify-center">
                     <AppImage
-                        :src="getPokemonImage(pokemon)"
-                        :alt="name"
-                        :showPlaceholder="false"
+                        :src="spriteUrl"
+                        :alt="pokemonName"
+                        class="image-pixelated size-full object-contain"
+                        errorClass="p-4 sm:p-6"
+                        placeholder="/egg.gif"
                     />
                 </div>
-                <PokemonNavigation />
-            </aside>
-            <PokemonData
-                v-if="pokemonSpecies && pokemonForms && pokemonEvolutionChain"
-                :pokemon="pokemon"
-                :pokemonSpecies="pokemonSpecies"
-                :pokemonForms="pokemonForms"
-                :pokemonEvolutionChain="pokemonEvolutionChain"
-            />
+                <div class="mt-4 sm:mt-6 lg:mt-8">
+                    <PokemonNavigation :pokemonId />
+                </div>
+            </div>
+            <div class="md:col-span-2">
+                <PokemonData :pokemon />
+            </div>
         </div>
-        <AppMessage v-else text="We couldn't find the pokemon you are looking for" type="warning" />
     </template>
 </template>
-
-<style scoped>
-.image {
-    padding: 1rem;
-    aspect-ratio: 1;
-}
-
-img {
-    width: 100%;
-    height: 100%;
-    image-rendering: pixelated;
-    object-fit: contain;
-}
-</style>

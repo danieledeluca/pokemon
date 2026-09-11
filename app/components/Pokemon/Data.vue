@@ -1,141 +1,58 @@
 <script setup lang="ts">
-import type { EvolutionChain, Pokemon, PokemonForm, PokemonSpecies } from 'pokenode-ts';
+import type { Pokemon } from 'pokenode-ts';
 
-const {
-    pokemon,
-    pokemonSpecies,
-    pokemonForms,
-    pokemonEvolutionChain: _pokemonEvolutionChain,
-} = defineProps<{
+import { resourceId } from 'pokenode-ts';
+
+const { pokemon } = defineProps<{
     pokemon: Pokemon;
-    pokemonSpecies: PokemonSpecies;
-    pokemonForms: PokemonForm[];
-    pokemonEvolutionChain: EvolutionChain;
 }>();
 
-const evolutionChain = parseEvolutionChain(_pokemonEvolutionChain);
+const { data: pokemonDetails } = useLazyFetch(`/api/pokemon/details/${pokemon.id}`);
+
+const pokemonSpeciesId = resourceId(pokemon.species.url);
 </script>
 
 <template>
-    <main>
-        <article class="basic">
-            <h1>
-                <span>{{ getPokemonName(pokemon, pokemonSpecies, pokemonForms) }}</span>
-            </h1>
-            <p class="flavour-text">
-                {{ parsePokemonFlavorText(pokemonSpecies.flavor_text_entries) }}
-            </p>
-            <p class="height"><strong>Height: </strong>{{ Number(pokemon.height) / 10 }} m</p>
-            <p class="weight"><strong>Weight: </strong>{{ Number(pokemon.weight) / 10 }} kg</p>
-            <p class="types">
-                <strong>Types: </strong>
-                <PokemonType
-                    v-for="type in pokemon.types"
-                    :key="type.type.name"
-                    :type="type.type.name"
-                />
-            </p>
-        </article>
-        <article v-if="evolutionChain.length" class="evolutions">
-            <h5 class="title">
-                <span>Evolutions</span>
-            </h5>
-            <div class="content">
-                <PokemonEvolutionChain
-                    v-for="subEvolutionChain in evolutionChain"
-                    :key="subEvolutionChain.name"
-                    :evolutionChain="subEvolutionChain"
-                />
+    <div class="space-y-4 sm:space-y-6 lg:space-y-8">
+        <UPageCard
+            variant="subtle"
+            :title="pokemonDetails?.name"
+            :ui="{
+                title: 'text-2xl',
+            }"
+        >
+            <div v-if="pokemonDetails?.flavourText" class="text-lg">
+                {{ pokemonDetails.flavourText }}
             </div>
-        </article>
-        <article v-if="pokemonSpecies.varieties.length > 1" class="varieties">
-            <h5 class="title">
-                <span>Varieties</span>
-            </h5>
-            <div class="content">
-                <template v-for="variety in pokemonSpecies.varieties" :key="variety.pokemon.name">
-                    <div v-if="getIdFromUrl(variety.pokemon.url) !== pokemon.id" class="variety">
-                        <NuxtLink
-                            :to="`/pokemon/${getIdFromUrl(variety.pokemon.url)}`"
-                            class="image"
-                            :data-tooltip="parseName(variety.pokemon.name)"
-                        >
-                            <AppImage
-                                :src="getPokemonSprites(variety.pokemon.url)['front-default']"
-                                :alt="variety.pokemon.name"
-                            />
-                        </NuxtLink>
-                        <div class="name">
-                            <span>{{ parseName(variety.pokemon.name) }}</span>
-                        </div>
-                    </div>
-                </template>
+            <div>
+                <strong>Height </strong>
+                <span>{{ pokemon.height / 10 }} m</span>
             </div>
-        </article>
-        <article v-if="pokemonForms.length > 1" class="forms">
-            <h5 class="title">
-                <span>Forms</span>
-            </h5>
-            <div class="content">
-                <template v-for="form in pokemonForms" :key="form.name">
-                    <div v-if="form.id !== pokemon.id" class="form">
-                        <div class="image" :data-tooltip="parseName(form.name)">
-                            <AppImage :src="form.sprites.front_default || ''" :alt="form.name" />
-                        </div>
-                        <div class="name">
-                            <span>{{ parseName(form.name) }}</span>
-                        </div>
-                    </div>
-                </template>
+            <div>
+                <strong>Weight </strong>
+                <span>{{ pokemon.weight / 10 }} kg</span>
             </div>
-        </article>
-    </main>
+            <div>
+                <strong>Types </strong>
+                <span class="inline-flex flex-wrap gap-1 align-middle">
+                    <PokemonType v-for="type in pokemon.types" :key="type.slot" :pokemonType="type" />
+                </span>
+            </div>
+        </UPageCard>
+        <UPageCard v-if="pokemonDetails?.hasEvolutionChain" variant="subtle" title="Evolutions">
+            <div class="pokemon-grid">
+                <PokemonEvolutionChain :pokemonSpeciesId />
+            </div>
+        </UPageCard>
+        <UPageCard v-if="pokemonDetails?.hasVarieties" variant="subtle" title="Varieties">
+            <div class="pokemon-grid">
+                <PokemonVarieties :pokemonSpeciesId />
+            </div>
+        </UPageCard>
+        <UPageCard v-if="pokemonDetails?.hasForms" variant="subtle" title="Forms">
+            <div class="pokemon-grid">
+                <PokemonForms :pokemonId="pokemon.id" />
+            </div>
+        </UPageCard>
+    </div>
 </template>
-
-<style scoped>
-.content {
-    display: inline-grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    width: 100%;
-    text-align: center;
-}
-
-.evolutions .content {
-    align-items: center;
-}
-
-@media (min-width: 576px) {
-    .content {
-        grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
-    }
-}
-</style>
-
-<style>
-.pokemon .content .image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-width: 96px;
-    width: 100%;
-    margin-inline: auto;
-    aspect-ratio: 1;
-}
-
-.pokemon .content .name {
-    display: -webkit-box;
-    margin-top: 0.5rem;
-    font-size: 0.875em;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-
-@media (min-width: 768px) {
-    .pokemon .content .name {
-        display: none;
-    }
-}
-</style>

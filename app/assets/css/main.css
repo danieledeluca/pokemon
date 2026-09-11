@@ -1,0 +1,45 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@theme {
+    --aspect-card-high: 8 / 11;
+    --aspect-card-low: 245 / 337;
+}
+
+@layer components {
+    .list-grid {
+        @apply grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 lg:gap-8;
+    }
+
+    .list-card {
+        @apply aspect-square;
+
+        [data-slot="body"] {
+            @apply h-full flex justify-center items-center;
+        }
+    }
+
+    .list-title {
+        @apply mt-3 truncate text-center;
+    }
+
+    .image-pixelated {
+        image-rendering: pixelated;
+    }
+
+    .pokemon-grid {
+        @apply grid grid-cols-3 items-center gap-4 sm:grid-cols-[repeat(auto-fill,minmax(96px,1fr))];
+    }
+
+    .pokemon-image {
+        @apply flex aspect-square items-center justify-center relative;
+    }
+
+    .pokemon-title {
+        @apply truncate text-center mt-1;
+    }
+}
+
+.medium-zoom-image--opened {
+    @apply p-4 sm:p-6 lg:p-8;
+}

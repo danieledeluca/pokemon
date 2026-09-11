@@ -4,36 +4,15 @@ import type { NuxtError } from '#app';
 const { error } = defineProps<{
     error: NuxtError;
 }>();
+
+useSeoMeta({
+    title: 'Page not found',
+    description: 'We are sorry but this page could not be found.',
+});
 </script>
 
 <template>
-    <div class="page-wrapper container">
-        <div class="error">
-            <h1>{{ error.statusCode }}</h1>
-            <p>{{ error.message }}</p>
-            <NuxtLink to="/" role="button">
-                <span>Go back to home</span>
-            </NuxtLink>
-        </div>
-    </div>
+    <UApp>
+        <UError :error="error" />
+    </UApp>
 </template>
-
-<style scoped>
-.page-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.error {
-    text-align: center;
-}
-
-h1 {
-    font-size: 8rem;
-}
-
-p {
-    font-size: 1.5rem;
-}
-</style>

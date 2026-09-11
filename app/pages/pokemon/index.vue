@@ -1,58 +1,123 @@
 <script setup lang="ts">
-const { filters, query } = usePokemonFilters('front-default');
-const { data: pokemonList, error, status } = await useLazyFetch('/api/pokemon', { query });
+import type { FormSubmitEvent, SelectItem } from '@nuxt/ui';
+import type { SpriteVariant } from 'pokenode-ts';
+
+import { resourceId } from 'pokenode-ts';
+
+import type { PokemonSchema } from '#imports';
 
 useSeoMeta({
     title: 'Pokémon',
-    description: 'A list of all Pokémon',
+    description: 'A list of all Pokémon.',
 });
+
+const state = reactive<PokemonSchema>({
+    name: getQueryValue('name'),
+    page: Number(getQueryValue('page')) || 1,
+    shiny: Boolean(getQueryValue('shiny')) || false,
+    variant: getQueryValue('variant') as SpriteVariant || 'default',
+});
+
+const { data: pokemonGroups, pending, error, refresh } = useLazyFetch('/api/pokemon', {
+    query: state,
+    watch: false,
+});
+
+const spriteVariantsItems: SelectItem[] = spriteVariants.map((variant) => {
+    return {
+        label: kebabToCapital(variant),
+        value: variant,
+    };
+});
+
+function handleSubmit(event: FormSubmitEvent<PokemonSchema>) {
+    if (pending.value) {
+        return;
+    }
+
+    setQueryValues({
+        name: event.data.name,
+        page: undefined,
+    });
+    refresh();
+}
 </script>
 
 <template>
-    <SkeletonLoader v-if="status === 'pending'" layout="pokemon-list" />
-    <AppMessage
-        v-if="status === 'error' && error"
-        type="error"
-        :text="error.statusMessage || error.message"
-    />
-    <template v-if="status === 'success'">
-        <PokemonSearchForm v-model:filters="filters" />
-        <template v-if="pokemonList?.results.length">
-            <div class="pokemon-grid">
-                <div v-for="pokemon in pokemonList.results" :key="pokemon.url" class="pokemon">
-                    <NuxtLink
-                        class="image article"
-                        :to="`/pokemon/${pokemon.url.split('/').at(-2)}`"
-                    >
-                        <template
-                            v-for="(image, sprite) in getPokemonSprites(pokemon.url)"
-                            :key="sprite"
-                        >
-                            <AppImage
-                                v-if="sprite === filters.sprite"
-                                :src="image"
-                                :alt="pokemon.name"
-                                :class="sprite"
-                            />
-                        </template>
-                    </NuxtLink>
-                    <div class="name">
-                        <span>{{ parseName(pokemon.name) }}</span>
-                    </div>
-                </div>
+    <UForm
+        :schema="PokemonSchema"
+        :state
+        class="mb-4 space-y-4 sm:mb-6 lg:mb-8"
+        @submit="handleSubmit"
+    >
+        <UFieldGroup class="w-full">
+            <UInput
+                v-model="state.name"
+                class="w-full"
+                icon="i-lucide-search"
+                placeholder="Search for a card"
+            />
+            <UButton type="submit" label="Search" />
+        </UFieldGroup>
+        <div class="flex items-end justify-between gap-4">
+            <UFormField label="Sprite" class="flex-1">
+                <USelect
+                    v-model="state.variant"
+                    :items="spriteVariantsItems"
+                    class="w-full"
+                    @update:modelValue="(value) => {
+                        setQueryValue('variant', value?.toString() === 'default' ? undefined : value?.toString())
+
+                        if (value === 'dream-world') {
+                            state.shiny = false
+                        }
+                    }"
+                />
+            </UFormField>
+            <UFormField class="flex h-8 items-center">
+                <USwitch
+                    v-model="state.shiny"
+                    label="Shiny"
+                    :disabled="state.variant === 'dream-world'"
+                    @update:modelValue="(value) => setQueryValue('shiny', !value ? undefined : String(value))"
+                />
+            </UFormField>
+        </div>
+    </UForm>
+    <template v-if="pending">
+        <div class="list-grid">
+            <div v-for="n in 10" :key="n">
+                <USkeleton class="list-card" />
+                <USkeleton class="list-title h-6" />
             </div>
-            <PokemonListsNavigation :pokemonList="pokemonList" />
+        </div>
+    </template>
+    <UAlert v-else-if="error" color="error" :title="error.message" />
+    <template v-else-if="pokemonGroups">
+        <template v-if="pokemonGroups.length > 0">
+            <template v-for="(pokemon, index) in pokemonGroups" :key="index">
+                <div v-if="index + 1 === state.page" class="list-grid">
+                    <PokemonCard
+                        v-for="pkm in pokemon"
+                        :key="pkm.name"
+                        :pokemonId="resourceId(pkm.url)"
+                        :shiny="state.shiny"
+                        :variant="state.variant"
+                    />
+                </div>
+            </template>
+            <UPagination
+                v-if="pokemonGroups.length > 1"
+                v-model:page="state.page"
+                :total="pokemonGroups.flat().length"
+                :itemsPerPage="POKEMON_PER_PAGE"
+                class="mt-4 sm:mt-6 lg:mt-8"
+                :ui="{
+                    list: 'justify-center',
+                }"
+                @update:page="(value) => setQueryValue('page', value === 1 ? undefined : value.toString())"
+            />
         </template>
-        <AppMessage
-            v-else
-            text="We couldn't find any Pokémon matching your search criteria"
-            type="warning"
-        />
+        <UAlert v-else color="warning" :title="`No pokemon fond for: ${state.name}`" />
     </template>
 </template>
-
-<style scoped>
-img:is(.front-default, .front-shiny) {
-    image-rendering: pixelated;
-}
-</style>

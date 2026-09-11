@@ -1,51 +1,48 @@
 <script setup lang="ts">
-import type { SerieResume } from '@tcgdex/sdk';
-
-const { filters, query } = useTcgFilters<SerieResume>();
-const { data: series, error, status } = await useLazyFetch('/api/sets', { query });
-
 useSeoMeta({
-    title: 'Sets',
-    description: 'A list of all Pokémon TCG sets',
+    title: 'TCG Sets',
+    description: 'A list of all Pokémon TCG sets.',
 });
+
+const { data: series, pending, error } = useLazyFetch('/api/series');
+
+const name = ref(getQueryValue('name'));
 </script>
 
 <template>
-    <SkeletonLoader v-if="status === 'pending'" layout="sets" />
-    <AppMessage
-        v-if="status === 'error' && error"
-        type="error"
-        :text="error.statusMessage || error.message"
-    />
-    <template v-if="status === 'success'">
-        <TcgSearchForm v-model:filters="filters" nameFieldPlaceholder="Search for a set" />
-        <template v-if="series?.length">
-            <div v-for="serie in series" :key="serie.id" class="series">
-                <h2>{{ serie.name }}</h2>
-                <div class="pokemon-grid">
-                    <div v-for="set in serie.sets" :key="set.id" class="set">
-                        <NuxtLink class="image article" :to="`/sets/${set.id}`">
-                            <AppImage :src="`${set.logo}.png`" :alt="set.name" />
-                        </NuxtLink>
-                        <div class="name">
-                            <span>{{ set.name }}</span>
-                        </div>
+    <div class="mb-4 sm:mb-6 lg:mb-8">
+        <UInput
+            v-model="name"
+            class="w-full"
+            icon="i-lucide-search"
+            placeholder="Search for a set"
+            :disabled="pending"
+            @update:modelValue="(value) => setQueryValue('name', value)"
+        />
+    </div>
+    <template v-if="pending">
+        <div class="grid gap-4 sm:gap-6 lg:gap-8">
+            <div v-for="n in 2" :key="n" class="pb-4 sm:pb-6 lg:pb-8">
+                <USkeleton class="mb-4 h-8 w-60" />
+                <div class="list-grid">
+                    <div v-for="m in 10" :key="m">
+                        <USkeleton class="list-card" />
+                        <USkeleton class="list-title h-6" />
                     </div>
                 </div>
             </div>
-        </template>
-        <AppMessage
-            v-else
-            text="We couldn't find any sets matching your search criteria"
-            type="warning"
-        />
+        </div>
+    </template>
+    <UAlert v-else-if="error" color="error" :title="error.message" />
+    <template v-else-if="series">
+        <div v-if="series.length > 0" class="grid gap-4 sm:gap-6 lg:gap-8">
+            <TcgSerieCard
+                v-for="serie in series"
+                :key="serie.id"
+                :serie
+                :name
+            />
+        </div>
+        <UAlert v-else color="warning" :title="`No sets fond for: ${name}`" />
     </template>
 </template>
-
-<style scoped>
-.series:not(:last-child) {
-    margin-bottom: 2rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid var(--pico-muted-border-color);
-}
-</style>

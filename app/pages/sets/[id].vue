@@ -1,90 +1,47 @@
 <script setup lang="ts">
-import type { Set } from '@tcgdex/sdk';
-
 const route = useRoute();
 const setId = route.params.id;
 
-const { filters, query } = useTcgFilters<Set>();
-const { data: set, error, status } = await useLazyFetch(`/api/sets/${setId}`, { query });
+const { data: set, pending, error } = useLazyFetch(`/api/sets/${setId}`);
 
 useSeoMeta({
     title: () => set.value?.name,
-    description: () => `A list of all Pokémon TCG cards in the ${set.value?.name} set`,
+    description: () => `Browse every card from the ${set.value?.name} set.`,
+});
+
+const name = ref(getQueryValue('name'));
+
+const setCards = computed(() => {
+    return set.value?.cards.filter((card) => card.name.toLowerCase().includes(name.value.trim().toLowerCase())) || [];
 });
 </script>
 
 <template>
-    <SkeletonLoader v-if="status === 'pending'" layout="set" />
-    <AppMessage
-        v-if="status === 'error' && error"
-        type="error"
-        :text="error.statusMessage || error.message"
-    />
-    <template v-if="status === 'success'">
-        <article v-if="set" class="set">
-            <div class="logo">
-                <AppImage :src="`${set.logo}.png`" :alt="set.name" />
+    <template v-if="pending">
+        <USkeleton class="h-48 w-full" />
+        <USkeleton class="my-4 h-8 w-full sm:my-6 lg:my-8" />
+        <div class="list-grid">
+            <div v-for="n in 20" :key="n">
+                <USkeleton class="aspect-card-low" />
+                <USkeleton class="list-title h-6" />
             </div>
-            <div class="content">
-                <p>
-                    <strong>Name: </strong>{{ set.name }}
-                    <img
-                        v-if="set.symbol"
-                        class="symbol"
-                        :src="`${set.symbol}.png`"
-                        :alt="set.name"
-                    />
-                </p>
-                <p><strong>Serie: </strong>{{ set.serie.name }}</p>
-                <p><strong>Release date: </strong>{{ formatDate(set.releaseDate) }}</p>
-                <p><strong>Total cards: </strong>{{ set.cardCount.total }}</p>
-            </div>
-        </article>
-        <TcgSearchForm v-model:filters="filters" />
-        <TcgCardsGrid v-if="set?.cards.length" :cards="set.cards" />
-        <AppMessage
-            v-else
-            text="We couldn't find any cards matching your search criteria"
-            type="warning"
-        />
+        </div>
+    </template>
+    <UAlert v-else-if="error" color="error" :title="error.message" />
+    <template v-else-if="set">
+        <TcgSetData :set />
+        <div class="my-4 sm:my-6 lg:my-8">
+            <UInput
+                v-model="name"
+                class="w-full"
+                icon="i-lucide-search"
+                placeholder="Search for a card"
+                @update:modelValue="(value) => setQueryValue('name', value)"
+            />
+        </div>
+        <div v-if="setCards.length > 0" class="list-grid">
+            <TcgCard v-for="card in setCards" :key="card.id" :card />
+        </div>
+        <UAlert v-else color="warning" :title="`No cards fond for: ${name}`" />
     </template>
 </template>
-
-<style scoped>
-.set {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-.set p:last-child {
-    margin-bottom: 0;
-}
-
-.logo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.logo img {
-    max-width: 80%;
-    max-height: 80%;
-}
-
-.content {
-    align-self: center;
-}
-
-.symbol {
-    width: 1.5rem;
-    margin-left: 0.5rem;
-}
-
-@media (min-width: 768px) {
-    .set {
-        grid-template-columns: 1fr 2fr;
-    }
-}
-</style>

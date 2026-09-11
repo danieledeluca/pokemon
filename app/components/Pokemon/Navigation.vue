@@ -1,50 +1,72 @@
 <script setup lang="ts">
-const FIRST_ALT_POKEMON_ID = 10001;
+import { resourceId } from 'pokenode-ts';
 
-const route = useRoute();
-const pokemonId = Number(route.params.id);
+const { pokemonId } = defineProps<{
+    pokemonId: number;
+}>();
 
-const { data: pokemonList } = await useLazyFetch('/api/pokemon', { query: { limit: 10000 } });
+const { data: pokemonGroups, pending, error } = useLazyFetch('/api/pokemon');
 
-const lastAltPokemonId = computed(() => getIdFromUrl(pokemonList.value?.results.at(-1)?.url));
-const lastBasePokemonId = computed(() =>
-    getIdFromUrl(
-        pokemonList.value?.results
-            .filter((result) => getIdFromUrl(result.url) < FIRST_ALT_POKEMON_ID)
-            .at(-1)?.url,
-    ),
-);
+const pokemon = computed(() => pokemonGroups.value?.flat());
 
-const showPreviousButton = pokemonId > 1;
-const showNextButton = computed(() => pokemonId < lastAltPokemonId.value);
+const currentPokemonIndex = computed(() => {
+    return pokemon.value?.findIndex((pkm) => resourceId(pkm.url) === pokemonId) || 0;
+});
 
-const previousPokemonId = computed(() =>
-    pokemonId === FIRST_ALT_POKEMON_ID ? lastBasePokemonId.value : pokemonId - 1,
-);
-const nextPokemonId = computed(() =>
-    pokemonId === lastBasePokemonId.value ? FIRST_ALT_POKEMON_ID : pokemonId + 1,
-);
+const firstPokemonId = computed(() => {
+    const firstPokemon = pokemon.value?.at(0);
 
-const showNavigation = computed(
-    () =>
-        (showPreviousButton || showNextButton.value) &&
-        (previousPokemonId.value || nextPokemonId.value),
-);
+    if (firstPokemon) {
+        return resourceId(firstPokemon);
+    }
+
+    return undefined;
+});
+const lastPokemonId = computed(() => {
+    const lastPokemon = pokemon.value?.at(-1);
+
+    if (lastPokemon) {
+        return resourceId(lastPokemon);
+    }
+
+    return undefined;
+});
+
+const previousPokemonId = computed(() => {
+    const previousPokemon = pokemon.value?.at(currentPokemonIndex.value - 1);
+
+    if (previousPokemon) {
+        return resourceId(previousPokemon.url);
+    }
+
+    return undefined;
+});
+const nextPokemonId = computed(() => {
+    const nextPokemon = pokemon.value?.at(currentPokemonIndex.value + 1);
+
+    if (nextPokemon) {
+        return resourceId(nextPokemon.url);
+    }
+
+    return undefined;
+});
 </script>
 
 <template>
-    <div v-if="showNavigation" class="navigation" role="group">
-        <button v-if="!showPreviousButton" type="button" class="secondary" disabled>
-            <span>Previous</span>
-        </button>
-        <NuxtLink v-else role="button" class="secondary" :to="`/pokemon/${previousPokemonId}`">
-            <span>Previous</span>
-        </NuxtLink>
-        <button v-if="!showNextButton" type="button" class="secondary" disabled>
-            <span>Next</span>
-        </button>
-        <NuxtLink v-else role="button" class="secondary" :to="`/pokemon/${nextPokemonId}`">
-            <span>Next</span>
-        </NuxtLink>
-    </div>
+    <UFieldGroup v-if="!error" class="w-full">
+        <UButton
+            :loading="pending"
+            :disabled="pokemonId === firstPokemonId"
+            :to="`/pokemon/${previousPokemonId}`"
+            label="Previous"
+            block
+        />
+        <UButton
+            :loading="pending"
+            :disabled="pokemonId === lastPokemonId"
+            :to="`/pokemon/${nextPokemonId}`"
+            label="Next"
+            block
+        />
+    </UFieldGroup>
 </template>
