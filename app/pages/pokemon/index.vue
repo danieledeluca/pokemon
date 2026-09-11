@@ -35,6 +35,8 @@ function handleSubmit(event: FormSubmitEvent<PokemonSchema>) {
         return;
     }
 
+    state.page = 1;
+
     setQueryValues({
         name: event.data.name,
         page: undefined,
@@ -86,7 +88,7 @@ function handleSubmit(event: FormSubmitEvent<PokemonSchema>) {
     </UForm>
     <template v-if="pending">
         <div class="list-grid">
-            <div v-for="n in 10" :key="n">
+            <div v-for="n in 50" :key="n">
                 <USkeleton class="list-card" />
                 <USkeleton class="list-title h-6" />
             </div>
