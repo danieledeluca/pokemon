@@ -33,7 +33,7 @@ useSeoMeta({
                         :src="card.image ? `${card.image}/high.png` : undefined"
                         :alt="card.name"
                         class="w-full"
-                        placeholder="/card-back-high.png"
+                        placeholder="/placeholders/card-back-high.png"
                         errorClass="p-4 sm:p-6"
                         :allowZoom="true"
                     />

@@ -19,7 +19,7 @@ const { pokemonName, pokemonId, pokemonSpriteUrl, pending } = defineProps<{
             <AppImage
                 :src="pokemonSpriteUrl"
                 :alt="pokemonName"
-                placeholder="/egg.gif"
+                placeholder="/placeholders/egg.gif"
             />
             <slot />
         </NuxtLink>

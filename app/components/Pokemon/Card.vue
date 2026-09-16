@@ -32,7 +32,7 @@ const spriteUrl = computed(() => {
                 <AppImage
                     :src="spriteUrl"
                     :alt="pokemonName"
-                    placeholder="/egg.gif"
+                    placeholder="/placeholders/egg.gif"
                     class="max-h-full max-w-full"
                 />
             </UCard>

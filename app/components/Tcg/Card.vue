@@ -13,7 +13,7 @@ const { card } = defineProps<{
                 :src="card.image ? `${card.image}/low.png` : undefined"
                 :alt="card.name"
                 class="w-full"
-                placeholder="/card-back-low.png"
+                placeholder="/placeholders/card-back-low.png"
                 errorClass="p-4 sm:p-6"
             />
         </NuxtLink>

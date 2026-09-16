@@ -43,7 +43,7 @@ const spriteUrl = computed(() => {
                         :alt="pokemonName"
                         class="image-pixelated size-full object-contain"
                         errorClass="p-4 sm:p-6"
-                        placeholder="/egg.gif"
+                        placeholder="/placeholders/egg.gif"
                     />
                 </div>
                 <div class="mt-4 sm:mt-6 lg:mt-8">
