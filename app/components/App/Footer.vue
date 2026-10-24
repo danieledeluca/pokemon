@@ -11,8 +11,10 @@
             &copy; {{ new Date().getFullYear() }} - Daniele De Luca - Thanks to
             <ULink to="https://www.tcgdex.net/" target="_blank">
                 TCGdex
+                <UIcon name="i-lucide-external-link" class="align-baseline" />
             </ULink> and <ULink to="https://pokeapi.co/" target="_blank">
                 PokéAPI
+                <UIcon name="i-lucide-external-link" class="align-baseline" />
             </ULink> for all the data.
         </p>
     </UFooter>
