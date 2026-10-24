@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { refDebounced } from '@vueuse/core';
+
 useSeoMeta({
     title: 'TCG Sets',
     description: 'A list of all Pokémon TCG sets.',
@@ -7,6 +9,7 @@ useSeoMeta({
 const { data: series, pending, error } = useLazyFetch('/api/series');
 
 const name = ref(getQueryValue('name'));
+const nameDebounced = refDebounced(name, 300);
 </script>
 
 <template>
@@ -17,7 +20,7 @@ const name = ref(getQueryValue('name'));
             icon="i-lucide-search"
             placeholder="Search for a set"
             :disabled="pending"
-            @update:modelValue="(value) => setQueryValue('name', value)"
+            @update:modelValue="setQueryValue('name', $event)"
         />
     </div>
     <template v-if="pending">
@@ -35,14 +38,14 @@ const name = ref(getQueryValue('name'));
     </template>
     <UAlert v-else-if="error" color="error" :title="error.message" />
     <template v-else-if="series">
-        <div v-if="series.length > 0" class="grid gap-4 sm:gap-6 lg:gap-8">
+        <div v-if="series.length > 0" class="grid gap-4 sm:gap-6 lg:gap-8 not-empty:[&+*]:hidden">
             <TcgSerieCard
                 v-for="serie in series"
                 :key="serie.id"
                 :serie
-                :name
+                :name="nameDebounced"
             />
         </div>
-        <UAlert v-else color="warning" :title="`No sets fond for: ${name}`" />
+        <UAlert color="warning" :title="`No sets fond for: ${nameDebounced}`" />
     </template>
 </template>
