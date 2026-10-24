@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { refDebounced } from '@vueuse/core';
+
 const route = useRoute();
 const setId = route.params.id;
 
@@ -10,9 +12,12 @@ useSeoMeta({
 });
 
 const name = ref(getQueryValue('name'));
+const nameDebounces = refDebounced(name, 300);
 
 const setCards = computed(() => {
-    return set.value?.cards.filter((card) => card.name.toLowerCase().includes(name.value.trim().toLowerCase())) || [];
+    return set.value?.cards.filter((card) => {
+        return card.name.toLowerCase().includes(nameDebounces.value.trim().toLowerCase());
+    }) || [];
 });
 </script>
 
@@ -42,6 +47,6 @@ const setCards = computed(() => {
         <div v-if="setCards.length > 0" class="list-grid">
             <TcgCard v-for="card in setCards" :key="card.id" :card />
         </div>
-        <UAlert v-else color="warning" :title="`No cards fond for: ${name}`" />
+        <UAlert v-else color="warning" :title="`No cards fond for: ${nameDebounces}`" />
     </template>
 </template>
