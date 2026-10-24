@@ -16,7 +16,7 @@ const pokemonSpeciesId = resourceId(pokemon.species.url);
     <div class="space-y-4 sm:space-y-6 lg:space-y-8">
         <UPageCard
             variant="subtle"
-            :title="pokemonDetails?.name"
+            :title="pokemonDetails?.name || pokemon.name"
             :ui="{
                 title: 'text-2xl',
             }"
