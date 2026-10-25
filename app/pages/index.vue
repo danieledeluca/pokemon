@@ -19,7 +19,7 @@ const pageCards = ref<PageCardProps[]>([
     {
         title: 'Pokémon cards',
         description: 'Search and explore every Pokémon card available, filtering by name.',
-        icon: 'i-lucide-images',
+        icon: 'i-lucide-playing-cards-fan',
         to: '/cards/',
         variant: 'subtle',
     },

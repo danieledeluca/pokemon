@@ -4,45 +4,47 @@ import type { Set } from '@tcgdex/sdk';
 const { set } = defineProps <{
     set: Set;
 }>();
-
-const showSymbol = ref(true);
 </script>
 
 <template>
-    <UCard variant="subtle">
-        <div class="grid items-center gap-4 sm:gap-6 md:grid-cols-3">
-            <div class="flex items-center justify-center">
-                <AppImage
-                    :src="set.logo ? `${set.logo}.png` : undefined"
-                    :alt="set.name"
-                    errorClass="p-4 sm:p-6"
-                />
-            </div>
-            <div class="grid gap-4 md:col-span-2">
-                <div>
-                    <strong>Name </strong>
-                    <span>{{ set.name }}</span>
-                    <NuxtImg
-                        v-if="set.symbol && showSymbol"
-                        :src="`${set.symbol}.png`"
-                        :alt="set.name"
-                        class="ml-2 inline-block size-5"
-                        @error="showSymbol = false"
-                    />
-                </div>
-                <div>
-                    <strong>Serie </strong>
+    <div class="grid items-center gap-4 sm:gap-6 md:grid-cols-3">
+        <AppImage
+            :src="set.logo ? `${set.logo}.png` : undefined"
+            :alt="set.name"
+            errorClass="p-4 sm:p-6"
+        />
+        <UPageCard
+            variant="subtle"
+            :title="set.name"
+            class="md:col-span-2"
+            :ui="{
+                body: 'w-full',
+                title: 'text-2xl max-md:text-center',
+            }"
+        >
+            <div class="data-table">
+                <div class="data-table-item">
+                    <div class="data-table-label">
+                        <UIcon name="i-lucide-layers" />
+                        <span>Serie</span>
+                    </div>
                     <span>{{ set.serie.name }}</span>
                 </div>
-                <div>
-                    <strong>Release date </strong>
-                    <span>{{ formatDate(set.releaseDate) }}</span>
-                </div>
-                <div>
-                    <strong>Total cards </strong>
+                <div class="data-table-item">
+                    <div class="data-table-label">
+                        <UIcon name="i-lucide-playing-cards-fan" />
+                        <span>Total cards</span>
+                    </div>
                     <span>{{ set.cardCount.total }}</span>
                 </div>
+                <div class="data-table-item">
+                    <div class="data-table-label">
+                        <UIcon name="i-lucide-calendar" />
+                        <span>Released date</span>
+                    </div>
+                    <span>{{ formatDate(set.releaseDate) }}</span>
+                </div>
             </div>
-        </div>
-    </UCard>
+        </UPageCard>
+    </div>
 </template>

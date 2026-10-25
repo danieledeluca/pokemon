@@ -2,8 +2,6 @@
 const { card } = defineProps <{
     card: TcgCard;
 }>();
-
-const showSymbol = ref(true);
 </script>
 
 <template>
@@ -40,48 +38,60 @@ const showSymbol = ref(true);
             <div v-if="card.description">
                 {{ card.description }}
             </div>
-            <div class="rounded-lg border border-accented *:flex *:justify-between *:gap-2 *:border-accented *:px-4 *:py-2 *:not-last:border-b">
-                <div>
-                    <strong>Set </strong>
+            <div class="data-table">
+                <div class="data-table-item">
+                    <div class="data-table-label">
+                        <UIcon name="i-lucide-layers" />
+                        <span>Set</span>
+                    </div>
                     <ULink :to="`/sets/${card.set.id}`">
                         <span>{{ card.set.name }}</span>
-                        <NuxtImg
-                            v-if="card.set.symbol && showSymbol"
-                            :src="`${card.set.symbol}.png`"
-                            :alt="card.set.name"
-                            class="ml-2 inline-block size-5"
-                            @error="showSymbol = false"
-                        />
                     </ULink>
                 </div>
-                <div>
-                    <strong>No </strong>
-                    <div>
-                        <span>{{ card.localId.padStart(card.set.cardCount.total.toString().length, '0') }}/</span>
-                        <span>{{ card.set.cardCount.total }}</span>
+                <div class="data-table-item">
+                    <div class="data-table-label">
+                        <UIcon name="i-lucide-hash" />
+                        <span>No</span>
                     </div>
+                    <!-- eslint-disable-next-line style/max-len -->
+                    <span>{{ card.localId.padStart(card.set.cardCount.total.toString().length, '0') }}/{{ card.set.cardCount.total }}</span>
                 </div>
-                <div v-if="card.hp">
-                    <strong>HP </strong>
+                <div v-if="card.hp" class="data-table-item">
+                    <div class="data-table-label">
+                        <UIcon name="i-lucide-heart" />
+                        <span>HP</span>
+                    </div>
                     <span>{{ card.hp }}</span>
                 </div>
-                <div v-if="card.level">
-                    <strong>Level </strong>
+                <div v-if="card.level" class="data-table-item">
+                    <div class="data-table-label">
+                        <UIcon name="i-lucide-zap" />
+                        <span>Level</span>
+                    </div>
                     <span>{{ card.level }}</span>
                 </div>
-                <div>
-                    <strong>Rarity </strong>
+                <div class="data-table-item">
+                    <div class="data-table-label">
+                        <UIcon name="i-lucide-sparkles" />
+                        <span>Rarity</span>
+                    </div>
                     <span>{{ card.rarity }}</span>
                 </div>
-                <div v-if="card.illustrator">
-                    <strong>Illustrator</strong>
+                <div v-if="card.illustrator" class="data-table-item">
+                    <div class="data-table-label">
+                        <UIcon name="i-lucide-brush" />
+                        <span>Illustrator</span>
+                    </div>
                     <span class="italic">{{ card.illustrator }}</span>
                 </div>
-                <div v-if="card.regulationMark">
-                    <strong>Regulation mark</strong>
-                    <div class="flex aspect-square w-6 items-center justify-center rounded-md bg-default p-1 text-xs font-medium ring ring-accented">
-                        {{ card.regulationMark }}
+                <div v-if="card.regulationMark" class="data-table-item">
+                    <div class="data-table-label">
+                        <UIcon name="i-lucide-scale" />
+                        <span>Regulation mark</span>
                     </div>
+                    <span class="flex aspect-square w-6 items-center justify-center rounded-md bg-default p-1 text-xs font-medium ring ring-accented">
+                        {{ card.regulationMark }}
+                    </span>
                 </div>
             </div>
         </UPageCard>

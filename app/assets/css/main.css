@@ -38,6 +38,18 @@
     .pokemon-title {
         @apply truncate text-center mt-1;
     }
+
+    .data-table {
+        @apply rounded-lg border border-accented;
+    }
+
+    .data-table-item {
+        @apply flex justify-between gap-2 border-accented px-4 py-2 not-last:border-b;
+    }
+
+    .data-table-label {
+        @apply flex items-center gap-2 font-bold;
+    }
 }
 
 .medium-zoom-image--opened {
