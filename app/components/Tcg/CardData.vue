@@ -10,11 +10,24 @@ const showSymbol = ref(true);
     <div class="space-y-4 sm:space-y-6 lg:space-y-8">
         <UPageCard
             variant="subtle"
-            :title="card.name"
             :ui="{
-                title: 'text-2xl',
+                body: 'w-full',
+                title: 'flex items-center justify-between gap-2',
             }"
         >
+            <template #title>
+                <div class="text-2xl font-semibold text-pretty text-highlighted">
+                    {{ card.name }}
+                </div>
+                <div v-if="card.types" class="flex gap-1 align-middle">
+                    <TcgType
+                        v-for="(type, index) in card.types"
+                        :key="index"
+                        :type
+                        size="small"
+                    />
+                </div>
+            </template>
             <div class="text-lg">
                 <span>{{ card.category }}</span>
                 <span v-if="card.suffix">&nbsp;{{ card.suffix }}</span>
@@ -27,55 +40,55 @@ const showSymbol = ref(true);
             <div v-if="card.description">
                 {{ card.description }}
             </div>
-            <div v-if="card.hp">
-                <strong>HP </strong>
-                <span>{{ card.hp }}</span>
-            </div>
-            <div v-if="card.types">
-                <strong>Types </strong>
-                <span class="inline-flex flex-wrap gap-1 align-middle">
-                    <TcgType
-                        v-for="(type, index) in card.types"
-                        :key="index"
-                        :type
-                        size="small"
-                    />
-                </span>
-            </div>
-            <div v-if="card.level">
-                <strong>Level </strong>
-                <span>{{ card.level }}</span>
-            </div>
-            <div>
-                <strong>Rarity </strong>
-                <span>{{ card.rarity }}</span>
-            </div>
-            <div>
-                <strong>Set </strong>
-                <ULink :to="`/sets/${card.set.id}`">
-                    <span>{{ card.set.name }}</span>
-                    <NuxtImg
-                        v-if="card.set.symbol && showSymbol"
-                        :src="`${card.set.symbol}.png`"
-                        :alt="card.set.name"
-                        class="ml-2 inline-block size-5"
-                        @error="showSymbol = false"
-                    />
-                </ULink>
-            </div>
-            <div>
-                <strong>No. </strong>
-                <span>{{ card.localId.padStart(card.set.cardCount.total.toString().length, '0') }}/</span>
-                <span>{{ card.set.cardCount.total }}</span>
-            </div>
-            <div v-if="card.illustrator" class="text-right text-muted italic">
-                {{ card.illustrator }}
+            <div class="rounded-lg border border-accented *:flex *:justify-between *:gap-2 *:border-accented *:px-4 *:py-2 *:not-last:border-b">
+                <div>
+                    <strong>Set </strong>
+                    <ULink :to="`/sets/${card.set.id}`">
+                        <span>{{ card.set.name }}</span>
+                        <NuxtImg
+                            v-if="card.set.symbol && showSymbol"
+                            :src="`${card.set.symbol}.png`"
+                            :alt="card.set.name"
+                            class="ml-2 inline-block size-5"
+                            @error="showSymbol = false"
+                        />
+                    </ULink>
+                </div>
+                <div>
+                    <strong>No </strong>
+                    <div>
+                        <span>{{ card.localId.padStart(card.set.cardCount.total.toString().length, '0') }}/</span>
+                        <span>{{ card.set.cardCount.total }}</span>
+                    </div>
+                </div>
+                <div v-if="card.hp">
+                    <strong>HP </strong>
+                    <span>{{ card.hp }}</span>
+                </div>
+                <div v-if="card.level">
+                    <strong>Level </strong>
+                    <span>{{ card.level }}</span>
+                </div>
+                <div>
+                    <strong>Rarity </strong>
+                    <span>{{ card.rarity }}</span>
+                </div>
+                <div v-if="card.illustrator">
+                    <strong>Illustrator</strong>
+                    <span class="italic">{{ card.illustrator }}</span>
+                </div>
+                <div v-if="card.regulationMark">
+                    <strong>Regulation mark</strong>
+                    <div class="flex aspect-square w-6 items-center justify-center rounded-md bg-default p-1 text-xs font-medium ring ring-accented">
+                        {{ card.regulationMark }}
+                    </div>
+                </div>
             </div>
         </UPageCard>
         <UPageCard
             v-if="card.weaknesses || card.resistances || card.retreat"
             variant="subtle"
-            title="Battle Traits"
+            title="Battle traits"
         >
             <div class="grid gap-4 sm:grid-cols-3 sm:gap-6">
                 <div>
