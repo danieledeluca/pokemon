@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import type { Card } from '@tcgdex/sdk';
-
 const { card } = defineProps <{
-    card: Card;
+    card: TcgCard;
 }>();
 
 const showSymbol = ref(true);
@@ -80,7 +78,7 @@ const showSymbol = ref(true);
             title="Battle Traits"
         >
             <div class="grid gap-4 sm:grid-cols-3 sm:gap-6">
-                <div class="flex flex-col">
+                <div>
                     <div class="mb-4">
                         Weaknesses
                     </div>
@@ -94,7 +92,7 @@ const showSymbol = ref(true);
                         N/A
                     </div>
                 </div>
-                <div class="flex flex-col">
+                <div>
                     <div class="mb-4">
                         Resistances
                     </div>
@@ -108,7 +106,7 @@ const showSymbol = ref(true);
                         N/A
                     </div>
                 </div>
-                <div class="flex flex-col">
+                <div>
                     <div class="mb-4">
                         Retreat
                     </div>
@@ -163,6 +161,18 @@ const showSymbol = ref(true);
                 <ULink :to="{ name: 'cards', query: { name: card.evolveFrom } }">
                     {{ card.evolveFrom }}
                 </ULink>
+            </div>
+        </UPageCard>
+        <UPageCard v-if="card.pricing.cardmarket" variant="subtle" title="Cardmarket">
+            <div class="grid grid-cols-3 gap-4 sm:gap-6">
+                <div v-for="(price, label, index) in parseCardMarketPrices(card.pricing.cardmarket)" :key="index">
+                    <div class="mb-4">
+                        {{ label }}
+                    </div>
+                    <div class="font-bold">
+                        {{ price }}
+                    </div>
+                </div>
             </div>
         </UPageCard>
     </div>

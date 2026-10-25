@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
             }));
         }
 
-        return card;
+        return card as TcgCard;
     } catch (error) {
         return sendTcgDexError(event, error);
     }
