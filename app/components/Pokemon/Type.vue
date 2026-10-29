@@ -9,7 +9,9 @@ const { pokemonType } = defineProps<{
 
 const { data: type, pending } = useLazyFetch(`/api/pokemon/types/${resourceId(pokemonType.type.url)}`);
 
-const name = computed(() => type.value ? localize(type.value.names)?.name || '' : '');
+const name = computed(() => type.value
+    ? localize(type.value.names)?.name || ''
+    : '');
 
 const bgColors: Record<string, string> = {
     normal: '#919aa1',
@@ -41,9 +43,7 @@ const textColors: Record<string, string> = {
 </script>
 
 <template>
-    <template v-if="pending">
-        <USkeleton class="h-6 w-12" />
-    </template>
+    <USkeleton v-if="pending" class="h-6 w-12" />
     <span
         v-else-if="type"
         class="inline-flex items-center justify-center gap-1 rounded-md bg-(--bg-color) px-2 py-1 text-center text-xs font-medium text-(--text-color)"

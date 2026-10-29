@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import mediumZoom from 'medium-zoom';
 
-const { src, alt, placeholder, errorSrc = '/no-image.png', errorClass, allowZoom = false } = defineProps<{
+const { src, alt, placeholder, errorSrc = '/no-image.png', allowZoom = false } = defineProps<{
     src?: string;
     alt?: string;
     placeholder?: string;
     errorSrc?: string;
-    errorClass?: string;
     allowZoom?: boolean;
 }>();
 
@@ -43,6 +42,5 @@ onMounted(() => {
         alt="No image available"
         densities="1x"
         class="w-full object-contain"
-        :class="errorClass"
     />
 </template>

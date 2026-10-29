@@ -1,57 +1,16 @@
 <script setup lang="ts">
-import type { FormSubmitEvent, SelectItem } from '@nuxt/ui';
-import type { SpriteVariant } from 'pokenode-ts';
-
-import { resourceId } from 'pokenode-ts';
-
-import type { PokemonSchema } from '#imports';
-
 useSeoMeta({
     title: 'Pokémon',
     description: 'A list of all Pokémon.',
 });
 
-const state = reactive<PokemonSchema>({
-    name: getQueryValue('name'),
-    page: Number(getQueryValue('page')) || 1,
-    shiny: Boolean(getQueryValue('shiny')) || false,
-    variant: getQueryValue('variant') as SpriteVariant || 'default',
-});
-
-const { data: pokemonGroups, pending, error, refresh } = useLazyFetch('/api/pokemon', {
-    query: state,
-    watch: false,
-});
-
-const spriteVariantsItems: SelectItem[] = spriteVariants.map((variant) => {
-    return {
-        label: kebabToCapital(variant),
-        value: variant,
-    };
-});
-
-function handleSubmit(event: FormSubmitEvent<PokemonSchema>) {
-    if (pending.value) {
-        return;
-    }
-
-    state.page = 1;
-
-    setQueryValues({
-        name: event.data.name,
-        page: undefined,
-    });
-    refresh();
-}
+const { state, debouncedState } = useQueryState(BaseStateSchema, { name: undefined });
+const { state: filtersState } = useQueryState(PokemonFiltersStateSchema, { variant: 'default', shiny: false });
+const { data: pokemonGroups, pending, error } = useLazyFetch('/api/pokemon', { query: debouncedState });
 </script>
 
 <template>
-    <UForm
-        :schema="PokemonSchema"
-        :state
-        class="mb-4 space-y-4 sm:mb-6 lg:mb-8"
-        @submit="handleSubmit"
-    >
+    <div class="mb-4 space-y-4 sm:mb-6 lg:mb-8">
         <UFieldGroup class="w-full">
             <UInput
                 v-model="state.name"
@@ -59,33 +18,10 @@ function handleSubmit(event: FormSubmitEvent<PokemonSchema>) {
                 icon="i-lucide-search"
                 placeholder="Search for a card"
             />
-            <UButton type="submit" label="Search" />
+            <UButton label="Search" :loading="pending" />
         </UFieldGroup>
-        <div class="flex items-end justify-between gap-4">
-            <UFormField label="Sprite" class="flex-1">
-                <USelect
-                    v-model="state.variant"
-                    :items="spriteVariantsItems"
-                    class="w-full"
-                    @update:modelValue="(value) => {
-                        setQueryValue('variant', value?.toString() === 'default' ? undefined : value?.toString())
-
-                        if (value === 'dream-world') {
-                            state.shiny = false
-                        }
-                    }"
-                />
-            </UFormField>
-            <UFormField class="flex h-8 items-center">
-                <USwitch
-                    v-model="state.shiny"
-                    label="Shiny"
-                    :disabled="state.variant === 'dream-world'"
-                    @update:modelValue="(value) => setQueryValue('shiny', !value ? undefined : String(value))"
-                />
-            </UFormField>
-        </div>
-    </UForm>
+        <PokemonFilters v-model:filters="filtersState" />
+    </div>
     <template v-if="pending">
         <div class="list-grid">
             <div v-for="n in 50" :key="n">
@@ -94,32 +30,9 @@ function handleSubmit(event: FormSubmitEvent<PokemonSchema>) {
             </div>
         </div>
     </template>
-    <UAlert v-else-if="error" color="error" :title="error.message" />
+    <AppError v-else-if="error" :error />
     <template v-else-if="pokemonGroups">
-        <template v-if="pokemonGroups.length > 0">
-            <template v-for="(pokemon, index) in pokemonGroups" :key="index">
-                <div v-if="index + 1 === state.page" class="list-grid">
-                    <PokemonCard
-                        v-for="pkm in pokemon"
-                        :key="pkm.name"
-                        :pokemonId="resourceId(pkm.url)"
-                        :shiny="state.shiny"
-                        :variant="state.variant"
-                    />
-                </div>
-            </template>
-            <UPagination
-                v-if="pokemonGroups.length > 1"
-                v-model:page="state.page"
-                :total="pokemonGroups.flat().length"
-                :itemsPerPage="POKEMON_PER_PAGE"
-                class="mt-4 sm:mt-6 lg:mt-8"
-                :ui="{
-                    list: 'justify-center',
-                }"
-                @update:page="(value) => setQueryValue('page', value === 1 ? undefined : value.toString())"
-            />
-        </template>
-        <UAlert v-else color="warning" :title="`No pokemon fond for: ${state.name}`" />
+        <PokemonList v-if="pokemonGroups.length > 0" v-model:filters="filtersState" :pokemonGroups />
+        <AppWarning v-else :title="`No pokemon fond for: ${debouncedState.name}`" />
     </template>
 </template>

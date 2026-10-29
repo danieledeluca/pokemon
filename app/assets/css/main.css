@@ -32,7 +32,7 @@
     }
 
     .pokemon-image {
-        @apply flex aspect-square items-center justify-center relative;
+        @apply flex aspect-square items-center justify-center;
     }
 
     .pokemon-title {

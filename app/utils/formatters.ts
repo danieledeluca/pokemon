@@ -1,6 +1,7 @@
-export function formatDate(date: string) {
+export function formatDate(date: string, options?: Intl.DateTimeFormatOptions) {
     return new Intl.DateTimeFormat('en-US', {
         dateStyle: 'long',
+        ...options,
     }).format(new Date(date));
 }
 

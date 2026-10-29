@@ -7,17 +7,20 @@ const items = computed<NavigationMenuItem[]>(() => [
     {
         label: 'Sets',
         to: '/sets',
+        icon: 'i-lucide-layers',
         active: route.path.startsWith('/sets'),
     },
     {
         label: 'Cards',
         to: '/cards',
+        icon: 'i-lucide-playing-cards-fan',
         active: route.path.startsWith('/cards'),
         external: route.name === 'cards',
     },
     {
         label: 'Pokémon',
         to: '/pokemon',
+        icon: 'i-lucide-paw-print',
         active: route.path.startsWith('/pokemon'),
         external: route.name === 'pokemon',
     },

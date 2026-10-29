@@ -7,20 +7,15 @@ const { set } = defineProps <{
 </script>
 
 <template>
-    <div class="grid items-center gap-4 sm:gap-6 md:grid-cols-3">
-        <AppImage
-            :src="set.logo ? `${set.logo}.png` : undefined"
-            :alt="set.name"
-            errorClass="p-4 sm:p-6"
-        />
+    <div class="flex gap-4 max-md:flex-col sm:gap-6">
+        <div class="flex items-center justify-center md:flex-1">
+            <AppImage :src="set.logo ? `${set.logo}.png` : undefined" :alt="set.name" class="md:max-h-55" />
+        </div>
         <UPageCard
             variant="subtle"
             :title="set.name"
-            class="md:col-span-2"
-            :ui="{
-                body: 'w-full',
-                title: 'text-2xl max-md:text-center',
-            }"
+            class="md:flex-2"
+            :ui="{ body: 'w-full', title: 'text-2xl max-md:text-center' }"
         >
             <div class="data-table">
                 <div class="data-table-item">
@@ -42,7 +37,7 @@ const { set } = defineProps <{
                         <UIcon name="i-lucide-calendar" />
                         <span>Released date</span>
                     </div>
-                    <span>{{ formatDate(set.releaseDate) }}</span>
+                    <span>{{ formatDate(set.releaseDate, { dateStyle: 'medium' }) }}</span>
                 </div>
             </div>
         </UPageCard>

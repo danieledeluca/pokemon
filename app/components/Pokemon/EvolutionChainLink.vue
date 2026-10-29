@@ -30,7 +30,7 @@ const colEnd = colStart + maxEvolutionChainLength + 1;
         <UIcon
             v-if="chainLink.evolves_to.length > 0"
             name="i-lucide-chevron-right"
-            class="absolute top-1/2 -right-4 -translate-y-1/2"
+            class="absolute top-[calc(50%-12px-(var(--spacing)/2))] -right-4 -translate-y-1/2"
         />
     </PokemonImage>
     <div
@@ -45,9 +45,7 @@ const colEnd = colStart + maxEvolutionChainLength + 1;
             v-for="subChainLink in chainLink.evolves_to"
             :key="subChainLink.species.name"
             class="col-span-(--col-span) grid grid-cols-subgrid gap-4"
-            :style="{
-                '--col-span': colEnd - colStart,
-            }"
+            :style="{ '--col-span': colEnd - colStart }"
         >
             <PokemonEvolutionChainLink :chainLink="subChainLink" :index="index + 1" />
         </div>

@@ -1,19 +1,19 @@
 import TCGdex from '@tcgdex/sdk';
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async () => {
     try {
         const tcgdex = new TCGdex('en');
         const series = await tcgdex.fetch('series');
 
         if (!series) {
-            return sendError(event, createError({
+            throw createError({
                 statusCode: 404,
-                statusMessage: 'Series not found.',
-            }));
+                message: 'Series not found',
+            });
         }
 
         return series.reverse();
     } catch (error) {
-        return sendTcgDexError(event, error);
+        return sendTcgDexError(error);
     }
 });

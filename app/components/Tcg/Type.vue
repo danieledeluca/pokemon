@@ -15,9 +15,7 @@ const {
         :text="type"
         class="inline-block"
         :disabled="!showTooltip"
-        :content="{
-            side: 'top',
-        }"
+        :content="{ side: 'top' }"
     >
         <NuxtImg
             :src="`/card-types/${type.toLowerCase()}.png`"

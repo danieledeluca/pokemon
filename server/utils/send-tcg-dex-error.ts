@@ -1,8 +1,6 @@
-import type { H3Event } from 'h3';
-
-export default function sendTcgDexError(event: H3Event, error: unknown) {
-    return sendError(event, createError({
+export default function sendTcgDexError(error: unknown) {
+    throw createError({
         statusCode: 500,
-        statusMessage: (error as Error).message || 'Internal Server Error',
-    }));
+        message: (error as Error).message || 'Internal Server Error',
+    });
 }

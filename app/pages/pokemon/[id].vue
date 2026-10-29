@@ -27,22 +27,18 @@ const spriteUrl = computed(() => {
                 <USkeleton class="aspect-square w-full" />
                 <USkeleton class="mt-4 h-8 w-full sm:mt-6 lg:mt-8" />
             </div>
-            <div class="space-y-4 sm:space-y-6 md:col-span-2 lg:space-y-8">
-                <USkeleton class="h-96 w-full" />
-                <USkeleton class="h-48 w-full" />
-            </div>
+            <USkeleton class="h-66 w-full md:col-span-2" />
         </div>
     </template>
-    <UAlert v-else-if="error" color="error" :title="error.message" />
+    <AppError v-else-if="error" :error />
     <template v-else-if="pokemon">
-        <div class="grid gap-4 sm:gap-6 md:grid-cols-3 lg:gap-8">
-            <div>
+        <div class="grid items-start gap-4 sm:gap-6 md:grid-cols-3 lg:gap-8">
+            <div class="sticky md:top-[calc(var(--ui-header-height)+var(--spacing)*6)] lg:top-[calc(var(--ui-header-height)+var(--spacing)*8)]">
                 <div class="flex aspect-square items-center justify-center">
                     <AppImage
                         :src="spriteUrl"
                         :alt="pokemonName"
                         class="image-pixelated size-full object-contain"
-                        errorClass="p-4 sm:p-6"
                         placeholder="/placeholders/egg.gif"
                     />
                 </div>

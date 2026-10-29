@@ -1,10 +1,10 @@
 import { PokemonClient } from 'pokenode-ts';
 
 export default defineEventHandler(async (event) => {
-    const result = await getValidatedRouterParams(event, PokemonRouterParams.safeParse);
+    const result = await getValidatedRouterParams(event, PokemonDetailPageRouterParamsSchema.safeParse);
 
     if (result.error) {
-        return sendZodError(event, result.error);
+        return sendZodError(result.error);
     }
 
     const pokemonSpeciesId = result.data.id;
@@ -15,6 +15,6 @@ export default defineEventHandler(async (event) => {
 
         return pokemonSpecies;
     } catch (error) {
-        return sendPokenodeTsError(event, error);
+        return sendPokenodeTsError(error);
     }
 });

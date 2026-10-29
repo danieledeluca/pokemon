@@ -1,53 +1,23 @@
 <script setup lang="ts">
-import type { FormSubmitEvent } from '@nuxt/ui';
-
-import type { CardsSchema } from '#imports';
-
 useSeoMeta({
     title: 'TCG Cards',
     description: 'A list of all Pokémon TCG cards.',
 });
 
-const state = reactive<CardsSchema>({
-    name: getQueryValue('name'),
-    page: Number(getQueryValue('page') || 1),
-});
-
-const { data: cardsGroups, pending, error, refresh } = useLazyFetch('/api/cards', {
-    query: state,
-    watch: false,
-});
-
-function handleSubmit(event: FormSubmitEvent<CardsSchema>) {
-    if (pending.value) {
-        return;
-    }
-
-    setQueryValues({
-        ...event.data,
-        page: undefined,
-    });
-    refresh();
-}
+const { state, debouncedState } = useQueryState(BaseStateSchema, { name: undefined });
+const { data: cardsGroups, pending, error } = useLazyFetch('/api/cards', { query: debouncedState });
 </script>
 
 <template>
-    <UForm
-        :schema="CardsSchema"
-        :state
-        class="mb-4 sm:mb-6 lg:mb-8"
-        @submit="handleSubmit"
-    >
-        <UFieldGroup class="w-full">
-            <UInput
-                v-model="state.name"
-                class="w-full"
-                icon="i-lucide-search"
-                placeholder="Search for a card"
-            />
-            <UButton type="submit" label="Search" />
-        </UFieldGroup>
-    </UForm>
+    <UFieldGroup class="mb-4 w-full sm:mb-6 lg:mb-8">
+        <UInput
+            v-model="state.name"
+            class="w-full"
+            icon="i-lucide-search"
+            placeholder="Search for a card"
+        />
+        <UButton label="Search" :loading="pending" />
+    </UFieldGroup>
     <template v-if="pending">
         <div class="list-grid">
             <div v-for="n in 20" :key="n">
@@ -59,26 +29,9 @@ function handleSubmit(event: FormSubmitEvent<CardsSchema>) {
             <USkeleton v-for="n in 9" :key="n" class="size-8" />
         </div>
     </template>
-    <UAlert v-else-if="error" color="error" :title="error.message" />
+    <AppError v-else-if="error" :error />
     <template v-else-if="cardsGroups">
-        <template v-if="cardsGroups.length > 0">
-            <template v-for="(cards, index) in cardsGroups" :key="index">
-                <div v-if="index + 1 === state.page" class="list-grid">
-                    <TcgCard v-for="card in cards" :key="card.id" :card />
-                </div>
-            </template>
-            <UPagination
-                v-if="cardsGroups.length > 1"
-                v-model:page="state.page"
-                :total="cardsGroups.flat().length"
-                :itemsPerPage="CARDS_PER_PAGE"
-                class="mt-4 sm:mt-6 lg:mt-8"
-                :ui="{
-                    list: 'justify-center',
-                }"
-                @update:page="(value) => setQueryValue('page', value === 1 ? undefined : value.toString())"
-            />
-        </template>
-        <UAlert v-else color="warning" :title="`No cards fond for: ${state.name}`" />
+        <TcgCardList v-if="cardsGroups.length > 0" :cardsGroups />
+        <AppWarning v-else :title="`No cards fond for: ${debouncedState.name}`" />
     </template>
 </template>

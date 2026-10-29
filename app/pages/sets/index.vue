@@ -1,26 +1,21 @@
 <script setup lang="ts">
-import { refDebounced } from '@vueuse/core';
-
 useSeoMeta({
     title: 'TCG Sets',
     description: 'A list of all Pokémon TCG sets.',
 });
 
 const { data: series, pending, error } = useLazyFetch('/api/series');
-
-const name = ref(getQueryValue('name'));
-const nameDebounced = refDebounced(name, 300);
+const { state, debouncedState } = useQueryState(BaseStateSchema, { name: undefined });
 </script>
 
 <template>
     <div class="mb-4 sm:mb-6 lg:mb-8">
         <UInput
-            v-model="name"
+            v-model="state.name"
             class="w-full"
             icon="i-lucide-search"
             placeholder="Search for a set"
             :disabled="pending"
-            @update:modelValue="setQueryValue('name', $event)"
         />
     </div>
     <template v-if="pending">
@@ -36,16 +31,16 @@ const nameDebounced = refDebounced(name, 300);
             </div>
         </div>
     </template>
-    <UAlert v-else-if="error" color="error" :title="error.message" />
+    <AppError v-else-if="error" :error />
     <template v-else-if="series">
         <div v-if="series.length > 0" class="grid gap-4 sm:gap-6 lg:gap-8 not-empty:[&+*]:hidden">
             <TcgSerieCard
                 v-for="serie in series"
                 :key="serie.id"
                 :serie
-                :name="nameDebounced"
+                :name="debouncedState.name"
             />
         </div>
-        <UAlert color="warning" :title="`No sets fond for: ${nameDebounced}`" />
+        <AppWarning :title="`No sets fond for: ${debouncedState.name}`" />
     </template>
 </template>

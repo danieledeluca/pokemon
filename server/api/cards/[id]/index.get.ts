@@ -1,10 +1,10 @@
 import TCGdex from '@tcgdex/sdk';
 
 export default defineEventHandler(async (event) => {
-    const result = await getValidatedRouterParams(event, TcgRouterParams.safeParse);
+    const result = await getValidatedRouterParams(event, TcgDetailPageRouterParamsSchema.safeParse);
 
     if (result.error) {
-        return sendZodError(event, result.error);
+        return sendZodError(result.error);
     }
 
     const cardId = result.data.id;
@@ -14,14 +14,14 @@ export default defineEventHandler(async (event) => {
         const card = await tcgdex.fetch('cards', cardId);
 
         if (!card) {
-            return sendError(event, createError({
+            throw createError({
                 statusCode: 404,
-                statusMessage: 'Card not found.',
-            }));
+                message: 'Card not found',
+            });
         }
 
         return card as TcgCard;
     } catch (error) {
-        return sendTcgDexError(event, error);
+        return sendTcgDexError(error);
     }
 });

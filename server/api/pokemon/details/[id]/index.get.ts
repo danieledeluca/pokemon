@@ -1,10 +1,10 @@
 import { getPokemonSpriteUrl, localize, localizeAll, PokemonClient, resourceId } from 'pokenode-ts';
 
 export default defineEventHandler(async (event) => {
-    const result = await getValidatedRouterParams(event, PokemonRouterParams.safeParse);
+    const result = await getValidatedRouterParams(event, PokemonDetailPageRouterParamsSchema.safeParse);
 
     if (result.error) {
-        return sendZodError(event, result.error);
+        return sendZodError(result.error);
     }
 
     const pokemonId = result.data.id;
@@ -22,7 +22,9 @@ export default defineEventHandler(async (event) => {
             name = localize(pokemonSpecies.names)?.name || name;
             flavourText = localizeAll(pokemonSpecies.flavor_text_entries).at(-1)?.flavor_text || '';
         } else {
-            const pokemonForm = pokemon.forms[0] ? await api.resolve(pokemon.forms[0]) : undefined;
+            const pokemonForm = pokemon.forms[0]
+                ? await api.resolve(pokemon.forms[0])
+                : undefined;
 
             if (pokemonForm) {
                 name = localize(pokemonForm.names)?.name || name;
@@ -39,6 +41,6 @@ export default defineEventHandler(async (event) => {
             hasForms: pokemon.forms.length > 1,
         };
     } catch (error) {
-        return sendPokenodeTsError(event, error);
+        return sendPokenodeTsError(error);
     }
 });

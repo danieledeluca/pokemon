@@ -6,13 +6,7 @@ const { card } = defineProps <{
 
 <template>
     <div class="space-y-4 sm:space-y-6 lg:space-y-8">
-        <UPageCard
-            variant="subtle"
-            :ui="{
-                body: 'w-full',
-                title: 'flex items-center justify-between gap-2',
-            }"
-        >
+        <UPageCard variant="subtle" :ui="{ body: 'w-full', title: 'flex items-center justify-between gap-2' }">
             <template #title>
                 <div class="text-2xl font-semibold text-pretty text-highlighted">
                     {{ card.name }}
@@ -89,19 +83,15 @@ const { card } = defineProps <{
                         <UIcon name="i-lucide-scale" />
                         <span>Regulation mark</span>
                     </div>
-                    <span class="flex aspect-square w-6 items-center justify-center rounded-md bg-default p-1 text-xs font-medium ring ring-accented">
+                    <span class="flex min-w-6 items-center justify-center rounded-md bg-default p-1 text-xs font-medium ring ring-accented">
                         {{ card.regulationMark }}
                     </span>
                 </div>
             </div>
         </UPageCard>
-        <UPageCard
-            v-if="card.weaknesses || card.resistances || card.retreat"
-            variant="subtle"
-            title="Battle traits"
-        >
+        <UPageCard v-if="card.weaknesses || card.resistances || card.retreat" variant="subtle" title="Battle traits">
             <div class="grid gap-4 sm:grid-cols-3 sm:gap-6">
-                <div>
+                <div class="flex flex-col justify-center">
                     <div class="mb-4">
                         Weaknesses
                     </div>
@@ -115,7 +105,7 @@ const { card } = defineProps <{
                         N/A
                     </div>
                 </div>
-                <div>
+                <div class="flex flex-col justify-center">
                     <div class="mb-4">
                         Resistances
                     </div>
@@ -129,7 +119,7 @@ const { card } = defineProps <{
                         N/A
                     </div>
                 </div>
-                <div>
+                <div class="flex flex-col justify-center">
                     <div class="mb-4">
                         Retreat
                     </div>

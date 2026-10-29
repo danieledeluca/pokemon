@@ -1,10 +1,10 @@
 import TCGdex from '@tcgdex/sdk';
 
 export default defineEventHandler(async (event) => {
-    const result = await getValidatedRouterParams(event, TcgRouterParams.safeParse);
+    const result = await getValidatedRouterParams(event, TcgDetailPageRouterParamsSchema.safeParse);
 
     if (result.error) {
-        return sendZodError(event, result.error);
+        return sendZodError(result.error);
     }
 
     const setId = result.data.id;
@@ -14,14 +14,14 @@ export default defineEventHandler(async (event) => {
         const set = await tcgdex.fetch('sets', setId);
 
         if (!set) {
-            return sendError(event, createError({
+            throw createError({
                 statusCode: 404,
-                statusMessage: 'Set not found.',
-            }));
+                message: 'Set not found',
+            });
         }
 
         return set;
     } catch (error) {
-        return sendTcgDexError(event, error);
+        return sendTcgDexError(error);
     }
 });

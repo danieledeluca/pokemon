@@ -1,17 +1,15 @@
-import type { H3Event } from 'h3';
-
 import { PokenodeError } from 'pokenode-ts';
 
-export default function sendPokenodeTsError(event: H3Event, error: unknown) {
+export default function sendPokenodeTsError(error: unknown) {
     if (PokenodeError.isPokenodeError(error)) {
-        return sendError(event, createError({
+        throw createError({
             statusCode: error.status,
-            statusMessage: error.statusText,
-        }));
+            message: error.statusText,
+        });
     }
 
-    return sendError(event, createError({
+    throw createError({
         statusCode: 500,
-        statusMessage: 'Internal Server Error',
-    }));
+        message: 'Internal Server Error',
+    });
 }

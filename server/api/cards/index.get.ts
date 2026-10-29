@@ -1,12 +1,11 @@
-import type { CardResume } from '@tcgdex/sdk';
-
 import TCGdex, { Query } from '@tcgdex/sdk';
+import { groupData } from '~~/server/utils/group-data';
 
 export default defineEventHandler(async (event) => {
-    const result = await getValidatedQuery(event, CardsSchema.safeParse);
+    const result = await getValidatedQuery(event, CardsQuerySchema.safeParse);
 
     if (result.error) {
-        return sendZodError(event, result.error);
+        return sendZodError(result.error);
     }
 
     const name = result.data.name || '';
@@ -16,25 +15,17 @@ export default defineEventHandler(async (event) => {
         const tcgQuery = new Query().like('name', name);
         const tcgCards = await tcgdex.card.list(tcgQuery);
 
-        const cards = tcgCards.reduce<CardResume[][]>((acc, card, index) => {
-            const chunkIndex = Math.floor(index / CARDS_PER_PAGE);
-
-            if (!acc[chunkIndex]) {
-                acc[chunkIndex] = [];
-            }
-
-            acc[chunkIndex].push({
+        const cardsGroups = groupData(tcgCards, (card) => {
+            return {
                 id: card.id,
                 localId: card.localId,
                 name: card.name,
                 image: card.image,
-            });
+            };
+        });
 
-            return acc;
-        }, []);
-
-        return cards;
+        return cardsGroups;
     } catch (error) {
-        return sendTcgDexError(event, error);
+        return sendTcgDexError(error);
     }
 });
