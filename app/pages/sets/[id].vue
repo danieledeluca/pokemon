@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useDebounceFn } from '@vueuse/core';
+
 const route = useRoute();
 const { data: set, pending, error } = useLazyFetch(`/api/sets/${route.params.id}`);
 
@@ -7,13 +9,17 @@ useSeoMeta({
     description: () => `Browse every card from the ${set.value?.name} set.`,
 });
 
-const { state, debouncedState } = useQueryState(BaseStateSchema, { name: undefined });
+const { state } = useQueryState(BaseStateSchema, { name: undefined });
 
 const setCards = computed(() => {
     return set.value?.cards.filter((card) => {
-        return card.name.toLowerCase().includes(debouncedState.value.name?.trim().toLowerCase() || '');
+        return card.name.toLowerCase().includes(state.name?.trim().toLowerCase() || '');
     }) || [];
 });
+
+const handleUpdate = useDebounceFn((value?: string) => {
+    state.name = value;
+}, 300);
 </script>
 
 <template>
@@ -35,15 +41,17 @@ const setCards = computed(() => {
         <TcgSetData :set />
         <div class="my-4 sm:my-6 lg:my-8">
             <UInput
-                v-model="state.name"
+                :modelValue="state.name"
                 class="w-full"
                 icon="i-lucide-search"
                 placeholder="Search for a card"
+                :loading="pending"
+                @update:modelValue="handleUpdate"
             />
         </div>
         <div v-if="setCards.length > 0" class="list-grid">
             <TcgCard v-for="card in setCards" :key="card.id" :card />
         </div>
-        <AppWarning v-else :title="`No cards fond for: ${debouncedState.name}`" />
+        <AppWarning v-else :title="`No cards fond for: ${state.name}`" />
     </template>
 </template>

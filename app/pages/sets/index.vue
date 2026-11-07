@@ -1,21 +1,28 @@
 <script setup lang="ts">
+import { useDebounceFn } from '@vueuse/core';
+
 useSeoMeta({
     title: 'TCG Sets',
     description: 'A list of all Pokémon TCG sets.',
 });
 
 const { data: series, pending, error } = useLazyFetch('/api/series');
-const { state, debouncedState } = useQueryState(BaseStateSchema, { name: undefined });
+const { state } = useQueryState(BaseStateSchema, { name: undefined });
+
+const handleUpdate = useDebounceFn((value?: string) => {
+    state.name = value;
+}, 300);
 </script>
 
 <template>
     <div class="mb-4 sm:mb-6 lg:mb-8">
         <UInput
-            v-model="state.name"
+            :modelValue="state.name"
             class="w-full"
             icon="i-lucide-search"
             placeholder="Search for a set"
-            :disabled="pending"
+            :loading="pending"
+            @update:modelValue="handleUpdate"
         />
     </div>
     <template v-if="pending">
@@ -38,9 +45,9 @@ const { state, debouncedState } = useQueryState(BaseStateSchema, { name: undefin
                 v-for="serie in series"
                 :key="serie.id"
                 :serie
-                :name="debouncedState.name"
+                :name="state.name"
             />
         </div>
-        <AppWarning :title="`No sets fond for: ${debouncedState.name}`" />
+        <AppWarning :title="`No sets fond for: ${state.name}`" />
     </template>
 </template>

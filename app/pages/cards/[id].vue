@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const route = useRoute();
-const { data: card, pending, error } = useLazyFetch(`/api/cards/${route.params.id}`);
+const { data: card, pending, error } = useLazyFetch<TcgCard>(`/api/cards/${route.params.id}`);
 
 useSeoMeta({
     title: () => card.value?.name,

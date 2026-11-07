@@ -1,22 +1,33 @@
 <script setup lang="ts">
+import { useDebounceFn } from '@vueuse/core';
+
 useSeoMeta({
     title: 'Pokémon',
     description: 'A list of all Pokémon.',
 });
 
-const { state, debouncedState } = useQueryState(BaseStateSchema, { name: undefined });
-const { state: filtersState } = useQueryState(PokemonFiltersStateSchema, { variant: 'default', shiny: false });
-const { data: pokemonGroups, pending, error } = useLazyFetch('/api/pokemon', { query: debouncedState });
+const { state } = useQueryState(BaseStateSchema, { name: undefined }, true);
+const { state: filtersState } = useQueryState(PokemonFiltersStateSchema, {
+    variant: 'default',
+    shiny: false,
+});
+const { data: pokemonGroups, pending, error } = useLazyFetch('/api/pokemon', { query: state });
+
+const handleUpdate = useDebounceFn((value?: string) => {
+    state.name = value;
+}, 300);
 </script>
 
 <template>
     <div class="mb-4 space-y-4 sm:mb-6 lg:mb-8">
         <UFieldGroup class="w-full">
             <UInput
-                v-model="state.name"
+                :modelValue="state.name"
                 class="w-full"
                 icon="i-lucide-search"
                 placeholder="Search for a card"
+                :loading="pending"
+                @update:modelValue="handleUpdate"
             />
             <UButton label="Search" :loading="pending" />
         </UFieldGroup>
@@ -33,6 +44,6 @@ const { data: pokemonGroups, pending, error } = useLazyFetch('/api/pokemon', { q
     <AppError v-else-if="error" :error />
     <template v-else-if="pokemonGroups">
         <PokemonList v-if="pokemonGroups.length > 0" v-model:filters="filtersState" :pokemonGroups />
-        <AppWarning v-else :title="`No pokemon fond for: ${debouncedState.name}`" />
+        <AppWarning v-else :title="`No pokemon fond for: ${state.name}`" />
     </template>
 </template>
