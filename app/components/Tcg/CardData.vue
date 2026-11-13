@@ -26,9 +26,7 @@ const { card } = defineProps <{
                 <span v-if="card.trainerType"> - {{ card.trainerType }}</span>
                 <span v-if="card.stage"> - {{ card.stage }}</span>
             </div>
-            <div v-if="card.effect">
-                {{ parseTcgText(card.effect) }}
-            </div>
+            <div v-if="card.effect" v-html="card.effect" />
             <div v-if="card.description">
                 {{ card.description }}
             </div>
@@ -141,15 +139,13 @@ const { card } = defineProps <{
         <UPageCard v-if="card.abilities" variant="subtle" title="Abilities">
             <div v-for="(ability, index) in card.abilities" :key="index">
                 <strong>{{ ability.type }} - {{ ability.name }}</strong>
-                <div class="mt-1">
-                    {{ parseTcgText(ability.effect) }}
-                </div>
+                <div class="mt-1" v-html="ability.effect" />
             </div>
         </UPageCard>
         <UPageCard v-if="card.attacks" variant="subtle" title="Attacks">
             <div v-for="(attack, index) in card.attacks" :key="index" class="border-muted not-last:border-b not-last:pb-4">
                 <div class="flex items-center gap-2">
-                    <div class="flex flex-wrap gap-1">
+                    <div v-if="attack.cost" class="flex flex-wrap gap-1">
                         <TcgType
                             v-for="(cost, costIndex) in attack.cost"
                             :key="costIndex"
@@ -160,9 +156,7 @@ const { card } = defineProps <{
                     <strong class="flex-1 truncate">{{ attack.name }}</strong>
                     <strong class="ml-auto">{{ attack.damage }}</strong>
                 </div>
-                <div v-if="attack.effect" class="mt-2">
-                    {{ parseTcgText(attack.effect) }}
-                </div>
+                <div v-if="attack.effect" class="mt-2" v-html="attack.effect" />
             </div>
         </UPageCard>
         <UPageCard v-if="card.item?.name" variant="subtle" title="Held item">
@@ -178,11 +172,11 @@ const { card } = defineProps <{
         </UPageCard>
         <UPageCard v-if="card.pricing.cardmarket" variant="subtle" title="Cardmarket">
             <div class="grid grid-cols-3 gap-4 sm:gap-6">
-                <div v-for="(price, label, index) in parseCardMarketPrices(card.pricing.cardmarket)" :key="index">
+                <div v-for="(price, label, index) in parseCardMarketPrices(card.pricing.cardmarket)" :key="index" class="flex flex-col">
                     <div class="mb-4">
                         {{ label }}
                     </div>
-                    <div class="font-bold">
+                    <div class="mt-auto font-bold">
                         {{ price }}
                     </div>
                 </div>
