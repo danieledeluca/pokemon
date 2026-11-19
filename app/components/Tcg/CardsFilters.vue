@@ -18,16 +18,10 @@ function handleUpdate<K extends keyof CardsFilters>(field: K, value: CardsFilter
                     :modelValue="state[field.formFieldProps.name]"
                     v-bind="field.selectMenuProps"
                     class="w-full min-w-0"
+                    clear
                     @update:modelValue="handleUpdate(field.formFieldProps.name, $event as CardsFilters[typeof field.formFieldProps.name])"
                 />
                 <!-- eslint-enable style/max-len -->
-                <UButton
-                    v-if="state[field.formFieldProps.name]"
-                    icon="i-lucide-x"
-                    variant="subtle"
-                    color="error"
-                    @click.stop="state[field.formFieldProps.name] = undefined"
-                />
             </div>
         </UFormField>
     </div>

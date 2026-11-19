@@ -171,14 +171,13 @@ const { card } = defineProps <{
             </div>
         </UPageCard>
         <UPageCard v-if="card.pricing.cardmarket" variant="subtle" title="Cardmarket">
-            <div class="grid grid-cols-3 gap-4 sm:gap-6">
-                <div v-for="(price, label, index) in parseCardMarketPrices(card.pricing.cardmarket)" :key="index" class="flex flex-col">
-                    <div class="mb-4">
-                        {{ label }}
+            <div class="data-table">
+                <div v-for="(priceItem, index) in parseCardMarketPrices(card.pricing.cardmarket)" :key="index" class="data-table-item">
+                    <div v-if="priceItem" class="data-table-label">
+                        <UIcon :name="priceItem.icon" />
+                        {{ priceItem.label }}
                     </div>
-                    <div class="mt-auto font-bold">
-                        {{ price }}
-                    </div>
+                    <span>{{ priceItem.price }}</span>
                 </div>
             </div>
         </UPageCard>

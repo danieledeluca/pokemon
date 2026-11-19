@@ -1,6 +1,6 @@
 export function parseCardMarketPrices(prices: TcgCard['pricing']['cardmarket']) {
     if (!prices) {
-        return {};
+        return [];
     }
 
     const labelsMap: Partial<Record<keyof typeof prices, string>> = {
@@ -9,12 +9,26 @@ export function parseCardMarketPrices(prices: TcgCard['pricing']['cardmarket']) 
         avg30: '30 Day Average',
     };
 
-    return Object.entries(prices || {}).reduce<Record<string, string>>((acc, [type, price]) => {
-        const label = labelsMap[type as keyof typeof prices];
+    const iconsMap: Partial<Record<keyof typeof prices, string>> = {
+        trend: 'i-lucide-chart-no-axes-combined',
+        avg7: 'i-lucide-calendar-days',
+        avg30: 'i-lucide-calendar-range',
+    };
 
-        if (label) {
-            acc[label] = formatPrice(Number(price));
+    return Object.entries(prices).reduce<{ label?: string; price: string; icon?: string }[]>((acc, [type, price]) => {
+        const priceType = type as keyof typeof prices;
+
+        const label = labelsMap[priceType];
+        const icon = iconsMap[priceType];
+
+        if (label && icon) {
+            acc.push({
+                label,
+                price: formatPrice(Number(price)),
+                icon,
+            });
         }
+
         return acc;
-    }, {});
+    }, []);
 }
