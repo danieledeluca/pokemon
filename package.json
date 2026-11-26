@@ -23,7 +23,7 @@
     "@tcgdex/sdk": "^2.9.0",
     "@vueuse/core": "^15.0.0",
     "eslint": "^10.13.0",
-    "medium-zoom": "^1.1.0",
+    "medium-zoom": "^1.1.2",
     "nuxt": "^4.6.2",
     "pinia": "^4.1.0",
     "pokenode-ts": "^5.0.0",
