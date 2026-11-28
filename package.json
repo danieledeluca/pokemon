@@ -35,7 +35,7 @@
     "@antfu/eslint-config": "^10.0.0",
     "eslint-plugin-better-tailwindcss": "^4.10.0",
     "eslint-plugin-format": "^2.0.1",
-    "lint-staged": "^17.6.2",
+    "lint-staged": "^17.6.3",
     "simple-git-hooks": "^2.14.0",
     "vue-tsc": "^3.3.14",
     "zod": "^4.6.7"
