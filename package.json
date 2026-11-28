@@ -37,7 +37,7 @@
     "eslint-plugin-format": "^2.0.1",
     "lint-staged": "^17.6.2",
     "simple-git-hooks": "^2.14.0",
-    "vue-tsc": "^3.3.13",
+    "vue-tsc": "^3.3.14",
     "zod": "^4.6.7"
   },
   "simple-git-hooks": {
